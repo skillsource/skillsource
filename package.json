@@ -17,7 +17,8 @@
     "url": "https://github.com/wellsinator/skillsource/issues"
   },
   "homepage": "https://github.com/wellsinator/skillsource#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "webpack": "^3.11.0"
   }
 }
