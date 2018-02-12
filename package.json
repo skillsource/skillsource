@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wellsinator/skillsource.git"
+    "url": "git+https://github.com/skillsource/skillsource.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/wellsinator/skillsource/issues"
+    "url": "https://github.com/skillsource/skillsource/issues"
   },
-  "homepage": "https://github.com/wellsinator/skillsource#readme",
+  "homepage": "https://github.com/skillsource/skillsource#readme",
   "dependencies": {
     "express": "^4.16.2",
     "react": "^16.2.0",
