@@ -17,7 +17,11 @@
     "url": "https://github.com/wellsinator/skillsource/issues"
   },
   "homepage": "https://github.com/wellsinator/skillsource#readme",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.16.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
