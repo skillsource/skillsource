@@ -1,0 +1,17 @@
+.nav {
+  display: block;
+  background-color: red
+}
+
+.navButton {
+  display: inline-block;
+  background-color: yellow;
+  padding: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.navButton .active {
+  background-color: green;
+}
+
