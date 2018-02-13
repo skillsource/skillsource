@@ -1,9 +1,24 @@
-.nav {
-  display: block;
-  background-color: red
+html, body {
+  margin: 0;
+  padding: 0;
 }
 
-.navButton {
+h1 {
+  margin-left: 10px
+}
+
+.content {
+  padding: 10px;
+}
+
+.nav {
+  display: block;
+  background-color: red;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.navLeft {
   display: inline-block;
   background-color: yellow;
   padding: 20px;
@@ -11,7 +26,20 @@
   margin-right: 10px;
 }
 
-.navButton .active {
-  background-color: green;
+.navRight {
+  display: inline-block;
+  float: right;
+  background-color: yellow;
+  padding: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.navLeft .active {
+  font-weight: bold;
+}
+
+.navRight .active {
+  font-weight: bold;
 }
 
