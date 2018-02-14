@@ -47,6 +47,7 @@ h1 {
   display: block;
   background-color: teal;
   margin-bottom: 20px;
+  padding-left: 10px;
 }
 
 .snippet-name {
