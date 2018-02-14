@@ -43,3 +43,24 @@ h1 {
   font-weight: bold;
 }
 
+.snippet {
+  display: block;
+  background-color: teal;
+  margin-bottom: 20px;
+}
+
+.snippet-name {
+  display: inline-block;
+}
+
+.snippet-rating {
+  display: inline-block;
+  padding-left: 30px;
+}
+
+.snippet-description {
+  display: block;
+  padding-bottom: 10px
+}
+
+

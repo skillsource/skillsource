@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {
   Route,
   NavLink,
-  BrowserRouter
+  HashRouter
 } from "react-router-dom";
 
 class Nav extends Component {
@@ -14,6 +14,9 @@ class Nav extends Component {
         </div>
         <div className="navLeft">
           <NavLink to="/courses">Browse</NavLink>
+        </div>
+        <div className="navLeft">
+          <NavLink to="/dashboard">Dashboard</NavLink>
         </div>
         <div className="navRight">
           <NavLink to="/signup">Signup</NavLink>
