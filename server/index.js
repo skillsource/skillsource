@@ -1,7 +1,7 @@
-// const Courses = require('../services/courses');
-// const Enrollments = require('../services/enrollments');
-// const Auth = require('../services/enrollments');
-// const Users = require('../services/users');
+const Courses = require('../services/courses');
+const Enrollments = require('../services/enrollments');
+const Auth = require('../services/enrollments');
+const Users = require('../services/users');
 
 const bodyParser = require('body-parser');
 const express = require('express');
