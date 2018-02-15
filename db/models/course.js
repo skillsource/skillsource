@@ -1,18 +1,31 @@
-const db = require('../index.js');
+const Sequelize = require('sequelize');
+const User = require('./user.js');
+const Step = require('./step.js');
 
-const Course = db.define('Course', {
-  name: {
-    type: Sequelize.STRING
-  },
-  description: {
-    type: Sequelize.STRING
-  },
-  rating: {
-    type: Sequelize.INTEGER
-  }
-});
+module.exports = function(sequelize, DataTypes) {
+  var Course = sequelize.define('Course', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    name: {
+      type: DataTypes.STRING
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      defaultValue: null
+    }
+  }, {
+    classMethods: {
+      associate: function(models) {
+        Course.belongsTo(models.User);
+        Course.belongsTo(models.Step);
+      }
+    }
+  });
 
-// needs relationship with user for user_id
-Course.hasMany(Step);
-
-module.exports.Course = Course;
+  return Course;
+}

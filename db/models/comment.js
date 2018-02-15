@@ -1,15 +1,20 @@
-const db = require('../index.js');
+const Sequelize = require('sequelize');
 const Course = require('./course.js');
 const User = require('./user.js');
 
-const Comment = db.define('Comment', {
-  text: {
-    type: Sequelize.STRING
-  }
-});
+module.exports = function(sequelize, DataTypes) {
+  var Comment = sequelize.define('Comment', {
+    text: {
+      type: Sequelize.STRING
+    }
+  }, {
+    classMethods: {
+      associate: function(models) {
+        Comment.belongsTo(models.Course);
+        Comment.belongsTo(models.User);
+      }
+    }
+  });
 
-// need to add relationship with user_id and course_id
-Comment.belongsTo(Course);
-Comment.belongsTo(User);
-
-module.exports.Comment = Comment;
+  return Comment;
+}

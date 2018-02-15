@@ -1,19 +1,24 @@
-const db = require('../index.js');
+const Sequelize = require('sequelize');
 const Course = require('./course.js');
 
-const Step = db.define('Step', {
-  ordinal_number: {
-    type: Sequelize.INTEGER
-  },
-  name: {
-    type: Sequelize.STRING
-  },
-  text: {
-    type: Sequelize.TEXT
-  }
-});
+module.exports = function(sequelize, DataTypes) {
+  var Step = sequelize.define('Step', {
+    ordinal_number: {
+      type: DataTypes.INTEGER
+    },
+    name: {
+      type: DataTypes.STRING
+    },
+    text: {
+      type: DataTypes.TEXT
+    }
+  }, {
+    classMethods: {
+      associate: function(models) {
+        Step.belongsTo(models.Course);
+      }
+    }
+  });
 
-// needs a relationship with course for course_id
-Step.belongsTo(Course);
-
-module.exports.Step = Step;
+  return Step;
+}
