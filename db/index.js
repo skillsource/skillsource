@@ -1,15 +1,23 @@
-var Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
+const config = require('../config/config.js');
 
-var db = new Sequelize('skillsource_db', 'root', '', {
+const sequelize = new Sequelize(config.db_name, config.db_user, config.db_password, {
+  host: 'localhost',
   dialect: 'mysql'
 });
 
-/* in server/index.js
+const models = [
+  'Course',
+  'Comment',
+  'User',
+  'Step',
+  'Users_Courses',
+  'Users_Steps'
+];
 
-db.sync()
-  .then(() => {
-    console.log("db is synced");
-  });
+models.forEach(function(model) {
+  module.exports[model] = sequelize.import(__dirname + '/models/' + model);
+});
 
-*/
-exports.db = db;
+sequelize.sync()
+
