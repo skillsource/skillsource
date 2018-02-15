@@ -43,3 +43,43 @@ h1 {
   font-weight: bold;
 }
 
+.courseSnippet {
+  border-radius: 25px;
+  border: 2px solid red;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 800px;
+  height: 120px;
+  position: relative;
+}
+
+.courseName {
+  display: inline-block;
+  float: left;
+}
+
+.rating {
+  display: inline-block;
+  float: right;
+}
+
+.description {
+  position: absolute;
+
+  bottom: 0;
+}
+
+.search{
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.searchButton{
+  margin-bottom: 20px;
+}
+
+
+
+
+
+
