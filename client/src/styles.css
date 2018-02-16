@@ -7,6 +7,11 @@ h1 {
   margin-left: 10px
 }
 
+a {
+  color: inherit;
+  text-decoration: inherit; /* no underline */
+}
+
 .content {
   padding: 10px;
 }
@@ -50,6 +55,10 @@ h1 {
   padding-left: 10px;
 }
 
+.snippet:hover {
+  box-shadow: 2px 2px #000000;
+}
+
 .snippet-name {
   display: inline-block;
 }
@@ -62,6 +71,27 @@ h1 {
 .snippet-description {
   display: block;
   padding-bottom: 10px
+}
+
+.step {
+  display: block;
+  background-color: green;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.step:hover {
+  box-shadow: 2px 2px red;
+}
+
+.create-step {
+  border-width: 2px;
+  border-style: dotted;
+  border-color: red;
+  margin: 20px;
+  padding: 10px;
 }
 
 

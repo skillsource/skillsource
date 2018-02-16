@@ -18,6 +18,9 @@ class Nav extends Component {
         <div className="navLeft">
           <NavLink to="/dashboard">Dashboard</NavLink>
         </div>
+        <div className="navLeft">
+          <NavLink to="/create">Create Course</NavLink>
+        </div>
         <div className="navRight">
           <NavLink to="/signup">Signup</NavLink>
         </div>

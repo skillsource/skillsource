@@ -2,7 +2,9 @@ import React, { Component } from "react";
 
 class Snippet extends Component {
   render() {
+    const url = "#/courses/" + this.props.data.id
     return (
+      <a href={url}>
       <div className="snippet">
         <div className="snippet-name">
           <h4>{this.props.data.name}</h4>
@@ -14,6 +16,7 @@ class Snippet extends Component {
         <p>{this.props.data.description}</p>
         </div>
       </div>
+      </a>
     );
   }
 }
