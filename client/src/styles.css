@@ -34,6 +34,12 @@ a {
 .navRight {
   display: inline-block;
   float: right;
+
+}
+
+.childRight {
+  display: inline-block;
+  float: right;
   background-color: yellow;
   padding: 20px;
   margin-left: 10px;
