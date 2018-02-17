@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import CreateStep from './createStep.jsx';
 
-class Login extends Component {
+class Create extends Component {
   render() {
     return (
       <div className="create">
@@ -23,4 +23,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Create;
