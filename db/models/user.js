@@ -1,30 +1,36 @@
-const db = require('../index.js');
+const Sequelize = require('sequelize');
 const Course = require('./course.js');
 const Comment = require('./comment.js');
 
-const User = db.define('User', {
-  email: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-      isEmail: true
+// // one example of hashing password: https://www.youtube.com/watch?v=pquxHIBx8ks&index=5&list=PL5ze0DjYv5DYBDfl0vF_VRxEu8JdTIHlR
+// // watch at 6:30
+
+module.exports = function(sequelize, DataTypes) {
+  var User = sequelize.define('User', {
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        isEmail: true
+      }
+    },
+    username: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    password: {
+      type: DataTypes.STRING
     }
-  },
-  username: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  password: {
-    type: Sequelize.STRING
-  }
-});
+  }, {
+    classMethods: {
+      associate: function(models) {
+        User.hasMany(models.Course);
+        User.hasMany(models.Comment);
+      }
+    }
+  });
 
-User.hasMany(Course);
-User.hasMany(Comment);
-
-// one example of hashing password: https://www.youtube.com/watch?v=pquxHIBx8ks&index=5&list=PL5ze0DjYv5DYBDfl0vF_VRxEu8JdTIHlR
-// watch at 6:30
-
-module.exports.User = User;
+  return User;
+}
