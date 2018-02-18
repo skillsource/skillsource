@@ -64,16 +64,8 @@ let users = [
     id: 1,
     username: 'test',
     password: 'asdf123'
-  },
-  {
-    id: 2,
-    username: 'test2',
-    password: 'asdf12345'
   }
 ];
-
-
-
 
 // users
 app.get('/users/:userId', wrap(async (req, res) => {
@@ -82,15 +74,19 @@ app.get('/users/:userId', wrap(async (req, res) => {
 }));
 
 app.post('/users', wrap(async (req, res) => {
-  const user = await Users.create(req.body);
-  res.send(user);
+  let token = jwt.sign({ username: req.body.username, email: req.body.email }, 'secret', { expiresIn: 129600 });
+  // const user = await Users.create(req.body);
+  res.status(201).json({
+    success: true,
+    err: null,
+    token: token
+  });
 }));
 
 // todo
 // auth - use session tokens
 app.post('/login', wrap(async (req, res) => {
   const { username, password } = req.body;
-
   for (let user of users) {
     if (username == user.username && password == user.password) {
       let token = jwt.sign({ id: user.id, username: user.username }, 'secret', { expiresIn: 129600 });
@@ -107,7 +103,6 @@ app.post('/login', wrap(async (req, res) => {
       });
     }
   }
-  res.send();
 }));
 
 // app.delete('/')
