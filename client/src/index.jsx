@@ -29,26 +29,9 @@ class App extends React.Component {
         username: 'Chris',
         email: 'chris@Skillsource.com',
         id: 1,
-        enrolled: [{
-          id: 1,
-          name: 'Learn Javascript',
-          description: 'Learn vanilla javascript in 30 days or less',
-          rating: '****' },
-          {
-          id: 2,
-          name: 'Swim like Michael Phelps',
-          description: 'Master the techniques perfected by the master of swim.',
-          rating: '*****' },
-          {
-          id: 3,
-          name: 'Play the ukelele',
-          description: 'Learn how to play the uke through youtube videos, perfectly ordered by level of difficulty.',
-          rating: '***' }
-        ],
       }
     };
   }
-
 
   render () {
     const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -70,7 +53,7 @@ class App extends React.Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <PrivateRoute path="/create" component={Create} />
-            <PrivateRoute path="/dashboard" render={(props) => <Dashboard {...props} enrolled={this.state.userData.enrolled}/>} />
+            <PrivateRoute path="/dashboard" component={Dashboard}/>
             <Route exact path="/courses" component={Browse} />
             <Route path="/courses/:id" render={(props) => <Course {...this.props} {...props} />}/>
           </div>
