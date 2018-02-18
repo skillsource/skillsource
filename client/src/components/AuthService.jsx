@@ -10,8 +10,23 @@ export default class AuthService {
     return this.fetch(`${this.domain}/login`, {
       method: 'POST',
       body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    }).then(res => {
+      this.setToken(res.token) // Setting the token in localStorage
+      return Promise.resolve(res);
+    });
+  }
+
+  signup = (username, password, email) => {
+    // Get a token from api server using the fetch api
+    return this.fetch(`${this.domain}/users`, {
+      method: 'POST',
+      body: JSON.stringify({
         username,
-        password
+        password,
+        email
       })
     }).then(res => {
       this.setToken(res.token) // Setting the token in localStorage
@@ -40,6 +55,7 @@ export default class AuthService {
   }
 
   setToken(idToken) {
+    console.log("made it here to set token")
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken)
   }
