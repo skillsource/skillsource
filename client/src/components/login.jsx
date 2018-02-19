@@ -4,11 +4,11 @@ import AuthService from './AuthService.jsx';
 class Login extends Component {
   constructor(){
     super();
-    this.Auth = new AuthService();
+    this.Auth = AuthService;
   }
 
   componentWillMount() {
-    if (this.Auth.loggedIn()) {
+    if (AuthService.loggedIn()) {
       this.props.history.replace('/');
     }
   }
