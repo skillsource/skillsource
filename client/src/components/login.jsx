@@ -1,23 +1,62 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import AuthService from './AuthService.jsx';
 
 class Login extends Component {
+  constructor(){
+    super();
+    this.Auth = new AuthService();
+  }
+
+  componentWillMount() {
+    if (this.Auth.loggedIn()) {
+      this.props.history.replace('/');
+    }
+  }
+
   render() {
     return (
-      <div className="login">
-        <h3>Login</h3>
-        <form method="post" action="http://localhost:3000/login">
-          <div className="input">
-            <label>Username: </label>
-            <input name="username" id="username" type="text"/>
-          </div>
-          <div className="input">
-            <label>Password: </label>
-            <input name="password" id="password" type="password"/>
-          </div>
-          <input type="submit" value="Submit"/>
-        </form>
+      <div className="center">
+        <div className="card">
+          <h1>Login</h1>
+          <form>
+            <input
+              className="form-item"
+              placeholder="Username goes here..."
+              name="username"
+              type="text"
+              onChange={this.handleChange}
+            />
+            <input
+              className="form-item"
+              placeholder="Password goes here..."
+              name="password"
+              type="password"
+              onChange={this.handleChange}
+            />
+            <button onClick={this.handleFormSubmit}>SUBMIT</button>
+          </form>
+        </div>
       </div>
     );
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    this.Auth.login(this.state.username, this.state.password)
+      .then(res => {
+        console.log("res:", res)
+        this.props.history.replace('/');
+      })
+      .catch(err =>
+        console.error('err in handleFormSubmit', err)
+      );
   }
 }
 

@@ -19,5 +19,5 @@ models.forEach(function(model) {
   module.exports[model] = sequelize.import(__dirname + '/models/' + model);
 });
 
-sequelize.sync()
+sequelize.sync();
 
