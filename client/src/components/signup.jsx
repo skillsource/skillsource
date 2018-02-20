@@ -4,7 +4,7 @@ import AuthService from './AuthService.jsx';
 class Signup extends Component {
   constructor() {
     super();
-    this.auth = new AuthService();
+    this.auth = AuthService;
   }
 
   handleChange = (e) => {
