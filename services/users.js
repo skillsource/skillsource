@@ -1,22 +1,7 @@
-const User = require('../db/models/user.js');
+const User = require('../db/models/user').User;
 
-const get = function(userID) {
-  User.findById(userID).then((user) => {
-    return user;
-  })
-  .catch((err) => {
-    return err;
-  });
-};
+exports.getUserById = (userId) => User.findById(userId);
 
-const create = function(userBody) {
-  User.create(userBody).then((user) => {
-    return user;
-  })
-  .catch((err) => {
-    return err;
-  });
-}
+exports.getUserByEmail = (email) => User.findOne({ where: { email } });
 
-module.exports.get = get;
-module.exports.create = create;
+exports.create = (user) => User.create(user);
