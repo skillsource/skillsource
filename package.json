@@ -19,6 +19,8 @@
   "homepage": "https://github.com/skillsource/skillsource#readme",
   "dependencies": {
     "axios": "^0.17.1",
+    "bcrypt": "^1.0.3",
+    "boom": "^7.1.1",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-jwt": "^5.3.0",
