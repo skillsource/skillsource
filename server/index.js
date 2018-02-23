@@ -3,24 +3,21 @@ const Enrollments = require('../services/enrollments');
 const Auth = require('../services/enrollments');
 const Users = require('../services/users');
 
-const jwt = require('jsonwebtoken');
-const exjwt = require('express-jwt');
-
+const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-const express = require('express');
+const boom = require('boom');
 const cors = require('cors');
+const exjwt = require('express-jwt');
+const express = require('express');
+const jwt = require('jsonwebtoken');
+
 const app = express();
-
-app.use(express.static(__dirname + '/../client/dist'));
-app.use(bodyParser.json());
-
+const jwtMW = exjwt({ secret: 'secret' });
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
-const jwtMW = exjwt({
-  secret: 'secret'
-});
-
+app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
@@ -57,65 +54,47 @@ app.put('/enrollments', wrap(async (req, res) => {
   Courses.updateRating(courseId);
 }));
 
-
-// MOCKING DB just for test
-let users = [
-  {
-    id: 1,
-    username: 'test',
-    password: 'asdf123'
-  }
-];
-
 // users
 app.get('/users/:userId', wrap(async (req, res) => {
-  const user = await Users.get(req.params.userId);
+  const { userId } = req.params;
+  const user = await Users.getUserById(userId);
+  if (!user) throw boom.notFound('Cannot locate user by supplied userId');
+
   res.send(user);
 }));
 
 app.post('/users', wrap(async (req, res) => {
-  let token = jwt.sign({ username: req.body.username, email: req.body.email }, 'secret', { expiresIn: 129600 });
-  // const user = await Users.create(req.body);
-  res.status(201).json({
-    success: true,
-    err: null,
-    token: token
-  });
+  const { username, email, password } = req.body;
+  const user = await Users.getUserByEmail(email);
+  if (user) throw boom.badRequest('Email already exists');
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = await Users.create({ username, email, password: hashedPassword });
+  res.send(newUser);
 }));
 
-// todo
-// auth - use session tokens
+// auth
 app.post('/login', wrap(async (req, res) => {
-  const { username, password } = req.body;
-  for (let user of users) {
-    if (username == user.username && password == user.password) {
-      let token = jwt.sign({ id: user.id, username: user.username }, 'secret', { expiresIn: 129600 });
-      res.status(201).json({
-        success: true,
-        err: null,
-        token: token
-      });
-    } else {
-      res.status(401).json({
-        success: false,
-        token: null,
-        err: 'Username or password is incorrect'
-      });
-    }
-  }
+  const { email, password } = req.body;
+  const user = await Users.getUserByEmail(email);
+  const boomUnauthorized = boom.unauthorized('Email/password incorrect');
+  if (!user) throw boomUnauthorized;
+
+  const authorized = await bcrypt.compare(password, user.password);
+  if (!authorized) throw boomUnauthorized;
+
+  const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
+  res.send(token);
 }));
 
-// app.delete('/')
-// log user out - destroy token
-
-// app.use(function (err, req, res, next) {
-//   // Send the error rather than to show it on the console
-//     if (err.name === 'UnauthorizedError') {
-//         res.status(401).send(err);
-//     }
-//     else {
-//         next(err);
-//     }
-// });
+app.use((err, req, res, next) => {
+  console.log(err);
+  if (err.isBoom) {
+    const { payload } = err.output;
+    res.status(payload.statusCode).send(payload);
+  } else {
+    res.sendStatus(500);
+  }
+});
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
