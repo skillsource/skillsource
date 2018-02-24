@@ -1,7 +1,4 @@
-const Courses = require('../services/courses');
-const Enrollments = require('../services/enrollments');
-const Auth = require('../services/enrollments');
-const Users = require('../services/users');
+const db = require('../db/index');
 
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
@@ -16,48 +13,56 @@ const jwtMW = exjwt({ secret: 'secret' });
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await Courses.get();
+  const courses = await db.Course.findAll({ include: { model: db.Step } });
   res.send(courses);
 }));
 
-app.get('/courses/:courseId', wrap(async (req, res) => {
-  const course = await Courses.get(req.params.courseId);
-  res.send(course);
-}));
-
 app.post('/courses', wrap(async (req, res) => {
-  const courseId = await Courses.create(req.body);
-  res.send(courseId);
+  const { course, steps } = req.body;
+  const newCourse = await db.Course.create(course);
+  const courseId = newCourse.id;
+
+  const stepsWithCourseId = steps.map(step => {
+    return { ...step, courseId: newCourse.id };
+  });
+  await db.Step.bulkCreate(stepsWithCourseId);
+  const newSteps = await db.Step.findAll({ where: { courseId } });
+  res.send({ course: newCourse, steps: newSteps });
 }));
 
 // enrollments
 app.get('/enrollments/:userId', wrap(async (req, res) => {
-  const enrollments = await Enrollments.get(req.params.userId);
+  const { userId } = req.params;
+  const enrollments = await db.Enrollment.findAll({ where: { userId } });
   res.send(enrollments);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
-  const userCourseId = await Enrollments.create(req.body);
-  res.send(userCourseId);
-}));
+  const { userId, courseId } = req.body;
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
 
-app.put('/enrollments', wrap(async (req, res) => {
-  const enrollment = await Enrollments.update(req.body);
-  res.send(enrollment);
+  const course = await db.Course.findById(courseId);
+  if (!course) throw boom.badRequest('Cannot locate course by supplied courseId');
 
-  const { courseId } = req.body;
-  Courses.updateRating(courseId);
+  try {
+    const enrollment = await db.Enrollment.create({ userId, courseId });
+    res.send(enrollment);
+  } catch(err) {
+    throw boom.badRequest('User is already enrolled in this course');
+  }
 }));
 
 // users
 app.get('/users/:userId', wrap(async (req, res) => {
   const { userId } = req.params;
-  const user = await Users.getUserById(userId);
+  const user = await db.User.findById(userId);
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
 
   res.send(user);
@@ -65,18 +70,25 @@ app.get('/users/:userId', wrap(async (req, res) => {
 
 app.post('/users', wrap(async (req, res) => {
   const { username, email, password } = req.body;
-  const user = await Users.getUserByEmail(email);
+  const user = await db.User.findOne({ where: { email } });
   if (user) throw boom.badRequest('Email already exists');
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await Users.create({ username, email, password: hashedPassword });
+  const newUser = await db.User.create({ username, email, password: hashedPassword });
   res.send(newUser);
+}));
+
+// steps
+app.get('/steps/:courseId', wrap(async (req, res) => {
+  const { courseId } = req.params;
+  const steps = await db.Step.findAll({ where: { courseId } });
+  res.send(steps);
 }));
 
 // auth
 app.post('/login', wrap(async (req, res) => {
   const { email, password } = req.body;
-  const user = await Users.getUserByEmail(email);
+  const user = await db.User.findOne({ where: { email } });
   const boomUnauthorized = boom.unauthorized('Email/password incorrect');
   if (!user) throw boomUnauthorized;
 
