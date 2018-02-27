@@ -30,7 +30,7 @@ const Course = sequelize.define('course', {
   },
 });
 
-const UserCourse = sequelize.define('userCourses', {
+const UserCourse = sequelize.define('userCourse', {
   rating: {
     type: Sequelize.INTEGER,
     defaultValue: null,
@@ -49,8 +49,15 @@ const Step = sequelize.define('step', {
   text: Sequelize.STRING,
 });
 
-User.hasMany(Course);
-Course.belongsTo(User);
+const UserStep = sequelize.define('userStep', {
+  completed: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  }
+});
+
+User.hasMany(Course, { as: 'lesson' });
+Course.belongsTo(User, { as: 'creator' });
 
 User.belongsToMany(Course, { through: UserCourse });
 Course.belongsToMany(User, { through: UserCourse });
@@ -58,9 +65,14 @@ Course.belongsToMany(User, { through: UserCourse });
 Course.hasMany(Step);
 Step.belongsTo(Course);
 
-// sequelize.sync({force: true});
+User.belongsToMany(Step, { through: UserStep });
+Step.belongsToMany(User, { through: UserStep });
+
+// sequelize.sync();
+// sequelize.sync({ force: true });
 
 module.exports.User = User;
 module.exports.Course = Course;
-module.exports.Enrollment = UserCourse;
+module.exports.UserCourse = UserCourse;
 module.exports.Step = Step;
+module.exports.UserStep = UserStep;
