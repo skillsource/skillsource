@@ -1,147 +1,118 @@
-const Courses = require('../services/courses');
-const Enrollments = require('../services/enrollments');
-const Auth = require('../services/enrollments');
-const Users = require('../services/users');
+const db = require('../db/index');
 
-const jwt = require('jsonwebtoken');
-const exjwt = require('express-jwt');
-
+const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-const express = require('express');
+const boom = require('boom');
 const cors = require('cors');
+const exjwt = require('express-jwt');
+const express = require('express');
+const jwt = require('jsonwebtoken');
+
 const app = express();
-
-app.use(express.static(__dirname + '/../client/dist'));
-app.use(bodyParser.json());
-
+const jwtMW = exjwt({ secret: 'secret' });
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
-const jwtMW = exjwt({
-  secret: 'secret'
-});
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
   console.log('GET received on /courses')
-  const courses = await Courses.get((err, result) => {
-    if (err) {
-      res.status(500).json({
-        success: false,
-        message: 'Error retrieving courses.'
-      });
-    } else {
-      res.status(201).json({
-        success: true,
-        message: "Success.",
-        data: result
-      });
-    }
-  });
-  console.log('Courses sent back', courses)
-}));
-
-app.get('/courses/:courseId', wrap(async (req, res) => {
-  const course = await Courses.get(req.params.courseId);
-  res.send(course);
+  const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
+  res.send(courses);
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  const courseId = await Courses.create(req.body);
-  res.send(courseId);
+  // expecting { name, description, userId , steps }
+  // where steps => steps: [{ ordinalNumber, name, text }]
+  const course = req.body;
+  const newCourse = await db.Course.create(course, { include: [db.Step] });
+  res.send({ course: newCourse });
 }));
 
 // enrollments
 app.get('/enrollments/:userId', wrap(async (req, res) => {
-  const enrollments = await Enrollments.get(req.params.userId);
-  res.send(enrollments);
+  const { userId } = req.params;
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
+
+  const courses = await user.getCourses({ include: [db.Step, db.Comment] });
+  res.send(courses);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
-  const userCourseId = await Enrollments.create(req.body);
-  res.send(userCourseId);
-}));
+  const { userId, courseId } = req.body;
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
 
-app.put('/enrollments', wrap(async (req, res) => {
-  const enrollment = await Enrollments.update(req.body);
-  res.send(enrollment);
+  const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
+  if (!course) throw boom.badRequest('Cannot locate course by supplied courseId');
 
-  const { courseId } = req.body;
-  Courses.updateRating(courseId);
+  try {
+    await user.addCourse(courseId);
+    await user.addSteps(course.steps);
+  } catch(err) {
+    throw boom.badRequest('User already enrolled in this course');
+  }
+
+  res.send(course);
 }));
 
 // users
 app.get('/users/:userId', wrap(async (req, res) => {
-  const user = Users.get(req.params.userId, (error, user) => {
-    if (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Error getting user.'
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Successfully retrieved user.",
-        data: user
-      });
-    }
-  });
+  const { userId } = req.params;
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.notFound('Cannot locate user by supplied userId');
+  res.send(user);
 }));
 
 app.post('/users', wrap(async (req, res) => {
-  console.log('POST to /users', req.body);
-  let token = jwt.sign({ username: req.body.username, email: req.body.email }, 'secret', { expiresIn: 129600 });
-  const user = Users.create(req.body, (error, user) => {
-    if (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Error creating user.'
-      });
-    } else {
-      res.status(201).json({
-        success: true,
-        message: "Success.",
-        data: user,
-        token: token
-      });
-    }
-  })
+  const { username, email, password } = req.body;
+  const user = await db.User.findOne({ where: { email } });
+  if (user) throw boom.badRequest('Email already exists');
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = await db.User.create({ username, email, password: hashedPassword });
+  res.send(newUser);
 }));
 
-// todo
-// auth - use session tokens
+// comments
+app.post('/comments', wrap(async (req, res) => {
+  const { userId, courseId, text } = req.body;
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
+
+  const course = await db.Course.findById(courseId);
+  if (!user) throw boom.badRequest('Cannot locate course by supplied courseId');
+
+  const comment = await db.Comment.create({ userId, courseId, text });
+  res.send(comment);
+}));
+
+// auth
 app.post('/login', wrap(async (req, res) => {
-  const { username, password } = req.body;
-  for (let user of users) {
-    if (username == user.username && password == user.password) {
-      let token = jwt.sign({ id: user.id, username: user.username }, 'secret', { expiresIn: 129600 });
-      res.status(201).json({
-        success: true,
-        err: null,
-        token: token
-      });
-    } else {
-      res.status(401).json({
-        success: false,
-        token: null,
-        err: 'Username or password is incorrect'
-      });
-    }
-  }
+  const { email, password } = req.body;
+  const user = await db.User.findOne({ where: { email } });
+  const boomUnauthorized = boom.unauthorized('Email/password incorrect');
+  if (!user) throw boomUnauthorized;
+
+  const authorized = await bcrypt.compare(password, user.password);
+  if (!authorized) throw boomUnauthorized;
+
+  const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
+  res.send(token);
 }));
 
-// app.delete('/')
-// log user out - destroy token
-
-// app.use(function (err, req, res, next) {
-//   // Send the error rather than to show it on the console
-//     if (err.name === 'UnauthorizedError') {
-//         res.status(401).send(err);
-//     }
-//     else {
-//         next(err);
-//     }
-// });
+app.use((err, req, res, next) => {
+  console.log(err);
+  if (err.isBoom) {
+    const { payload } = err.output;
+    res.status(payload.statusCode).send(payload);
+  } else {
+    res.sendStatus(500);
+  }
+});
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
