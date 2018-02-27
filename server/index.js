@@ -19,13 +19,13 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await db.Course.findAll();
+  const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
   res.send(courses);
 }));
 
 app.post('/courses', wrap(async (req, res) => {
   const course = req.body;
-  const newCourse = await db.Course.create(course, { include: [db.Step] });
+  const newCourse = await db.Course.create(course, { include: [db.Step, db.Comment] });
   res.send({ course: newCourse });
 }));
 
@@ -35,7 +35,7 @@ app.get('/enrollments/:userId', wrap(async (req, res) => {
   const user = await db.User.findById(userId);
   if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
 
-  const courses = await user.getCourses({ include: [db.Step] });
+  const courses = await user.getCourses({ include: [db.Step, db.Comment] });
   res.send(courses);
 }));
 
@@ -44,7 +44,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   const user = await db.User.findById(userId);
   if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
 
-  const course = await db.Course.findById(courseId, { include: db.Step });
+  const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
   if (!course) throw boom.badRequest('Cannot locate course by supplied courseId');
 
   try {
@@ -73,6 +73,19 @@ app.post('/users', wrap(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
   res.send(newUser);
+}));
+
+// comments
+app.post('/comments', wrap(async (req, res) => {
+  const { userId, courseId, text } = req.body;
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
+
+  const course = await db.Course.findById(courseId);
+  if (!user) throw boom.badRequest('Cannot locate course by supplied courseId');
+
+  const comment = await db.Comment.create({ userId, courseId, text });
+  res.send(comment);
 }));
 
 // auth

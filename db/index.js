@@ -56,6 +56,12 @@ const UserStep = sequelize.define('userStep', {
   }
 });
 
+const Comment = sequelize.define('comment', {
+  text: {
+    type: Sequelize.STRING
+  }
+});
+
 User.hasMany(Course, { as: 'lesson' });
 Course.belongsTo(User, { as: 'creator' });
 
@@ -68,6 +74,12 @@ Step.belongsTo(Course);
 User.belongsToMany(Step, { through: UserStep });
 Step.belongsToMany(User, { through: UserStep });
 
+Comment.belongsTo(User);
+User.hasMany(Comment);
+
+Comment.belongsTo(Course);
+Course.hasMany(Comment);
+
 // sequelize.sync();
 // sequelize.sync({ force: true });
 
@@ -76,3 +88,4 @@ module.exports.Course = Course;
 module.exports.UserCourse = UserCourse;
 module.exports.Step = Step;
 module.exports.UserStep = UserStep;
+module.exports.Comment = Comment;
