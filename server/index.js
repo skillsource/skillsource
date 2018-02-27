@@ -19,28 +19,24 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await db.Course.findAll({ include: { model: db.Step } });
+  const courses = await db.Course.findAll();
   res.send(courses);
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  const { course, steps } = req.body;
-  const newCourse = await db.Course.create(course);
-  const courseId = newCourse.id;
-
-  const stepsWithCourseId = steps.map(step => {
-    return { ...step, courseId: newCourse.id };
-  });
-  await db.Step.bulkCreate(stepsWithCourseId);
-  const newSteps = await db.Step.findAll({ where: { courseId } });
-  res.send({ course: newCourse, steps: newSteps });
+  const course = req.body;
+  const newCourse = await db.Course.create(course, { include: [db.Step] });
+  res.send({ course: newCourse });
 }));
 
 // enrollments
 app.get('/enrollments/:userId', wrap(async (req, res) => {
   const { userId } = req.params;
-  const enrollments = await db.Enrollment.findAll({ where: { userId } });
-  res.send(enrollments);
+  const user = await db.User.findById(userId);
+  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
+
+  const courses = await user.getCourses({ include: [db.Step] });
+  res.send(courses);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
@@ -48,15 +44,17 @@ app.post('/enrollments', wrap(async (req, res) => {
   const user = await db.User.findById(userId);
   if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
 
-  const course = await db.Course.findById(courseId);
+  const course = await db.Course.findById(courseId, { include: db.Step });
   if (!course) throw boom.badRequest('Cannot locate course by supplied courseId');
 
   try {
-    const enrollment = await db.Enrollment.create({ userId, courseId });
-    res.send(enrollment);
+    await user.addCourse(courseId);
+    await user.addSteps(course.steps);
   } catch(err) {
-    throw boom.badRequest('User is already enrolled in this course');
+    throw boom.badRequest('User already enrolled in this course');
   }
+
+  res.send(course);
 }));
 
 // users
@@ -64,7 +62,6 @@ app.get('/users/:userId', wrap(async (req, res) => {
   const { userId } = req.params;
   const user = await db.User.findById(userId);
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
-
   res.send(user);
 }));
 
@@ -76,13 +73,6 @@ app.post('/users', wrap(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
   res.send(newUser);
-}));
-
-// steps
-app.get('/steps/:courseId', wrap(async (req, res) => {
-  const { courseId } = req.params;
-  const steps = await db.Step.findAll({ where: { courseId } });
-  res.send(steps);
 }));
 
 // auth
