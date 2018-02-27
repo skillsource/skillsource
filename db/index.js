@@ -62,14 +62,13 @@ const Comment = sequelize.define('comment', {
   }
 });
 
-User.hasMany(Course, { as: 'lesson' });
 Course.belongsTo(User, { as: 'creator' });
 
 User.belongsToMany(Course, { through: UserCourse });
 Course.belongsToMany(User, { through: UserCourse });
 
-Course.hasMany(Step);
 Step.belongsTo(Course);
+Course.hasMany(Step);
 
 User.belongsToMany(Step, { through: UserStep });
 Step.belongsToMany(User, { through: UserStep });
