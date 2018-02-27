@@ -30,22 +30,16 @@ class Browse extends Component {
   }
 
   componentWillMount(){
-
     ApiService.browse()
-    .then((response) => {
+    .then((data) => {
       this.setState({
-        data: response.data
+        data: data
       })
     })
   }
 
-
-
   render() {
-
-    const test = this.state.data;
-
-    const snippets = test.map((course) => {
+    const snippets = this.state.data.map((course) => {
       return (
         <Snippet
           key={course.id}
