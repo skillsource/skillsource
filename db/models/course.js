@@ -27,5 +27,8 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
+  Course.create({id: 1, name: 'test', description: 'test', rating: 4})
+
   return Course;
 }
+

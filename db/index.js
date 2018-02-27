@@ -21,3 +21,4 @@ models.forEach(function(model) {
 
 sequelize.sync();
 
+exports.db = sequelize;

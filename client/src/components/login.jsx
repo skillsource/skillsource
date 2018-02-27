@@ -4,11 +4,11 @@ import AuthService from './AuthService.jsx';
 class Login extends Component {
   constructor(){
     super();
-    this.Auth = new AuthService();
+    this.Auth = AuthService;
   }
 
   componentWillMount() {
-    if (this.Auth.loggedIn()) {
+    if (AuthService.loggedIn()) {
       this.props.history.replace('/');
     }
   }
@@ -51,11 +51,11 @@ class Login extends Component {
 
     this.Auth.login(this.state.username, this.state.password)
       .then(res => {
-        console.log("Successful Login");
+        console.log("res:", res)
         this.props.history.replace('/');
       })
       .catch(err =>
-        console.error(err)
+        console.error('err in handleFormSubmit', err)
       );
   }
 }

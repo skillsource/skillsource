@@ -1,20 +1,26 @@
-const User = require('../db/models/user.js');
+const User = require('../db/index.js').User;
 
-const get = function(userID) {
+const get = function(userID, callback) {
   User.findById(userID).then((user) => {
-    return user;
+    if (!user) {
+      callback(true)
+    } else {
+      callback(false, user);
+    }
   })
   .catch((err) => {
-    return err;
+    callback(true);
   });
 };
 
-const create = function(userBody) {
-  User.create(userBody).then((user) => {
-    return user;
+const create = function(userBody, callback) {
+  User.sync()
+  .then(function(){
+    return User.create(userBody)}).then((user) => {
+    callback(false, user);
   })
   .catch((err) => {
-    return err;
+    callback(true);
   });
 }
 

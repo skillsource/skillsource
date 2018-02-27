@@ -1,7 +1,13 @@
-const Course = require('../db/models/course.js');
+const Course = require('../db/index.js').Course;
 
-const get = function() {
-
+const get = function(callback) {
+  Course.findAll().then((courses) => {
+    if (!courses) {
+      callback(true);
+    } else {
+      callback(false, courses);
+    }
+  })
 }
 
 const create = function() {

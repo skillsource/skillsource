@@ -1,27 +1,23 @@
 import decode from 'jwt-decode';
-export default class AuthService {
-  // Initializing important variables
-  constructor(domain) {
-    this.domain = domain || 'http://localhost:3000'
-  }
 
-  login = (email, password) => {
+const AuthService = {
+  domain: 'http://localhost:3000',
+  login: (username, password) => {
     // Get a token from api server using the fetch api
-    return this.fetch(`${this.domain}/login`, {
+    return AuthService.fetch(`${AuthService.domain}/login`, {
       method: 'POST',
       body: JSON.stringify({
-        email,
-        password
+        username: username,
+        password: password
       })
     }).then(res => {
-      this.setToken(res.token) // Setting the token in localStorage
+      AuthService.setToken(res.token) // Setting the token in localStorage
       return Promise.resolve(res);
-    })
-  }
-
-  signup = (username, password, email) => {
+    });
+  },
+  signup: (username, password, email) => {
     // Get a token from api server using the fetch api
-    return this.fetch(`${this.domain}/users`, {
+    return AuthService.fetch(`${AuthService.domain}/users`, {
       method: 'POST',
       body: JSON.stringify({
         username,
@@ -29,18 +25,16 @@ export default class AuthService {
         email
       })
     }).then(res => {
-      this.setToken(res.token) // Setting the token in localStorage
+      AuthService.setToken(res.token) // Setting the token in localStorage
       return Promise.resolve(res);
     })
-  }
-
-  loggedIn = () => {
+  },
+  loggedIn: () => {
     // Checks if there is a saved token and it's still valid
-    const token = this.getToken() // Getting token from localstorage
-    return !!token && !this.isTokenExpired(token) // handwaiving here
-  }
-
-  isTokenExpired(token) {
+    const token = AuthService.getToken() // Getting token from localstorage
+    return !!token && !AuthService.isTokenExpired(token) // handwaiving here
+  },
+  isTokenExpired: (token) => {
     try {
       const decoded = decode(token);
       if (decoded.exp < Date.now() / 1000) { // Checking if token is expired. N
@@ -52,31 +46,25 @@ export default class AuthService {
     catch (err) {
       return false;
     }
-  }
-
-  setToken(idToken) {
+  },
+  setToken: (idToken) => {
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken)
-  }
-
-  getToken() {
+  },
+  getToken: () => {
     // Retrieves the user token from localStorage
     const token = localStorage.getItem('id_token');
     return token;
-  }
-
-  logout() {
+  },
+  logout: () => {
     // Clear user token and profile data from localStorage
     localStorage.removeItem('id_token');
-  }
-
-  getProfile = () => {
+  },
+  getProfile: () => {
     // Using jwt-decode npm package to decode the token
-    return decode(this.getToken());
-  }
-
-
-  fetch = (url, options) => {
+    return decode(AuthService.getToken());
+  },
+  fetch: (url, options) => {
     // performs api calls sending the required authentication headers
     const headers = {
       'Accept': 'application/json',
@@ -85,16 +73,15 @@ export default class AuthService {
 
     // Setting Authorization header
     // Authorization: Bearer xxxxxxx.xxxxxxxx.xxxxxx
-    if (this.loggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken()
+    if (AuthService.loggedIn()) {
+      headers['Authorization'] = 'Bearer ' + AuthService.getToken()
     }
 
     return fetch(url, {headers, ...options})
-      .then(this._checkStatus)
+      .then(AuthService._checkStatus)
       .then(response => response.json())
-  }
-
-  _checkStatus(response) {
+  },
+  _checkStatus: (response) => {
     // raises an error in case response status is not a success
     if (response.status >= 200 && response.status < 300) { // Success status lies between 200 to 300
       return response;
@@ -105,3 +92,25 @@ export default class AuthService {
     }
   }
 }
+
+export default AuthService;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

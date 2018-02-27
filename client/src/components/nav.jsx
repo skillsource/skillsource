@@ -9,7 +9,7 @@ import AuthService from './AuthService.jsx';
 class Nav extends Component {
   constructor() {
     super();
-    this.auth = new AuthService();
+    this.auth = AuthService;
   }
 
   handleClick = () => {

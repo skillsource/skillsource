@@ -24,8 +24,22 @@ app.use(cors());
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await Courses.get();
-  res.send(courses);
+  console.log('GET received on /courses')
+  const courses = await Courses.get((err, result) => {
+    if (err) {
+      res.status(500).json({
+        success: false,
+        message: 'Error retrieving courses.'
+      });
+    } else {
+      res.status(201).json({
+        success: true,
+        message: "Success.",
+        data: result
+      });
+    }
+  });
+  console.log('Courses sent back', courses)
 }));
 
 app.get('/courses/:courseId', wrap(async (req, res) => {
@@ -57,40 +71,48 @@ app.put('/enrollments', wrap(async (req, res) => {
   Courses.updateRating(courseId);
 }));
 
-
-// MOCKING DB just for test
-let users = [
-  {
-    id: 1,
-    username: 'test',
-    password: 'asdf123'
-  },
-  {
-    id: 2,
-    username: 'test2',
-    password: 'asdf12345'
-  }
-];
-
 // users
 app.get('/users/:userId', wrap(async (req, res) => {
-  const user = await Users.get(req.params.userId);
-  res.send(user);
+  const user = Users.get(req.params.userId, (error, user) => {
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error getting user.'
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Successfully retrieved user.",
+        data: user
+      });
+    }
+  });
 }));
 
 app.post('/users', wrap(async (req, res) => {
-  console.log('Server received user post');
-  console.log(req.body);
-  users.push(req.body);
-  // const user = await Users.create(req.body);
-  res.send({username: 'test', password: 'asdf123'});
+  console.log('POST to /users', req.body);
+  let token = jwt.sign({ username: req.body.username, email: req.body.email }, 'secret', { expiresIn: 129600 });
+  const user = Users.create(req.body, (error, user) => {
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error creating user.'
+      });
+    } else {
+      res.status(201).json({
+        success: true,
+        message: "Success.",
+        data: user,
+        token: token
+      });
+    }
+  })
 }));
 
 // todo
 // auth - use session tokens
 app.post('/login', wrap(async (req, res) => {
   const { username, password } = req.body;
-
   for (let user of users) {
     if (username == user.username && password == user.password) {
       let token = jwt.sign({ id: user.id, username: user.username }, 'secret', { expiresIn: 129600 });
