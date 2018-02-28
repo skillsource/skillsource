@@ -80,7 +80,7 @@ const AuthService = {
 
     return fetch(url, {headers, ...options})
       .then(AuthService._checkStatus)
-      // .then(response => response.json())
+      .then(response => response.json())
   },
   _checkStatus: (response) => {
     // raises an error in case response status is not a success

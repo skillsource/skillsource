@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 // courses
 app.get('/courses', wrap(async (req, res) => {
   const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
-  res.send(courses);
+  res.send(JSON.stringify(courses));
 }));
 
 app.post('/courses', wrap(async (req, res) => {
@@ -29,7 +29,7 @@ app.post('/courses', wrap(async (req, res) => {
   // doing the work of POST /steps
   const course = req.body;
   const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
-  res.send(newCourse);
+  res.send(JSON.stringify(newCourse));
 }));
 
 // enrollments
@@ -37,7 +37,7 @@ app.get('/enrollments', wrap(async (req, res) => {
   const { userId } = req.query;
   const user = await db.User.findById(userId);
   const enrollments = await user.getCourses();
-  res.send(enrollments);
+  res.send(JSON.stringify(enrollments));
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
@@ -51,7 +51,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   } catch(err) {
     throw boom.badRequest('User already enrolled in this course');
   }
-  res.send(course);
+  res.send(JSON.stringify(course));
 }));
 
 // steps
@@ -59,7 +59,7 @@ app.get('/steps', wrap(async (req, res) => {
   const { courseId } = req.query;
   const course = await db.Course.findById(courseId);
   const steps = await course.getSteps();
-  res.send(steps);
+  res.send(JSON.stringify(steps));
 }));
 
 // userSteps
@@ -67,14 +67,14 @@ app.get('/user-steps', wrap(async (req, res) => {
   const { userId, courseId } = req.query;
   const user = await db.User.findById(userId);
   const userSteps = await user.getSteps({ where: { courseId } });
-  res.send(userSteps);
+  res.send(JSON.stringify(userSteps));
 }));
 
 app.patch('/user-steps', wrap(async (req, res) => {
   const { userId, stepId, completed } = req.query;
   await db.UserStep.update({ completed }, { where: { userId, stepId } });
   const updatedUserStep = await db.UserStep.findOne({ where: { userId, stepId } });
-  res.send(updatedUserStep);
+  res.send(JSON.stringify(updatedUserStep));
 }));
 
 // users
@@ -82,7 +82,7 @@ app.get('/users/:userId', wrap(async (req, res) => {
   const { userId } = req.params;
   const user = await db.User.findById(userId);
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
-  res.send(user);
+  res.send(JSON.stringify(user));
 }));
 
 app.post('/users', wrap(async (req, res) => {
@@ -92,7 +92,7 @@ app.post('/users', wrap(async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
-  res.send(newUser);
+  res.send(JSON.stringify(newUser));
 }));
 
 // comments
@@ -100,7 +100,7 @@ app.get('/comments', wrap(async (req, res) => {
   const { courseId } = req.query;
   const course = await db.Course.findById(courseId);
   const comments = await course.getComments();
-  res.send(comments);
+  res.send(JSON.stringify(comments));
 }));
 
 app.post('/comments', wrap(async (req, res) => {
@@ -108,7 +108,7 @@ app.post('/comments', wrap(async (req, res) => {
   const user = await db.User.findById(userId);
   const course = await db.Course.findById(courseId);
   const comment = await db.Comment.create({ userId, courseId, text });
-  res.send(comment);
+  res.send(JSON.stringify(comment));
 }));
 
 // auth
@@ -124,7 +124,7 @@ app.post('/login', wrap(async (req, res) => {
   if (!authorized) throw boomUnauthorized;
 
   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
-  res.send(token);
+  res.send(JSON.stringify(token));
 }));
 
 app.use((err, req, res, next) => {
