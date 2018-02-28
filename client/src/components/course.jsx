@@ -4,13 +4,10 @@ import Step from './step.jsx';
 const Course = (props) => {
 
   const courseId = props.match.params.id;
-  console.log('The course id', typeof courseId, courseId);
 
   const course = sampleData[courseId];
-  console.log('The course', course);
 
   const steps = course.steps;
-   console.log('The steps', steps);
 
   const lessonPlan = steps.map((step) => {
       return (
