@@ -13,14 +13,15 @@ const jwtMW = exjwt({ secret: 'secret' });
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
+  console.log('GET received on /courses')
   const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
-  res.send(courses);
+  res.send(JSON.stringify(courses));
 }));
 
 app.post('/courses', wrap(async (req, res) => {
@@ -92,7 +93,9 @@ app.post('/comments', wrap(async (req, res) => {
 
 // auth
 app.post('/login', wrap(async (req, res) => {
+  console.log("Post to login");
   const { email, password } = req.body;
+  console.log(email);
   const user = await db.User.findOne({ where: { email } });
   const boomUnauthorized = boom.unauthorized('Email/password incorrect');
   if (!user) throw boomUnauthorized;
@@ -101,7 +104,7 @@ app.post('/login', wrap(async (req, res) => {
   if (!authorized) throw boomUnauthorized;
 
   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
-  res.send(token);
+  res.send(JSON.stringify(token));
 }));
 
 app.use((err, req, res, next) => {

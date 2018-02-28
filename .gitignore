@@ -62,6 +62,7 @@ client/dist/*
 
 # Random file from OSX
 client/src/.DS_Store
+.DS_Store
 
 # config variables
 config/config.js
