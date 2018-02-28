@@ -2,12 +2,12 @@ import decode from 'jwt-decode';
 
 const AuthService = {
   domain: 'http://localhost:3000',
-  login: (username, password) => {
+  login: (email, password) => {
     // Get a token from api server using the fetch api
     return AuthService.fetch(`${AuthService.domain}/login`, {
       method: 'POST',
       body: JSON.stringify({
-        username: username,
+        email: email,
         password: password
       })
     }).then(res => {
@@ -25,6 +25,7 @@ const AuthService = {
         email
       })
     }).then(res => {
+      console.log('Login accomplised', res)
       AuthService.setToken(res.token) // Setting the token in localStorage
       return Promise.resolve(res);
     })

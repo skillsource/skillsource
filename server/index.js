@@ -13,13 +13,13 @@ const jwtMW = exjwt({ secret: 'secret' });
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await db.Course.findAll();
+  const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
   res.send(courses);
 }));
 
@@ -113,7 +113,9 @@ app.post('/comments', wrap(async (req, res) => {
 
 // auth
 app.post('/login', wrap(async (req, res) => {
+  console.log("Post to login");
   const { email, password } = req.body;
+  console.log(email);
   const user = await db.User.findOne({ where: { email } });
   const boomUnauthorized = boom.unauthorized('Email/password incorrect');
   if (!user) throw boomUnauthorized;
