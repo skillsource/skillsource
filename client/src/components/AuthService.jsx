@@ -11,9 +11,11 @@ const AuthService = {
         password: password
       })
     }).then(res => {
-      AuthService.setToken(res.token) // Setting the token in localStorage
       return Promise.resolve(res);
-    });
+    }).then(token => {
+      AuthService.setToken(token)
+      return token;
+    })
   },
   signup: (username, password, email) => {
     // Get a token from api server using the fetch api
