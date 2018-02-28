@@ -19,45 +19,62 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  console.log('GET received on /courses')
   const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
-  res.send(JSON.stringify(courses));
+  res.send(courses);
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting { name, description, userId , steps }
-  // where steps => steps: [{ ordinalNumber, name, text }]
+  // expecting course: { name, description, creatorId, steps }
+  // where array steps: [{ ordinalNumber, name, text }]
+  // doing the work of POST /steps
   const course = req.body;
-  const newCourse = await db.Course.create(course, { include: [db.Step] });
-  res.send({ course: newCourse });
+  const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
+  res.send(newCourse);
 }));
 
 // enrollments
-app.get('/enrollments/:userId', wrap(async (req, res) => {
-  const { userId } = req.params;
+app.get('/enrollments', wrap(async (req, res) => {
+  const { userId } = req.query;
   const user = await db.User.findById(userId);
-  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
-
-  const courses = await user.getCourses({ include: [db.Step, db.Comment] });
-  res.send(courses);
+  const enrollments = await user.getCourses();
+  res.send(enrollments);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
   const { userId, courseId } = req.body;
   const user = await db.User.findById(userId);
-  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
-
-  const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
-  if (!course) throw boom.badRequest('Cannot locate course by supplied courseId');
-
+  const course = await db.Course.findById(courseId, { include: db.Step });
   try {
     await user.addCourse(courseId);
+    // doing the work of POST /user-steps
     await user.addSteps(course.steps);
   } catch(err) {
     throw boom.badRequest('User already enrolled in this course');
   }
-
   res.send(course);
+}));
+
+// steps
+app.get('/steps', wrap(async (req, res) => {
+  const { courseId } = req.query;
+  const course = await db.Course.findById(courseId);
+  const steps = await course.getSteps();
+  res.send(steps);
+}));
+
+// userSteps
+app.get('/user-steps', wrap(async (req, res) => {
+  const { userId, courseId } = req.query;
+  const user = await db.User.findById(userId);
+  const userSteps = await user.getSteps({ where: { courseId } });
+  res.send(userSteps);
+}));
+
+app.patch('/user-steps', wrap(async (req, res) => {
+  const { userId, stepId, completed } = req.query;
+  await db.UserStep.update({ completed }, { where: { userId, stepId } });
+  const updatedUserStep = await db.UserStep.findOne({ where: { userId, stepId } });
+  res.send(updatedUserStep);
 }));
 
 // users
@@ -79,14 +96,17 @@ app.post('/users', wrap(async (req, res) => {
 }));
 
 // comments
+app.get('/comments', wrap(async (req, res) => {
+  const { courseId } = req.query;
+  const course = await db.Course.findById(courseId);
+  const comments = await course.getComments();
+  res.send(comments);
+}));
+
 app.post('/comments', wrap(async (req, res) => {
   const { userId, courseId, text } = req.body;
   const user = await db.User.findById(userId);
-  if (!user) throw boom.badRequest('Cannot locate user by supplied userId');
-
   const course = await db.Course.findById(courseId);
-  if (!user) throw boom.badRequest('Cannot locate course by supplied courseId');
-
   const comment = await db.Comment.create({ userId, courseId, text });
   res.send(comment);
 }));
@@ -104,7 +124,7 @@ app.post('/login', wrap(async (req, res) => {
   if (!authorized) throw boomUnauthorized;
 
   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
-  res.send(JSON.stringify(token));
+  res.send(token);
 }));
 
 app.use((err, req, res, next) => {
