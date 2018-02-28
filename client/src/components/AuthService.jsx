@@ -12,10 +12,10 @@ const AuthService = {
         password: password
       })
     }).then(res => {
-      let token = Promise.resolve(res);
-    }).then(res => {
-      AuthService.setToken(res)
-      return res;
+      return Promise.resolve(res);
+    }).then(token => {
+      AuthService.setToken(token)
+      return token;
     })
   },
   signup: (username, password, email) => {
