@@ -19,6 +19,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
+  console.log(req.get('Authorization'))
   const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
   res.send(JSON.stringify(courses));
 }));

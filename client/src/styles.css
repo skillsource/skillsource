@@ -134,3 +134,7 @@ a {
 .searchButton{
   margin-bottom: 20px;
 }
+
+#delete {
+  float:right;
+}

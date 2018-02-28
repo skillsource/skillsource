@@ -1,9 +1,19 @@
 import React, { Component } from "react";
 
 class CreateStep extends Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.data);
+  }
+
+
   render() {
     return (
       <div className="create-step">
+        <div className="stepOrder">
+        <h4>Step # {this.props.data.ordinalNumber + 1}</h4>
+        <p id="delete">Delete</p>
+        </div>
         <div className="input">
           <label>Step Name: </label>
           <input name="stepname" id="stepname" type="text"/>
