@@ -44,9 +44,10 @@ app.post('/courses', wrap(async (req, res) => {
 // enrollments
 app.get('/enrollments/:id', wrap(async (req, res) => {
   const { userId } = req.params.id;
-  const user = await db.User.findById(userId);
-  const enrollments = await user.getCourses();
-  res.send(JSON.stringify(enrollments));
+  // const user = await db.User.findById(userId);
+
+  // const enrollments = await user.getCourses();
+  // res.send(JSON.stringify(enrollments));
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
@@ -101,7 +102,11 @@ app.post('/users', wrap(async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
-  res.send(JSON.stringify(newUser));
+  const token = jwt.sign({ id: newUser.id }, 'secret', { expiresIn: 129600 });
+  res.status(201).send({
+    token: token,
+    user_id: newUser.id
+  });
 }));
 
 // comments
