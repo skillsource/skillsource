@@ -20,14 +20,13 @@ const Dashboard = (props) => {
   //         rating: '***' }
   //       ]
   let user_id = localStorage.getItem("user_id");
-  console.log("user_id:", user_id)
-  // ApiService.getEnrollments(user_id)
-  //   .then((response) => {
-  //     console.log("response in call to getEnrollments:", response)
-  //   })
-  //   .catch((error) => {
-  //     console.log("error in getEnrollments call:", error)
-  //   })
+  ApiService.getEnrollments(user_id)
+    .then((response) => {
+      console.log("response in call to getEnrollments:", response)
+    })
+    .catch((error) => {
+      console.log("error in getEnrollments call:", error)
+    })
 
 
   // const snippets = courses.map((course) => {
