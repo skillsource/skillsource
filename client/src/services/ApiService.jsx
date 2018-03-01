@@ -31,10 +31,11 @@ const ApiService = {
 
   },
   getEnrollments: (id) => {
-    return AuthService.fetch(`${AuthService.domain}/getEnrollments/` + id, {
+    return AuthService.fetch(`${AuthService.domain}/enrollments/` + id, {
       method: 'GET'
     })
     .then(res => {
+      console.log("response in get enrollments:", res)
       return Promise.resolve(res);
     })
     .catch((error) => {
