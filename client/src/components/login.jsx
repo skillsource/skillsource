@@ -8,9 +8,26 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    // if (AuthService.loggedIn()) {
-    //   this.props.history.replace('/');
-    // }
+    if (this.Auth.loggedIn()) {
+      this.props.history.replace('/');
+    }
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  handleFormSubmit = (e) => {
+    e.preventDefault();
+    this.Auth.login(this.state.email, this.state.password)
+      .then(res => {
+        this.props.history.replace('/');
+      })
+      .catch(err =>
+        console.error('err in handleFormSubmit', err)
+      );
   }
 
   render() {
@@ -33,31 +50,11 @@ class Login extends Component {
               type="password"
               onChange={this.handleChange}
             />
-            <button onClick={this.handleFormSubmit()}>SUBMIT</button>
+            <button onClick={this.handleFormSubmit}>SUBMIT</button>
           </form>
         </div>
       </div>
     );
-  }
-
-  handleChange = (e) => {
-    console.log("handleChange:", handleChange)
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-
-  handleFormSubmit = (e) => {
-    console.log("handleFormSubmit called")
-    e.preventDefault();
-    // this.Auth.login(this.state.email, this.state.password)
-    //   .then(res => {
-    //     console.log("res boi:", res.json())
-    //     this.props.history.replace('/');
-    //   })
-    //   .catch(err =>
-    //     console.error('err in handleFormSubmit', err)
-    //   );
   }
 }
 
