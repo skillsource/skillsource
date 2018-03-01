@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
+app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
 
 const unrestricted = [
   { url: '/courses', methods: ['GET'] },
