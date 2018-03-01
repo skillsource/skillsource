@@ -3,7 +3,6 @@ import React, { Component } from "react";
 class CreateStep extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.data);
   }
 
 

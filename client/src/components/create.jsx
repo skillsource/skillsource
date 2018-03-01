@@ -5,12 +5,32 @@ import CreateStep from './createStep.jsx';
 class Create extends Component {
   constructor(props) {
     super(props);
-    this.steps = props.stepDetails;
+    // this.steps = props.stepDetails;
+    this.state = {
+      steps: [
+          {
+            name: '',
+            ordinalNumber: 0,
+            text: ''
+          },
+          {
+            name: '',
+            ordinalNumber: 1,
+            text: ''
+          },
+          {
+            name: '',
+            ordinalNumber: 2,
+            text: ''
+          }
+        ],
+      nextOrdinal: 3
+    };
   }
 
   render() {
 
-    const Steps = this.steps.map((step) => {
+    const Steps = this.state.steps.map((step) => {
       return (
         <CreateStep key={step.ordinalNumber} data={step}/>
     )});
@@ -24,7 +44,7 @@ class Create extends Component {
             <input name="name" id="name" type="text"/>
           </div>
           {Steps}
-          <button onClick={this.props.addStep} className="addStep" type="submit">Add a step</button>
+          <button onClick={this.addStep} className="addStep" type="submit">Add a step</button>
           <input type="submit" value="Submit"/>
         </form>
       </div>
@@ -34,9 +54,9 @@ class Create extends Component {
 
 
   handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    // this.setState({
+    //   [e.target.name]: e.target.value
+    // });
   }
 
   handleFormSubmit = (e) => {
@@ -50,6 +70,17 @@ class Create extends Component {
       .catch(err =>
         console.error('err in handleFormSubmit', err)
       );
+  }
+
+  addStep = () => {
+    this.setState(prevState => ({
+  steps: [...prevState.steps, {
+            name: '',
+            ordinalNumber: 3,
+            text: ''
+          }]
+}))
+    console.log('yo', this.state.steps, this.state.nextOrdinal)
   }
 
 
