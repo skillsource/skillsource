@@ -71,6 +71,7 @@ class App extends React.Component {
         name: '',
         ordinalNumber: nextOrdinal,
         text: ''
+
       }
     )
     this.setState({
