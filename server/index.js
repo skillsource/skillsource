@@ -33,8 +33,8 @@ app.post('/courses', wrap(async (req, res) => {
 }));
 
 // enrollments
-app.get('/enrollments', wrap(async (req, res) => {
-  const { userId } = req.query;
+app.get('/enrollments/:id', wrap(async (req, res) => {
+  const { userId } = req.params.id;
   const user = await db.User.findById(userId);
   const enrollments = await user.getCourses();
   res.send(enrollments);
@@ -113,9 +113,7 @@ app.post('/comments', wrap(async (req, res) => {
 
 // auth
 app.post('/login', wrap(async (req, res) => {
-  console.log("Post to login");
   const { email, password } = req.body;
-  console.log(email);
   const user = await db.User.findOne({ where: { email } });
   const boomUnauthorized = boom.unauthorized('Email/password incorrect');
   if (!user) throw boomUnauthorized;
@@ -124,7 +122,10 @@ app.post('/login', wrap(async (req, res) => {
   if (!authorized) throw boomUnauthorized;
 
   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
-  res.send(token);
+  res.send({
+    token: token,
+    user_id: user.id
+  });
 }));
 
 app.use((err, req, res, next) => {

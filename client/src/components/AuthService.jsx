@@ -3,6 +3,7 @@ import decode from 'jwt-decode';
 const AuthService = {
   domain: 'http://localhost:3000',
   login: (email, password) => {
+    console.log("hello")
     // Get a token from api server using the fetch api
     return AuthService.fetch(`${AuthService.domain}/login`, {
       method: 'POST',
@@ -11,7 +12,9 @@ const AuthService = {
         password: password
       })
     }).then(res => {
-      AuthService.setToken(res.token) // Setting the token in localStorage
+      console.log("res on login call:", res)
+      AuthService.setToken(res.token); // Setting the token in localStorage
+      AuthService.setTokenForUserID(res.user_id);
       return Promise.resolve(res);
     });
   },
@@ -52,6 +55,9 @@ const AuthService = {
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken)
   },
+  setTokenForUserID: (id) => {
+    localStorage.setItem('user_id', id);
+  },
   getToken: () => {
     // Retrieves the user token from localStorage
     const token = localStorage.getItem('id_token');
@@ -60,12 +66,14 @@ const AuthService = {
   logout: () => {
     // Clear user token and profile data from localStorage
     localStorage.removeItem('id_token');
+    localStorage.removeItem('user_id');
   },
   getProfile: () => {
     // Using jwt-decode npm package to decode the token
     return decode(AuthService.getToken());
   },
   fetch: (url, options) => {
+    console.log("fetch called")
     // performs api calls sending the required authentication headers
     const headers = {
       'Accept': 'application/json',
@@ -79,11 +87,20 @@ const AuthService = {
     }
 
     return fetch(url, {headers, ...options})
+      .then((response) => {
+        console.log('response:', response.json())
+      })
       .then(AuthService._checkStatus)
-      // .then(response => response.json())
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log('response from fetch:', response)
+      })
   },
   _checkStatus: (response) => {
     // raises an error in case response status is not a success
+    console.log('response in check status:', response)
     if (response.status >= 200 && response.status < 300) { // Success status lies between 200 to 300
       return response;
     } else {

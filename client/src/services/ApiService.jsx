@@ -30,8 +30,16 @@ const ApiService = {
   addEnrollment: () => {
 
   },
-  getEnrollments: () => {
-
+  getEnrollments: (id) => {
+    return AuthService.fetch(`${AuthService.domain}/getEnrollments/` + id, {
+      method: 'GET'
+    })
+    .then(res => {
+      return Promise.resolve(res);
+    })
+    .catch((error) => {
+      console.log("error getting enrollments in ApiService:", error);
+    })
   },
   deleteEnrollment: () => {
 
