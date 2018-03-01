@@ -29,6 +29,7 @@ const AuthService = {
         email
       })
     }).then(res => {
+      AuthService.setTokenForUserID(res.user_id);
       AuthService.setToken(res.token); // Setting the token in localStorage
       return Promise.resolve(res);
     })
