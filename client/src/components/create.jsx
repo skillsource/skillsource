@@ -37,15 +37,13 @@ class Create extends Component {
     return (
       <div className="create">
         <h3>Create a course:</h3>
-        <form>
           <div className="input">
             <label>Course Name: </label>
             <input name="name" id="name" type="text"/>
           </div>
           {Steps}
-          <button onClick={this.addStep} className="addStep" type="submit">Add a step</button>
-          <input type="submit" value="Submit"/>
-        </form>
+          <button onClick={this.addStep} className="addStep">Add a step</button>
+          <button>Submit</button>
       </div>
     );
   }
@@ -53,9 +51,9 @@ class Create extends Component {
 
 
   handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    // this.setState({
+    //   [e.target.name]: e.target.value
+    // });
   }
 
   handleFormSubmit = (e) => {
@@ -73,7 +71,9 @@ class Create extends Component {
 
   addStep = () => {
     let stepsArray = this.state.steps.slice();
+    console.log('Steps array origin', stepsArray)
     let nextOrdinal = stepsArray.length;
+    console.log('Steps array length', nextOrdinal)
     stepsArray.push(
       {
         name: '',
@@ -81,10 +81,11 @@ class Create extends Component {
         text: ''
       }
     )
+    console.log('stepsArray after push', stepsArray);
     this.setState({
       steps: stepsArray
     })
-    console.log('New state.steps', this.state.steps, this.state.nextOrdinal)
+    console.log('New state.steps', this.state.steps)
   }
 
 
