@@ -29,12 +29,6 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // fetch('http://localhost:3000/users/1')
-    //   .then(data => console.log(data))
-    //   .catch(err => console.error(err));
-  }
-
   setUserData = (data) => {
     console.log('Setting user data', data)
     this.setState({

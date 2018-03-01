@@ -3,7 +3,6 @@ import decode from 'jwt-decode';
 const AuthService = {
   domain: 'http://localhost:3000',
   login: (email, password) => {
-    console.log("hello")
     // Get a token from api server using the fetch api
     return AuthService.fetch(`${AuthService.domain}/login`, {
       method: 'POST',
@@ -12,11 +11,13 @@ const AuthService = {
         password: password
       })
     }).then(res => {
-      console.log("res on login call:", res)
       AuthService.setToken(res.token); // Setting the token in localStorage
-      AuthService.setTokenForUserID(res.user_id);
+      AuthService.setTokenForUserID(res.user_id); // Setting the user_id in localStorage
       return Promise.resolve(res);
-    });
+    })
+    .catch((error) => {
+      console.log("error during login:", error);
+    })
   },
   signup: (username, password, email) => {
     // Get a token from api server using the fetch api
@@ -28,8 +29,7 @@ const AuthService = {
         email
       })
     }).then(res => {
-      console.log('Login accomplised', res)
-      AuthService.setToken(res.token) // Setting the token in localStorage
+      AuthService.setToken(res.token); // Setting the token in localStorage
       return Promise.resolve(res);
     })
   },
@@ -73,7 +73,6 @@ const AuthService = {
     return decode(AuthService.getToken());
   },
   fetch: (url, options) => {
-    console.log("fetch called")
     // performs api calls sending the required authentication headers
     const headers = {
       'Accept': 'application/json',
@@ -87,20 +86,11 @@ const AuthService = {
     }
 
     return fetch(url, {headers, ...options})
-      .then((response) => {
-        console.log('response:', response.json())
-      })
       .then(AuthService._checkStatus)
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        console.log('response from fetch:', response)
-      })
+      .then(response => response.json())
   },
   _checkStatus: (response) => {
     // raises an error in case response status is not a success
-    console.log('response in check status:', response)
     if (response.status >= 200 && response.status < 300) { // Success status lies between 200 to 300
       return response;
     } else {

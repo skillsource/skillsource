@@ -80,9 +80,7 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
-// const sampleCourse = Course.build({id: 1, name: 'test', description: 'test', rating: 5, userId: 1, creatorId: 1}).save();
-
-sequelize.sync();
+//sequelize.sync();
 // sequelize.sync({ force: true });
 
 module.exports.User = User;
