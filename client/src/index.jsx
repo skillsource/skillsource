@@ -24,25 +24,6 @@ class App extends React.Component {
 
     this.auth = AuthService;
 
-    this.state = {
-      createSteps: [
-          {
-            name: '',
-            ordinalNumber: 0,
-            text: ''
-          },
-          {
-            name: '',
-            ordinalNumber: 1,
-            text: ''
-          },
-          {
-            name: '',
-            ordinalNumber: 2,
-            text: ''
-          }
-        ]
-    };
   }
 
   render () {
@@ -64,7 +45,7 @@ class App extends React.Component {
             <Route path="/about" component={About} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <PrivateRoute path="/create" component={(props) => <Create addStep={this.addStep} stepDetails={this.state.createSteps}/>}/>
+            <Route path="/create" component={Create}/>
             <PrivateRoute path="/dashboard" component={Dashboard}/>
             <Route exact path="/courses" component={Browse} />
             <Route path="/courses/:id" render={(props) => <Course {...this.props} {...props} />}/>
