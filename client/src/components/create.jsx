@@ -23,8 +23,7 @@ class Create extends Component {
             ordinalNumber: 2,
             text: ''
           }
-        ],
-      nextOrdinal: 3
+        ]
     };
   }
 
@@ -54,9 +53,9 @@ class Create extends Component {
 
 
   handleChange = (e) => {
-    // this.setState({
-    //   [e.target.name]: e.target.value
-    // });
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   }
 
   handleFormSubmit = (e) => {
@@ -73,14 +72,19 @@ class Create extends Component {
   }
 
   addStep = () => {
-    this.setState(prevState => ({
-  steps: [...prevState.steps, {
-            name: '',
-            ordinalNumber: 3,
-            text: ''
-          }]
-}))
-    console.log('yo', this.state.steps, this.state.nextOrdinal)
+    let stepsArray = this.state.steps.slice();
+    let nextOrdinal = stepsArray.length;
+    stepsArray.push(
+      {
+        name: '',
+        ordinalNumber: nextOrdinal,
+        text: ''
+      }
+    )
+    this.setState({
+      steps: stepsArray
+    })
+    console.log('New state.steps', this.state.steps, this.state.nextOrdinal)
   }
 
 
