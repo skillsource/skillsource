@@ -28,8 +28,6 @@ const AuthService = {
         email
       })
     }).then(res => {
-      console.log('Login accomplised', res)
-      AuthService.setToken(res.token) // Setting the token in localStorage
       return Promise.resolve(res);
     })
   },
