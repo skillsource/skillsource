@@ -31,7 +31,7 @@ class Create extends Component {
 
     const Steps = this.state.steps.map((step) => {
       return (
-        <CreateStep key={step.ordinalNumber} data={step}/>
+        <CreateStep key={step.ordinalNumber} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
     )});
 
     return (
@@ -39,11 +39,15 @@ class Create extends Component {
         <h3>Create a course:</h3>
           <div className="input">
             <label>Course Name: </label>
-            <input name="name" id="name" type="text"/>
+            <input name="name" id="createName" type="text" onChange={this.handleChange}/>
+          </div>
+          <div className="input">
+            <label>Description: </label>
+            <input name="description" id="createDescription" type="text" onChange={this.handleChange}/>
           </div>
           {Steps}
           <button onClick={this.addStep} className="addStep">Add a step</button>
-          <button>Submit</button>
+          <button onClick={this.handleSubmit}>Submit</button>
       </div>
     );
   }
@@ -51,29 +55,26 @@ class Create extends Component {
 
 
   handleChange = (e) => {
-    // this.setState({
-    //   [e.target.name]: e.target.value
-    // });
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   }
 
-  handleFormSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-
-    this.Auth.login(this.state.email, this.state.password)
+    ApiService.createCourse(this.state.name, this.state.description, 1, this.state.steps)
       .then(res => {
-        console.log("res:", res)
-        this.props.history.replace('/');
+        console.log("Response from submit:", res)
+        // this.props.history.replace('/');
       })
       .catch(err =>
-        console.error('err in handleFormSubmit', err)
+        console.error('err in handleSubmit', err)
       );
   }
 
   addStep = () => {
     let stepsArray = this.state.steps.slice();
-    console.log('Steps array origin', stepsArray)
     let nextOrdinal = stepsArray.length;
-    console.log('Steps array length', nextOrdinal)
     stepsArray.push(
       {
         name: '',
@@ -81,13 +82,35 @@ class Create extends Component {
         text: ''
       }
     )
-    console.log('stepsArray after push', stepsArray);
     this.setState({
       steps: stepsArray
     })
-    console.log('New state.steps', this.state.steps)
   }
 
+  deleteStep = (index) => {
+    console.log('delete index', index)
+    let stepsArray = this.state.steps.slice();
+    stepsArray.splice(index, 1);
+    let counter = 0;
+    stepsArray.forEach((step) => {
+      step.ordinalNumber = counter;
+      counter++;
+    })
+    this.setState({
+      steps: stepsArray
+    })
+  }
+
+  handleStepsChange = (e, index) => {
+    let stepsArray = this.state.steps.slice();
+
+    stepsArray[index][e.target.name] = e.target.value;
+
+    this.setState({
+      steps: stepsArray
+    });
+    console.log('State post step change', this.state.steps)
+  }
 
 }
 
