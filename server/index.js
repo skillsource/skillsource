@@ -131,7 +131,10 @@ app.post('/login', wrap(async (req, res) => {
   if (!authorized) throw boomUnauthorized;
 
   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
-  res.send(JSON.stringify(token));
+  res.status(201).send({
+    token: token,
+    user_id: user.id
+  });
 }));
 
 app.use((err, req, res, next) => {
