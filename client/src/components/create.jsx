@@ -96,14 +96,10 @@ class Create extends Component {
     this.setState({
       steps: stepsArray,
       idCounter: this.state.idCounter + 1
-    }, () => {
-      console.log(this.state.idCounter)
     });
   }
 
   deleteStep = (index) => {
-    console.log('delete index', index);
-
     let stepsArray = this.state.steps.slice();
     stepsArray.splice(index, 1);
     let counter = 0;
@@ -113,11 +109,7 @@ class Create extends Component {
     })
     this.setState({
       steps: stepsArray
-    }, () => {
-      console.log('state post delete', this.state.steps);
     })
-
-
   }
 
   handleStepsChange = (e, index) => {
@@ -128,7 +120,6 @@ class Create extends Component {
     this.setState({
       steps: stepsArray
     });
-    console.log('State post step change', this.state.steps)
   }
 
 }
