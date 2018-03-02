@@ -10,7 +10,7 @@ const ApiService = {
       return Promise.resolve(res);
     });
   },
-  createCourse: (name, description, creatorId, url, steps) => {
+  createCourse: (name, description, steps) => {
     return AuthService.fetch(`${AuthService.domain}/courses`, {
       method: 'POST',
       body: JSON.stringify({
