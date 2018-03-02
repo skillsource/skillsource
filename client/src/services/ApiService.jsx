@@ -27,7 +27,15 @@ const ApiService = {
 
   },
   getEnrollments: () => {
-
+    return AuthService.fetch(`${AuthService.domain}/enrollments`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    })
   },
   deleteEnrollment: () => {
 
