@@ -36,7 +36,7 @@ app.get('/courses', wrap(async (req, res) => {
 app.get('/courses/:courseId', wrap(async (req, res) => {
   const { courseId } = req.params;
   const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
-  res.send(JSON.stringify(courses));
+  res.send(JSON.stringify(course));
 }));
 
 app.post('/courses', wrap(async (req, res) => {
