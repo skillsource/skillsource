@@ -134,3 +134,22 @@ a {
 .searchButton{
   margin-bottom: 20px;
 }
+
+#delete {
+  float:right;
+}
+
+#createDescription {
+  display: block;
+  width: 80%;
+  height: 60px;
+}
+
+#createName {
+  display: block;
+}
+
+.stepText {
+  width: 80%;
+  height: 30px;
+}

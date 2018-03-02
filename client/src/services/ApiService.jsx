@@ -10,22 +10,18 @@ const ApiService = {
       return Promise.resolve(res);
     });
   },
-  createCourse: (name, description, rating, userid) => {
-    // Get a token from api server using the fetch api
-    return AuthService.fetch(`${AuthService.domain}/users`, {
+  createCourse: (name, description, creatorId, steps) => {
+    return AuthService.fetch(`${AuthService.domain}/courses`, {
       method: 'POST',
       body: JSON.stringify({
         name,
         description,
-        rating,
-        userid
+        creatorId,
+        steps
       })
     }).then(res => {
       return Promise.resolve(res);
     })
-  },
-  createStep: () => {
-
   },
   addEnrollment: () => {
 

@@ -3,16 +3,13 @@ import axios from 'axios';
 import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.jsx'
 
-
-
 class Browse extends Component {
+
   constructor(props) {
     super(props);
-
     this.state = {
       data: []
     };
-
   }
 
   search(){

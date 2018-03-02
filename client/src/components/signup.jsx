@@ -20,6 +20,9 @@ class Signup extends Component {
 
     this.auth.signup(username, password, email)
       .then(res => {
+        this.auth.login(email, password);
+      })
+      .then(res => {
         this.props.history.replace('/');
       })
       .catch(err =>

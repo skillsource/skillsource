@@ -4,6 +4,7 @@ const AuthService = {
   domain: 'http://localhost:3000',
   login: (email, password) => {
     // Get a token from api server using the fetch api
+    console.log('from auth', email, password)
     return AuthService.fetch(`${AuthService.domain}/login`, {
       method: 'POST',
       body: JSON.stringify({
@@ -27,8 +28,6 @@ const AuthService = {
         email
       })
     }).then(res => {
-      console.log('Login accomplised', res)
-      AuthService.setToken(res.token) // Setting the token in localStorage
       return Promise.resolve(res);
     })
   },

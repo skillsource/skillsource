@@ -16,9 +16,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
+app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
+
+const unrestricted = [
+  { url: '/courses', methods: ['GET'] },
+  { url: '/steps', methods: ['GET'] },
+  { url: '/users', methods: ['POST'] },
+  { url: '/comments', methods: ['GET'] },
+  { url: '/login', methods: ['POST'] },
+]
+app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
+  console.log(req.get('Authorization'))
   const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
   res.send(JSON.stringify(courses));
 }));
@@ -113,9 +124,7 @@ app.post('/comments', wrap(async (req, res) => {
 
 // auth
 app.post('/login', wrap(async (req, res) => {
-  console.log("Post to login");
   const { email, password } = req.body;
-  console.log(email);
   const user = await db.User.findOne({ where: { email } });
   const boomUnauthorized = boom.unauthorized('Email/password incorrect');
   if (!user) throw boomUnauthorized;
@@ -132,8 +141,10 @@ app.use((err, req, res, next) => {
   if (err.isBoom) {
     const { payload } = err.output;
     res.status(payload.statusCode).send(payload);
+  } else if (err.name === 'UnauthorizedError') {
+    if (!req.user) res.status(401).send('Invalid jwt');
   } else {
-    res.sendStatus(500);
+    res.status(500).send('Whoops! Something went wrong. Check the server logs.');
   }
 });
 
