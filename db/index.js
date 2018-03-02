@@ -83,10 +83,17 @@ Course.hasMany(Comment);
 // sequelize.sync();
 // sequelize.sync({ force: true });
 
+const updateCourseRating = async(courseId) => {
+  const ratingsSum = await UserCourse.sum('rating');
+  const ratingsCount = await UserCourse.count();
+  const rating = Math.ceil(ratingsSum / ratingsCount);
+  await Course.update({ rating }, { where: { id: courseId } });
+};
+
 module.exports.User = User;
 module.exports.Course = Course;
 module.exports.UserCourse = UserCourse;
 module.exports.Step = Step;
 module.exports.UserStep = UserStep;
 module.exports.Comment = Comment;
-
+module.exports.updateCourseRating = updateCourseRating;

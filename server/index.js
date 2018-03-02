@@ -65,6 +65,15 @@ app.post('/enrollments', wrap(async (req, res) => {
   res.send(JSON.stringify(course));
 }));
 
+app.patch('/enrollments/rating', wrap(async (req, res) => {
+  const { courseId, rating } = req.body;
+  const userId = req.user.id;
+  await db.UserCourse.update({ rating }, { where: { userId, courseId } });
+  const updatedUserCourse = await db.UserCourse.findOne({ where: { userId, courseId } });
+  await db.updateCourseRating(courseId);
+  res.send(JSON.stringify(updatedUserCourse));
+}));
+
 // steps
 app.get('/steps', wrap(async (req, res) => {
   const { courseId } = req.query;
