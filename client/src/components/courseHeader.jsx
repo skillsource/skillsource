@@ -1,4 +1,5 @@
 import React from "react";
+import Enroll from "./enroll.jsx"
 
 class CourseHeader extends React.Component {
 
@@ -8,32 +9,21 @@ class CourseHeader extends React.Component {
     };
   }
 
-
-
   render(){
-
-  const courseId = this.props.match.params.id;
-
-  const course = sampleData[courseId];
-
-  const steps = course.steps;
-
-  const lessonPlan = steps.map((step) => {
-      return (
-        <Step
-          key={step.id}
-          data={step}/>
-      )
-    });
     return (
-      <div className="course-view">
+      <div className="course-header">
+        <div id="course-name">
           <h3>{course.name}</h3>
+        </div>
+        <div id="course-rating">
           <h4>Rating: {course.rating}</h4>
-          <p>{course.description}</p>
-          {lessonPlan}
+        </div>
+        <div id="course-enroll">
+          <Enroll />
+        </div>
       </div>
     );
   }
 }
 
-export default Course;
+export default CourseHeader;
