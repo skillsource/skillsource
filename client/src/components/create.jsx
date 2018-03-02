@@ -11,17 +11,20 @@ class Create extends Component {
           {
             name: '',
             ordinalNumber: 0,
-            text: ''
+            text: '',
+            url: ''
           },
           {
             name: '',
             ordinalNumber: 1,
-            text: ''
+            text: '',
+            url: ''
           },
           {
             name: '',
             ordinalNumber: 2,
-            text: ''
+            text: '',
+            url: ''
           }
         ]
     };
@@ -62,7 +65,7 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    ApiService.createCourse(this.state.name, this.state.description, 1, this.state.steps)
+    ApiService.createCourse(this.state.name, this.state.description, this.state.url, this.state.steps)
       .then(res => {
         console.log("CourseId:", res.id)
         let courseId = res.id;
@@ -80,7 +83,8 @@ class Create extends Component {
       {
         name: '',
         ordinalNumber: nextOrdinal,
-        text: ''
+        text: '',
+        url: ''
       }
     )
     this.setState({
