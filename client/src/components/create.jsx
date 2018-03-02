@@ -3,8 +3,8 @@ import ApiService from '../services/ApiService.jsx';
 import CreateStep from './createStep.jsx';
 
 class Create extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     // this.steps = props.stepDetails;
     this.state = {
       steps: [
@@ -64,8 +64,9 @@ class Create extends Component {
     e.preventDefault();
     ApiService.createCourse(this.state.name, this.state.description, 1, this.state.steps)
       .then(res => {
-        console.log("Response from submit:", res)
-        // this.props.history.replace('/');
+        console.log("CourseId:", res.id)
+        let courseId = res.id;
+        this.props.history.replace("/courses/" + courseId);
       })
       .catch(err =>
         console.error('err in handleSubmit', err)
@@ -87,7 +88,7 @@ class Create extends Component {
     })
   }
 
-  deleteStep = (index) => {
+  deleteStep = (e, index) => {
     console.log('delete index', index)
     let stepsArray = this.state.steps.slice();
     stepsArray.splice(index, 1);

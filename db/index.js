@@ -47,6 +47,7 @@ const Step = sequelize.define('step', {
     allowNull: false,
   },
   text: Sequelize.STRING,
+  url: Sequelize.STRING,
 });
 
 const UserStep = sequelize.define('userStep', {

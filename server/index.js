@@ -35,25 +35,25 @@ app.get('/courses', wrap(async (req, res) => {
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting course: { name, description, creatorId, steps }
+  // expecting course: { name, description, steps }
   // where array steps: [{ ordinalNumber, name, text }]
   // doing the work of POST /steps
-  const course = req.body;
+  const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
   res.send(JSON.stringify(newCourse));
 }));
 
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.user.id;
   const user = await db.User.findById(userId);
   const enrollments = await user.getCourses();
   res.send(JSON.stringify(enrollments));
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
-  const { userId, courseId } = req.body;
-  const user = await db.User.findById(userId);
+  const { courseId } = req.body;
+  const user = await db.User.findById(req.user.id);
   const course = await db.Course.findById(courseId, { include: db.Step });
   try {
     await user.addCourse(courseId);
@@ -75,14 +75,15 @@ app.get('/steps', wrap(async (req, res) => {
 
 // userSteps
 app.get('/user-steps', wrap(async (req, res) => {
-  const { userId, courseId } = req.query;
-  const user = await db.User.findById(userId);
+  const { courseId } = req.query;
+  const user = await db.User.findById(req.user.id);
   const userSteps = await user.getSteps({ where: { courseId } });
   res.send(JSON.stringify(userSteps));
 }));
 
 app.patch('/user-steps', wrap(async (req, res) => {
-  const { userId, stepId, completed } = req.query;
+  const userId = req.user.id;
+  const { stepId, completed } = req.query;
   await db.UserStep.update({ completed }, { where: { userId, stepId } });
   const updatedUserStep = await db.UserStep.findOne({ where: { userId, stepId } });
   res.send(JSON.stringify(updatedUserStep));
@@ -90,8 +91,7 @@ app.patch('/user-steps', wrap(async (req, res) => {
 
 // users
 app.get('/users/:userId', wrap(async (req, res) => {
-  const { userId } = req.params;
-  const user = await db.User.findById(userId);
+  const user = await db.User.findById(req.user.id);
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
   res.send(JSON.stringify(user));
 }));
@@ -115,8 +115,8 @@ app.get('/comments', wrap(async (req, res) => {
 }));
 
 app.post('/comments', wrap(async (req, res) => {
-  const { userId, courseId, text } = req.body;
-  const user = await db.User.findById(userId);
+  const { courseId, text } = req.body;
+  const user = await db.User.findById(req.user.id);
   const course = await db.Course.findById(courseId);
   const comment = await db.Comment.create({ userId, courseId, text });
   res.send(JSON.stringify(comment));
