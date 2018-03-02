@@ -4,6 +4,7 @@ const { db_name, db_user, db_password } = require('../config/config');
 const sequelize = new Sequelize(db_name, db_user, db_password, {
   host: 'localhost',
   dialect: 'mysql',
+  logging: false,
   operatorsAliases: false,
 });
 
@@ -80,7 +81,7 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
-// sequelize.sync();
+sequelize.sync();
 // sequelize.sync({ force: true });
 
 module.exports.User = User;
