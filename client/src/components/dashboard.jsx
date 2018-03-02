@@ -3,29 +3,13 @@ import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.jsx';
 
 const Dashboard = (props) => {
-  // const courses = [{
-  //         id: 1,
-  //         name: 'Learn Javascript',
-  //         description: 'Learn vanilla javascript in 30 days or less',
-  //         rating: '****' },
-  //         {
-  //         id: 2,
-  //         name: 'Swim like Michael Phelps',
-  //         description: 'Master the techniques perfected by the master of swim.',
-  //         rating: '*****' },
-  //         {
-  //         id: 3,
-  //         name: 'Play the ukelele',
-  //         description: 'Learn how to play the uke through youtube videos, perfectly ordered by level of difficulty.',
-  //         rating: '***' }
-  //       ]
   let courses = [];
   ApiService.getEnrollments()
     .then((res) => {
       courses = res;
     })
     .catch((error) => {
-      console.log("error:", error)
+      console.log("error calling getEnrollments in ApiService:", error)
     })
 
   const snippets = courses.map((course) => {
