@@ -89,12 +89,15 @@ class Create extends Component {
         ordinalNumber: nextOrdinal,
         text: '',
         url: '',
-        id: this.step.idCounter
+        id: this.state.idCounter
       }
     )
+
     this.setState({
       steps: stepsArray,
-      idCounter: idCounter++
+      idCounter: this.state.idCounter + 1
+    }, () => {
+      console.log(this.state.idCounter)
     });
   }
 
