@@ -10,7 +10,7 @@ class CreateStep extends Component {
       <div className="create-step">
         <div className="stepOrder">
         <h4>Step # {this.props.data.ordinalNumber + 1}</h4>
-        <button id="delete" onClick={(e) => {this.props.deleteStep(e, this.props.data.ordinalNumber)}}>Delete</button>
+        <button id="delete" onClick={() => {this.props.deleteStep(this.props.data.ordinalNumber)}}>Delete</button>
         </div>
         <div className="input">
           <label>Step Name: </label>

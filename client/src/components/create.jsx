@@ -12,21 +12,25 @@ class Create extends Component {
             name: '',
             ordinalNumber: 0,
             text: '',
-            url: ''
+            url: '',
+            id: 0
           },
           {
             name: '',
             ordinalNumber: 1,
             text: '',
-            url: ''
+            url: '',
+            id: 1
           },
           {
             name: '',
             ordinalNumber: 2,
             text: '',
-            url: ''
+            url: '',
+            id: 2
           }
-        ]
+        ],
+      idCounter: 3
     };
   }
 
@@ -34,7 +38,7 @@ class Create extends Component {
 
     const Steps = this.state.steps.map((step) => {
       return (
-        <CreateStep key={step.ordinalNumber} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
+        <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
     )});
 
     return (
@@ -84,16 +88,19 @@ class Create extends Component {
         name: '',
         ordinalNumber: nextOrdinal,
         text: '',
-        url: ''
+        url: '',
+        id: this.step.idCounter
       }
     )
     this.setState({
-      steps: stepsArray
-    })
+      steps: stepsArray,
+      idCounter: idCounter++
+    });
   }
 
-  deleteStep = (e, index) => {
-    console.log('delete index', index)
+  deleteStep = (index) => {
+    console.log('delete index', index);
+
     let stepsArray = this.state.steps.slice();
     stepsArray.splice(index, 1);
     let counter = 0;
@@ -103,7 +110,11 @@ class Create extends Component {
     })
     this.setState({
       steps: stepsArray
+    }, () => {
+      console.log('state post delete', this.state.steps);
     })
+
+
   }
 
   handleStepsChange = (e, index) => {
