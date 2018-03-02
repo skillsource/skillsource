@@ -1,28 +1,18 @@
 import React from "react";
+import ReactStars from 'react-stars';
 import Step from './step.jsx';
 
 const Course = (props) => {
-
   const courseId = props.match.params.id;
-
   const course = sampleData[courseId];
-
-  const steps = course.steps;
-
-  const lessonPlan = steps.map((step) => {
-      return (
-        <Step
-          key={step.id}
-          data={step}/>
-      )
-    });
+  const { steps, name, rating, description } = course;
 
   return (
     <div className="course-view">
-        <h3>{course.name}</h3>
-        <h4>Rating: {course.rating}</h4>
-        <p>{course.description}</p>
-        {lessonPlan}
+      <h3>{name}</h3>
+      <ReactStars value={rating} size={20} edit={false}/>
+      <p>{description}</p>
+      {steps.map(step => <Step key={step.id} data={step}/>)}
     </div>
   );
 }
@@ -35,7 +25,7 @@ export default Course;
           id: 1,
           name: 'Learn Javascript',
           description: 'Learn vanilla JS in 30 days or less.',
-          rating: '*****',
+          rating: 5,
           steps: [
             {
               id: 1,
@@ -61,7 +51,7 @@ export default Course;
           id: 2,
           name: 'Swim like Michael Phelps',
           description: 'Master the techniques perfected by the master of swim.',
-          rating: '*****',
+          rating: 4,
           steps: [
             {
               id: 1,
@@ -87,7 +77,7 @@ export default Course;
           id: 3,
           name: 'Play the ukelele',
           description: 'Learn how to play the uke through youtube videos, perfectly ordered by level of difficulty.',
-          rating: '***',
+          rating: 3,
           steps: [
             {
               id: 1,
