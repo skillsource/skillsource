@@ -35,7 +35,9 @@ class Browse extends Component {
       this.setState({
         data: data
       })
-    })
+    }).then(()=>{
+      console.log('the data >>>', this.state.data)
+    }) 
   }
 
   render() {
