@@ -24,60 +24,6 @@ class App extends React.Component {
 
     this.auth = AuthService;
 
-    this.state = {
-      createSteps: [
-          {
-            name: '',
-            ordinalNumber: 0,
-            text: ''
-          },
-          {
-            name: '',
-            ordinalNumber: 1,
-            text: ''
-          },
-          {
-            name: '',
-            ordinalNumber: 2,
-            text: ''
-          }
-        ]
-    };
-  }
-
-  // componentDidMount() {
-  //   fetch('http://localhost:3000/users/1')
-  //     .then(data => console.log(data))
-  //     .catch(err => console.error(err));
-  // }
-
-  // setUserData = (data) => {
-  //   console.log('Setting user data', data)
-  //   this.setState({
-  //     userData: {
-  //       id: data.id,
-  //       username: data.username,
-  //       email: data.email
-  //     }
-  //   })
-  // }
-  //
-  addStep = () => {
-    console.log("adding step")
-    let nextOrdinal = this.state.createSteps.length;
-    let stepsArray = this.state.createSteps;
-    stepsArray.push(
-      {
-        name: '',
-        ordinalNumber: nextOrdinal,
-        text: ''
-
-      }
-    )
-    this.setState({
-      createSteps: stepsArray
-    })
-    console.log('yo', this.state.steps)
   }
 
   render () {
@@ -99,7 +45,7 @@ class App extends React.Component {
             <Route path="/about" component={About} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <PrivateRoute path="/create" component={(props) => <Create addStep={this.addStep} stepDetails={this.state.createSteps}/>}/>
+            <Route path="/create" component={Create}/>
             <PrivateRoute path="/dashboard" component={Dashboard}/>
             <Route exact path="/courses" component={Browse} />
             <Route path="/courses/:id" render={(props) => <Course {...this.props} {...props} />}/>
