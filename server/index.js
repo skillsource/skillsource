@@ -29,8 +29,13 @@ app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  console.log(req.get('Authorization'))
-  const courses = await db.Course.findAll({ include: [db.Step, db.Comment] });
+  const courses = await db.Course.findAll();
+  res.send(JSON.stringify(courses));
+}));
+
+app.get('/courses/:courseId', wrap(async (req, res) => {
+  const { courseId } = req.params;
+  const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
   res.send(JSON.stringify(courses));
 }));
 
