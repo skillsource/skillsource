@@ -2,6 +2,7 @@ import React from "react";
 import Snippet from './snippet.jsx';
 
 const Dashboard = (props) => {
+
   const courses = [{
           id: 1,
           name: 'Learn Javascript',
@@ -32,6 +33,7 @@ const Dashboard = (props) => {
         <h3>You are enrolled in:</h3>
         {snippets}
     </div>
+
   );
 }
 
