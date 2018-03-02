@@ -35,7 +35,7 @@ app.get('/courses', wrap(async (req, res) => {
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting course: { name, description, steps }
+  // expecting course: { name, description, url, steps }
   // where array steps: [{ ordinalNumber, name, text }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
