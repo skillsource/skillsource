@@ -46,7 +46,7 @@ class Create extends Component {
         <h3>Create a course:</h3>
           <div className="input">
             <label>Course Name: </label>
-            <input name="name" id="createName" type="text" onChange={this.handleChange}/>
+            <input name="name" id="createName" type="text" onChange={this.handleChange} />
           </div>
           <div className="input">
             <label>Description: </label>
@@ -69,7 +69,8 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    ApiService.createCourse(this.state.name, this.state.description, this.state.steps)
+    const steps = this.state.steps.map(({ id, ...step }) => step)
+    ApiService.createCourse(this.state.name, this.state.description, steps)
       .then(res => {
         console.log("CourseId:", res.id)
         let courseId = res.id;
