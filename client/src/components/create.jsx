@@ -69,7 +69,7 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    ApiService.createCourse(this.state.name, this.state.description, this.state.url, this.state.steps)
+    ApiService.createCourse(this.state.name, this.state.description, this.state.steps)
       .then(res => {
         console.log("CourseId:", res.id)
         let courseId = res.id;

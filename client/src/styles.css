@@ -1,10 +1,12 @@
 html, body {
   margin: 0;
   padding: 0;
+  background-color: #FF9F1C;
 }
 
 h1 {
-  margin-left: 10px
+  margin-left: 10px;
+  color: #FDFFFC;
 }
 
 a {
@@ -18,14 +20,14 @@ a {
 
 .nav {
   display: block;
-  background-color: red;
+  background-color: #2EC4B6;
   margin-left: 0;
   margin-right: 0;
 }
 
 .navLeft {
   display: inline-block;
-  background-color: yellow;
+  background-color: #FDFFFC;
   padding: 20px;
   margin-left: 10px;
   margin-right: 10px;
@@ -34,13 +36,12 @@ a {
 .navRight {
   display: inline-block;
   float: right;
-
 }
 
 .childRight {
   display: inline-block;
   float: right;
-  background-color: yellow;
+  background-color: #FDFFFC;
   padding: 20px;
   margin-left: 10px;
   margin-right: 10px;
@@ -56,7 +57,7 @@ a {
 
 .snippet {
   display: block;
-  background-color: teal;
+  background-color: #2EC4B6;
   margin-bottom: 20px;
   padding-left: 10px;
 }
@@ -81,7 +82,7 @@ a {
 
 .step {
   display: block;
-  background-color: green;
+  background-color: #2EC4B6;
   padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -95,14 +96,14 @@ a {
 .create-step {
   border-width: 2px;
   border-style: dotted;
-  border-color: red;
+  border-color: #E71D36;
   margin: 20px;
   padding: 10px;
 }
 
 .courseSnippet {
   border-radius: 25px;
-  border: 2px solid red;
+  border: 2px solid #E71D36;
   padding-left: 10px;
   padding-right: 10px;
   width: 800px;
