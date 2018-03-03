@@ -1,6 +1,7 @@
 import React from "react";
 import ReactStars from 'react-stars';
 import Step from './step.jsx';
+import Comment from './comment.jsx';
 
 const Course = (props) => {
   const courseId = props.match.params.id;
@@ -13,6 +14,7 @@ const Course = (props) => {
       <ReactStars value={rating} size={20} edit={false}/>
       <p>{description}</p>
       {steps.map(step => <Step key={step.id} data={step}/>)}
+      <Comment courseId={courseId} />
     </div>
   );
 }

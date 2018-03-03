@@ -129,10 +129,11 @@ app.get('/comments', wrap(async (req, res) => {
 }));
 
 app.post('/comments', wrap(async (req, res) => {
-  const { courseId, text } = req.body;
-  const user = await db.User.findById(req.user.id);
+  const userId = req.user.id;
+  const { courseId, commentText } = req.body;
+  const user = await db.User.findById(userId);
   const course = await db.Course.findById(courseId);
-  const comment = await db.Comment.create({ userId, courseId, text });
+  const comment = await db.Comment.create({ userId, courseId, commentText });
   res.send(JSON.stringify(comment));
 }));
 
