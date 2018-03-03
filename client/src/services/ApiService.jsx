@@ -10,24 +10,55 @@ const ApiService = {
       return Promise.resolve(res);
     });
   },
-  createCourse: (name, description, creatorId, steps) => {
+  createCourse: (name, description, steps) => {
     return AuthService.fetch(`${AuthService.domain}/courses`, {
       method: 'POST',
       body: JSON.stringify({
         name,
         description,
-        creatorId,
         steps
       })
     }).then(res => {
       return Promise.resolve(res);
     })
   },
-  addEnrollment: () => {
 
+  getCourse: (id) => {
+    return AuthService.fetch(`${AuthService.domain}/courses/${id}`,{
+       method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res);
+    })
   },
-  getEnrollments: () => {
 
+  isEnrolled: (courseId) => {
+    return ApiService.getEnrollments().then((enrolledCourses)=>{
+      for (var i = 0; i < enrolledCourses.length; i++) {
+        if (courseId === enrolledCourses[i].courseId) {
+          return true;
+        }
+      }
+      return false;
+    });
+  },
+
+  enroll: (courseId) => {
+    return AuthService.fetch(`${AuthService.domain}/enrollments`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: courseId
+      })
+    }).then(res => {
+      return Promise.resolve(res);
+    })
+  },
+
+  getEnrollments: () => {
+    return AuthService.fetch(`${AuthService.domain}/enrollments`, {
+      method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res)
+    })
   },
   deleteEnrollment: () => {
 

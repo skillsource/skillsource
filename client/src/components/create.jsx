@@ -11,19 +11,26 @@ class Create extends Component {
           {
             name: '',
             ordinalNumber: 0,
-            text: ''
+            text: '',
+            url: '',
+            id: 0
           },
           {
             name: '',
             ordinalNumber: 1,
-            text: ''
+            text: '',
+            url: '',
+            id: 1
           },
           {
             name: '',
             ordinalNumber: 2,
-            text: ''
+            text: '',
+            url: '',
+            id: 2
           }
-        ]
+        ],
+      idCounter: 3
     };
   }
 
@@ -31,7 +38,7 @@ class Create extends Component {
 
     const Steps = this.state.steps.map((step) => {
       return (
-        <CreateStep key={step.ordinalNumber} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
+        <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
     )});
 
     return (
@@ -62,7 +69,7 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    ApiService.createCourse(this.state.name, this.state.description, 1, this.state.steps)
+    ApiService.createCourse(this.state.name, this.state.description, this.state.steps)
       .then(res => {
         console.log("CourseId:", res.id)
         let courseId = res.id;
@@ -80,16 +87,19 @@ class Create extends Component {
       {
         name: '',
         ordinalNumber: nextOrdinal,
-        text: ''
+        text: '',
+        url: '',
+        id: this.state.idCounter
       }
     )
+
     this.setState({
-      steps: stepsArray
-    })
+      steps: stepsArray,
+      idCounter: this.state.idCounter + 1
+    });
   }
 
-  deleteStep = (e, index) => {
-    console.log('delete index', index)
+  deleteStep = (index) => {
     let stepsArray = this.state.steps.slice();
     stepsArray.splice(index, 1);
     let counter = 0;
@@ -110,7 +120,6 @@ class Create extends Component {
     this.setState({
       steps: stepsArray
     });
-    console.log('State post step change', this.state.steps)
   }
 
 }

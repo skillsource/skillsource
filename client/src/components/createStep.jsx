@@ -5,7 +5,6 @@ class CreateStep extends Component {
     super(props);
   }
 
-
   render() {
     return (
       <div className="create-step">
@@ -15,12 +14,12 @@ class CreateStep extends Component {
         </div>
         <div className="input">
           <label>Step Name: </label>
-          <input name="stepname" id="stepname" type="text" onChange={(e) => {this.props.stepChange(e, this.props.data.ordinalNumber)}}/>
+          <input name="name" className="stepName" type="text" onChange={(e) => {this.props.stepChange(e, this.props.data.ordinalNumber)}}/>
         </div>
-        {/*<div className="input">
+        <div className="input">
           <label>Resource URL: </label>
-          <input name="url" id="url" type="text"/>
-        </div>*/}
+          <input name="url" className="stepUrl" type="text" onChange={(e) => {this.props.stepChange(e, this.props.data.ordinalNumber)}}/>
+        </div>
         <div className="input">
           <label>Text: </label>
           <input name="text" className="stepText" type="text" onChange={(e) => {this.props.stepChange(e, this.props.data.ordinalNumber)}}/>
