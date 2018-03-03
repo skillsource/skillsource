@@ -2,7 +2,7 @@ import React from "react";
 import Step from './step.jsx';
 import ApiService from '../services/ApiService.jsx'
 import CourseHeader from './courseHeader.jsx'
-import AuthService from './AuthService.jsx'
+import AuthService from '../services/AuthService.jsx'
 
 class Course extends React.Component {
 

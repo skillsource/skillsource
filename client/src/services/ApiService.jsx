@@ -1,4 +1,4 @@
-import AuthService from '../components/AuthService.jsx';
+import AuthService from './AuthService.jsx';
 import Browse from '../components/browse.jsx';
 
 const ApiService = {

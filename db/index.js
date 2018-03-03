@@ -85,8 +85,6 @@ Course.hasMany(Comment);
 
 sequelize.sync();
 
-// sequelize.sync();
-
 // sequelize.sync({ force: true });
 
 const updateCourseRating = async(courseId) => {
