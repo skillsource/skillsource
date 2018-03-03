@@ -10,20 +10,19 @@ const ApiService = {
       return Promise.resolve(res);
     });
   },
-  createCourse: (name, description, creatorId, steps) => {
+  createCourse: (name, description, steps) => {
     return AuthService.fetch(`${AuthService.domain}/courses`, {
       method: 'POST',
       body: JSON.stringify({
         name,
         description,
-        creatorId,
         steps
       })
     }).then(res => {
       return Promise.resolve(res);
     })
   },
-  addEnrollment: () => {
+  changeEnrollment: () => {
 
   },
   getEnrollments: () => {
