@@ -1,5 +1,6 @@
 import React from "react";
 import Step from './step.jsx';
+import Comment from './comment.jsx';
 
 const Course = (props) => {
 
@@ -23,6 +24,7 @@ const Course = (props) => {
         <h4>Rating: {course.rating}</h4>
         <p>{course.description}</p>
         {lessonPlan}
+        <Comment courseId={courseId} />
     </div>
   );
 }
