@@ -89,7 +89,7 @@ const ApiService = {
       })
     })
     .then((response) => {
-
+      console.log("response in ApiService.addComment():", response)
       return Promise.resolve(response);
     })
     .catch((error) => {

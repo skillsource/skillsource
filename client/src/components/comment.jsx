@@ -18,7 +18,7 @@ class Comment extends Component {
   getComments() {
     ApiService.getCommentsForCourse(this.props.courseId)
       .then((response) => {
-        console.log("response:", response)
+        console.log("response in Comment.getComments:", response)
         // this.setState({
         //   comments: response
         // })
