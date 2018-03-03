@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactStars from 'react-stars';
+import StarRatingComponent from 'react-star-rating-component';
 
 class Snippet extends Component {
   render() {
@@ -12,7 +12,12 @@ class Snippet extends Component {
           <h4>{name}</h4>
         </div>
         <div className="snippet-rating">
-          <ReactStars value={rating} size={20} edit={false}/>
+          <StarRatingComponent
+            name="rating"
+            starCount={5}
+            value={rating}
+            editing={false}
+          />
         </div>
         <div className="snippet-description">
         <p>{description}</p>
