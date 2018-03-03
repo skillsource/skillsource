@@ -8,8 +8,16 @@ class Browse extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      query: '',
+      toDisplay: []
     };
+  }
+
+  updateInputValue(evt) {
+    this.setState({
+      query: evt.target.value
+    });
   }
 
   search(){
@@ -17,10 +25,11 @@ class Browse extends Component {
     // .then(()=>{
 
     // })
-    var query = $("input").val().toLowerCase();
+    var query = this.state.query.toLowerCase();
     var filteredData = this.state.data.filter((course)=>{
       var title = course.name.toLowerCase();
-      var description = course.description.toLowerCase();
+      var description;
+      course.description === null ? description = '' : description = course.description.toLowerCase();
       return title.includes(query) || description.includes(query)
     })
     this.setState({toDisplay: filteredData})
@@ -30,7 +39,8 @@ class Browse extends Component {
     ApiService.browse()
     .then((data) => {
       this.setState({
-        data: data
+        data: data,
+        toDisplay: data
       })
     }).then(()=>{
       console.log('the data >>>', this.state.data)
@@ -38,7 +48,7 @@ class Browse extends Component {
   }
 
   render() {
-    const snippets = this.state.data.map((course) => {
+    const snippets = this.state.toDisplay.map((course) => {
       return (
         <Snippet
           key={course.id}
@@ -49,8 +59,8 @@ class Browse extends Component {
     return (
       <div className="browse">
         <h3>Browse courses:</h3>
-        <input className="search" type="search" placeholder="Search"></input>
-        <button onClick={this.search.bind(this)}className="searchButton" type="submit">Search</button>
+        <input value={this.state.query} onChange={this.updateInputValue.bind(this)} className="search" type="search" placeholder="Search"></input>
+        <button onClick={this.search.bind(this)} className="searchButton" type="submit">Search</button>
         {snippets}
       </div>
     );

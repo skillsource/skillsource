@@ -22,18 +22,42 @@ const ApiService = {
       return Promise.resolve(res);
     })
   },
-  changeEnrollment: () => {
 
+  getCourse: (id) => {
+    return AuthService.fetch(`${AuthService.domain}/courses/${id}`,{
+       method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res);
+    })
   },
+
+  isEnrolled: (courseId) => {
+    return ApiService.getEnrollments().then((enrolledCourses)=>{
+      for (var i = 0; i < enrolledCourses.length; i++) {
+        if (courseId === enrolledCourses[i].courseId) {
+          return true;
+        }
+      }
+      return false;
+    });
+  },
+
+  enroll: (courseId) => {
+    return AuthService.fetch(`${AuthService.domain}/enrollments`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: courseId
+      })
+    }).then(res => {
+      return Promise.resolve(res);
+    })
+  },
+
   getEnrollments: () => {
     return AuthService.fetch(`${AuthService.domain}/enrollments`, {
-      method: 'GET'
-    })
-    .then((response) => {
-      return Promise.resolve(response);
-    })
-    .catch((error) => {
-      return Promise.reject(error);
+      method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res)
     })
   },
   deleteEnrollment: () => {

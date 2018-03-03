@@ -1,5 +1,6 @@
 import React from "react";
 import Enroll from "./enroll.jsx"
+import ReactStars from 'react-stars';
 
 class CourseHeader extends React.Component {
 
@@ -13,13 +14,13 @@ class CourseHeader extends React.Component {
     return (
       <div className="course-header">
         <div id="course-name">
-          <h3>{course.name}</h3>
+          <h3>{this.props.course.name}</h3>
         </div>
         <div id="course-rating">
-          <h4>Rating: {course.rating}</h4>
+          <ReactStars value={this.props.course.rating} size={20} edit={false}/>
         </div>
         <div id="course-enroll">
-          <Enroll />
+          <Enroll handleEnrollment={this.props.handleEnrollment} enrolled={this.props.enrolled} loggedIn={this.props.loggedIn} />
         </div>
       </div>
     );

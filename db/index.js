@@ -6,6 +6,7 @@ const sequelize = new Sequelize(db_name, db_user, db_password, {
   dialect: 'mysql',
   logging: false,
   operatorsAliases: false,
+  logging: false
 });
 
 const User = sequelize.define('user', {

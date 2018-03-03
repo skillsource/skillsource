@@ -10,7 +10,7 @@ class Step extends Component {
           <h4>Step {this.props.data.id}: {this.props.data.name}</h4>
         </div>
         <div className="step-description">
-        <p>{this.props.data.description}</p>
+        <p>{this.props.data.text}</p>
         </div>
         <div className="step-resource">
         <p>Click to begin.</p>

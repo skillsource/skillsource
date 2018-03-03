@@ -2,31 +2,38 @@ import React from "react";
 import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.jsx';
 
-const Dashboard = (props) => {
-  let courses = [];
-  ApiService.getEnrollments()
-    .then((res) => {
-      courses = res;
-    })
-    .catch((error) => {
-      console.log("error calling getEnrollments in ApiService:", error)
-    })
+class Dashboard extends React.Component {
 
-  const snippets = courses.map((course) => {
+  constructor(props){
+    super(props);
+    this.state={
+      courses: []
+    }
+  }
+
+  componentDidMount(){
+    ApiService.getEnrollments().then(res => {
+      this.setState({courses: res});
+      console.log(res);
+    })
+  }
+
+  render(){
+    const snippets = this.state.courses.map((course) => {
       return (
         <Snippet
           key={course.id}
           data={course}/>
       )
     });
+    return (
+      <div className="dashboard">
+          <h3>You are enrolled in:</h3>
+          {snippets}
+      </div>
 
-  return (
-    <div className="dashboard">
-        <h3>You are enrolled in:</h3>
-        {snippets}
-    </div>
-
-  );
+    );
+  }
 }
 
 export default Dashboard;

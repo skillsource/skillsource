@@ -19,7 +19,8 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
 
 const unrestricted = [
-  { url: '/courses', methods: ['GET'] },
+  { url: '/courses/', methods: ['GET'] },
+  { url: /\/courses\/*/, methods: ['GET'] },
   { url: '/steps', methods: ['GET'] },
   { url: '/users', methods: ['POST'] },
   { url: '/comments', methods: ['GET'] },
@@ -60,6 +61,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   const { courseId } = req.body;
   const user = await db.User.findById(req.user.id);
   const course = await db.Course.findById(courseId, { include: db.Step });
+  console.log('the body', req.body)
   try {
     await user.addCourse(courseId);
     // doing the work of POST /user-steps
