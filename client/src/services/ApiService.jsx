@@ -32,9 +32,10 @@ const ApiService = {
   },
 
   isEnrolled: (courseId) => {
+    courseId = Number(courseId);
     return ApiService.getEnrollments().then((enrolledCourses)=>{
       for (var i = 0; i < enrolledCourses.length; i++) {
-        if (courseId === enrolledCourses[i].courseId) {
+        if (courseId === enrolledCourses[i].id) {
           return true;
         }
       }

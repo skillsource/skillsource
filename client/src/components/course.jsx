@@ -28,6 +28,7 @@ class Course extends React.Component {
     const courseId = this.props.match.params.id;
     if(loggedIn){
       ApiService.isEnrolled(courseId).then((isEnrolled)=>{
+        console.log('>>>>>>..', isEnrolled)
         this.setState({enrolled: isEnrolled});
       })
     }

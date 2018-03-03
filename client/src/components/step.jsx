@@ -2,12 +2,11 @@ import React, { Component } from "react";
 
 class Step extends Component {
   render() {
-    const url = this.props.data.resource;
     return (
-      <a href={url}>
+      <a href={this.props.data.url} target="_blank">
       <div className="step">
         <div className="step-name">
-          <h4>Step {this.props.data.id}: {this.props.data.name}</h4>
+          <h4>Step {this.props.data.ordinalNumber + 1}: {this.props.data.name}</h4>
         </div>
         <div className="step-description">
         <p>{this.props.data.text}</p>
