@@ -40,8 +40,8 @@ app.get('/courses/:courseId', wrap(async (req, res) => {
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting course: { name, description, url, steps }
-  // where array steps: [{ ordinalNumber, name, text }]
+  // expecting course: { name, description, steps }
+  // where array steps: [{ ordinalNumber, name, text, url }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
