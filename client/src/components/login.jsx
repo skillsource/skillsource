@@ -52,7 +52,7 @@ class Login extends Component {
     this.Auth.login(this.state.email, this.state.password)
       .then(res => {
         console.log("res.token:", res.token)
-        this.props.history.replace('/');
+        this.props.history.replace('/dashboard');
       })
       .catch(err =>
         console.error('err in handleFormSubmit', err)
