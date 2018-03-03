@@ -1,19 +1,21 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import ReactStars from 'react-stars';
 
 class Snippet extends Component {
   render() {
-    const url = "#/courses/" + this.props.data.id
+    const { id, name, rating, description } = this.props.data;
+    const url = "#/courses/" + id
     return (
       <a href={url}>
       <div className="snippet">
         <div className="snippet-name">
-          <h4>{this.props.data.name}</h4>
+          <h4>{name}</h4>
         </div>
         <div className="snippet-rating">
-          <p>Reviews: {this.props.data.rating}</p>
+          <ReactStars value={rating} size={20} edit={false}/>
         </div>
         <div className="snippet-description">
-        <p>{this.props.data.description}</p>
+        <p>{description}</p>
         </div>
       </div>
       </a>

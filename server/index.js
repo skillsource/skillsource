@@ -19,7 +19,8 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
 
 const unrestricted = [
-  { url: '/courses', methods: ['GET'] },
+  { url: '/courses/', methods: ['GET'] },
+  { url: /\/courses\/*/, methods: ['GET'] },
   { url: '/steps', methods: ['GET'] },
   { url: '/users', methods: ['POST'] },
   { url: '/comments', methods: ['GET'] },
@@ -40,7 +41,7 @@ app.get('/courses/:courseId', wrap(async (req, res) => {
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting course: { name, description, steps }
+  // expecting course: { name, description, url, steps }
   // where array steps: [{ ordinalNumber, name, text }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
@@ -60,6 +61,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   const { courseId } = req.body;
   const user = await db.User.findById(req.user.id);
   const course = await db.Course.findById(courseId, { include: db.Step });
+  console.log('the body', req.body)
   try {
     await user.addCourse(courseId);
     // doing the work of POST /user-steps
@@ -68,6 +70,15 @@ app.post('/enrollments', wrap(async (req, res) => {
     throw boom.badRequest('User already enrolled in this course');
   }
   res.send(JSON.stringify(course));
+}));
+
+app.patch('/enrollments/rating', wrap(async (req, res) => {
+  const { courseId, rating } = req.body;
+  const userId = req.user.id;
+  await db.UserCourse.update({ rating }, { where: { userId, courseId } });
+  const updatedUserCourse = await db.UserCourse.findOne({ where: { userId, courseId } });
+  await db.updateCourseRating(courseId);
+  res.send(JSON.stringify(updatedUserCourse));
 }));
 
 // steps
@@ -153,4 +164,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('Listening on port 3000!'));
