@@ -16,14 +16,13 @@ const ApiService = {
       body: JSON.stringify({
         name,
         description,
-        url,
         steps
       })
     }).then(res => {
       return Promise.resolve(res);
     })
   },
-  addEnrollment: () => {
+  changeEnrollment: () => {
 
   },
   getEnrollments: () => {
