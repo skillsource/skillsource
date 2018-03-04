@@ -86,8 +86,8 @@ sequelize.sync();
 // sequelize.sync({ force: true });
 
 const updateCourseRating = async(courseId) => {
-  const ratingsSum = await UserCourse.sum('rating');
-  const ratingsCount = await UserCourse.count();
+  const ratingsSum = await UserCourse.sum('rating', { where: { courseId } });
+  const ratingsCount = await UserCourse.count({ where: { courseId } });
   const rating = Math.ceil(ratingsSum / ratingsCount);
   await Course.update({ rating }, { where: { id: courseId } });
 };
