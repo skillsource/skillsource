@@ -72,6 +72,7 @@ const ApiService = {
       body: JSON.stringify({ courseId, rating }),
     }).then(res => {
       return Promise.resolve(res)
+    })
   },
 
   getCommentsForCourse: (courseId) => {
