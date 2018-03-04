@@ -1,11 +1,44 @@
 import React, { Component } from "react";
+import ApiService from "../services/ApiService.jsx";
 
 class Step extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      complete: false
+    }
+  }
+  
+  toggleCheckbox = () => {
+    const complete = !this.state.complete;
+    this.setState({complete: complete }, ()=>{
+      const stepId = this.props.stepId;
+      ApiService.toggleCheckbox(stepId, complete)
+    })
+  }
+
+  componentDidMount(){
+    const courseId = this.props.courseId
+    const stepId = this.props.stepId;
+    ApiService.getUserSteps(courseId).then(res=>{
+      for(var i = 0; i < res.length; i++){
+        if(res[i].id === stepId){
+          this.setState({complete: res[i].userStep.completed})
+        }
+      }
+    })
+  }
+
   render() {
     return (
       <a href={this.props.data.url} target="_blank">
       <div className="step">
         <div className="step-name">
+          {
+            this.props.enrolled
+            ? (<input type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
+            : (<p>not enrolled</p>)
+          }
           <h4>Step {this.props.data.ordinalNumber + 1}: {this.props.data.name}</h4>
         </div>
         <div className="step-description">

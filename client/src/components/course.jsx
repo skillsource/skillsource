@@ -48,7 +48,7 @@ class Course extends React.Component {
               <div>Loading..</div>
             :
             this.state.courseData.steps.map((step)=>{
-              return <Step key={step.id} data={step} />
+              return <Step enrolled={this.state.enrolled} key={step.id} data={step} stepId={step.id} courseId={this.props.match.params.id} />
             })
           }
           {
