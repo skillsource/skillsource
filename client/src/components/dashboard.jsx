@@ -17,6 +17,10 @@ class Dashboard extends React.Component {
     })
   }
 
+  enrolled() {
+    console.log(this.refs.completedButton)
+  }
+
   render(){
     const snippets = this.state.courses.map((course) => {
       return (
@@ -29,9 +33,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         <div className="tab">
-          <button className="tablinks">Enrolled</button>
-          <button className="tablinks">Completed</button>
-          <button className="tablinks">Created Courses</button>
+
         </div>
         <div className="dashboard">
           <h3>You are enrolled in:</h3>
