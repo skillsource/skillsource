@@ -5,6 +5,7 @@ const { db_name, db_user, db_password } = require('../config/config');
 const sequelize = new Sequelize(db_name, db_user, db_password, {
   host: 'localhost',
   dialect: 'mysql',
+  logging: false,
   operatorsAliases: false,
   logging: false
 });
@@ -86,11 +87,10 @@ const sampleUsers = User.bulkCreate(seed.sampleUsers);
 
 const sampleCourses = Course.bulkCreate(seed.sampleCourses);
 
-
-
 // sequelize.sync();
 
 sequelize.sync({ force: true });
+
 
 const updateCourseRating = async(courseId) => {
   const ratingsSum = await UserCourse.sum('rating');
