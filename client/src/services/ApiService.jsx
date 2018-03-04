@@ -61,35 +61,19 @@ const ApiService = {
       return Promise.resolve(res)
     })
   },
+
   deleteEnrollment: () => {
 
   },
-  addRating: () => {
 
-  },
-  changeRating: () => {
-
+  rate: (courseId, rating) => {
+    return AuthService.fetch(`${AuthService.domain}/enrollments/rating`, {
+      method: 'PATCH',
+      body: JSON.stringify({ courseId, rating }),
+    }).then(res => {
+      return Promise.resolve(res)
+    })
   }
 }
 
 export default ApiService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
