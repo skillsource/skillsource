@@ -22,15 +22,25 @@ class Dashboard extends React.Component {
       return (
         <Snippet
           key={course.id}
-          data={course}/>
+          data={course}
+        />
       )
     });
     return (
-      <div className="dashboard">
+      <div>
+        <div className="tab">
+          <button className="tablinks">Enrolled</button>
+          <button className="tablinks">Completed</button>
+          <button className="tablinks">Created Courses</button>
+        </div>
+        <div className="dashboard">
           <h3>You are enrolled in:</h3>
           {snippets}
+        </div>
+        <div className="completed">
+          <h3>You have completed:</h3>
+        </div>
       </div>
-
     );
   }
 }
