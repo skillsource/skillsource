@@ -62,6 +62,22 @@ const ApiService = {
     })
   },
 
+  toggleCheckbox: (stepId, completed) => {
+    return AuthService.fetch(`${AuthService.domain}/user-steps/?stepId=${stepId}&completed=${completed}`, {
+      method: 'PATCH',
+    }).then(res => {
+      return Promise.resolve(res)
+    })
+  },
+
+  getUserSteps: (courseId) => {
+    return AuthService.fetch(`${AuthService.domain}/user-steps/?courseId=${courseId}`, {
+      method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res)
+    })
+  },
+
   deleteEnrollment: () => {
 
   },
