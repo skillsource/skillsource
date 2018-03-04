@@ -1,9 +1,9 @@
 import React from "react";
 import Snippet from './snippet.jsx';
-import ApiService from '../services/ApiService.jsx'
+import ApiService from '../services/ApiService.jsx';
 
 class Dashboard extends React.Component {
-  
+
   constructor(props){
     super(props);
     this.state={
@@ -14,7 +14,6 @@ class Dashboard extends React.Component {
   componentDidMount(){
     ApiService.getEnrollments().then(res => {
       this.setState({courses: res});
-      console.log(res);
     })
   }
 

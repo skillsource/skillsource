@@ -1,5 +1,6 @@
 import React from "react";
 import Step from './step.jsx';
+import Comment from './comment.jsx';
 import ApiService from '../services/ApiService.jsx'
 import CourseHeader from './courseHeader.jsx'
 import AuthService from './AuthService.jsx'
@@ -38,23 +39,27 @@ class Course extends React.Component {
   }
 
   render(){
-    console.log('the steps! >>>', this.state.courseData.steps)
     return (
       <div className="course-view">
           <CourseHeader handleEnrollment={this.handleEnrollment} course={this.state.courseData} enrolled={this.state.enrolled} loggedIn={this.state.loggedIn} />
           <p>Description: {this.state.courseData.description}</p>
           {
             (this.state.courseData.steps === undefined) ?
-              <div>appleee</div>
+              <div>Loading..</div>
             :
             this.state.courseData.steps.map((step)=>{
               return <Step key={step.id} data={step} />
             })
           }
+          {
+            (this.state.courseData.id === undefined) ?
+            <div>Loading Comments..</div>
+            :
+            <Comment courseId={this.state.courseData.id} />
+          }
       </div>
     );
   }
-
 }
 
 export default Course;
