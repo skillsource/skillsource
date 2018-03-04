@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.jsx'
-import AuthService from './AuthService.jsx';
+import AuthService from '../services/AuthService.jsx';
 
 class Comment extends Component {
 

@@ -83,13 +83,16 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
-const sampleUsers = User.bulkCreate(seed.sampleUsers);
+///// USE THIS TO SEED DB ///////
 
-const sampleCourses = Course.bulkCreate(seed.sampleCourses);
+// sequelize.sync({ force: true }).then(() => {
+//   const sampleUsers = User.bulkCreate(seed.sampleUsers);
+//   const sampleCourses = Course.bulkCreate(seed.sampleCourses);
+//   const sampleSteps = Step.bulkCreate(seed.sampleSteps);
+// })
 
-// sequelize.sync();
+///////////////////////////////
 
-sequelize.sync({ force: true });
 
 
 const updateCourseRating = async(courseId) => {
