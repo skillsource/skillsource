@@ -72,6 +72,33 @@ const ApiService = {
       body: JSON.stringify({ courseId, rating }),
     }).then(res => {
       return Promise.resolve(res)
+  },
+
+  getCommentsForCourse: (courseId) => {
+    return AuthService.fetch(`${AuthService.domain}/comments?courseId=${courseId}`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    })
+  },
+
+  addComment: (courseId, comment) => {
+    return AuthService.fetch(`${AuthService.domain}/comments`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: courseId,
+        text: comment
+      })
+    })
+    .then((response) => {
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      return Promise.reject(error);
     })
   }
 }
