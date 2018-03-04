@@ -1,4 +1,4 @@
-import AuthService from '../components/AuthService.jsx';
+import AuthService from './AuthService.jsx';
 import Browse from '../components/browse.jsx';
 
 const ApiService = {
@@ -62,6 +62,7 @@ const ApiService = {
     })
   },
 
+<<<<<<< HEAD
   toggleCheckbox: (stepId, completed) => {
     return AuthService.fetch(`${AuthService.domain}/user-steps/?stepId=${stepId}&completed=${completed}`, {
       method: 'PATCH',
@@ -78,35 +79,48 @@ const ApiService = {
     })
   },
 
+=======
+>>>>>>> develop
   deleteEnrollment: () => {
 
   },
-  addRating: () => {
 
+  rate: (courseId, rating) => {
+    return AuthService.fetch(`${AuthService.domain}/enrollments/rating`, {
+      method: 'PATCH',
+      body: JSON.stringify({ courseId, rating }),
+    }).then(res => {
+      return Promise.resolve(res)
+    })
   },
-  changeRating: () => {
 
+  getCommentsForCourse: (courseId) => {
+    return AuthService.fetch(`${AuthService.domain}/comments?courseId=${courseId}`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    })
+  },
+
+  addComment: (courseId, comment) => {
+    return AuthService.fetch(`${AuthService.domain}/comments`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: courseId,
+        text: comment
+      })
+    })
+    .then((response) => {
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    })
   }
 }
 
 export default ApiService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

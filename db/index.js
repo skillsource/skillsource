@@ -1,9 +1,11 @@
+const seed = require('./sampleData/sampleData.js')
 const Sequelize = require('sequelize');
 const { db_name, db_user, db_password } = require('../config/config');
 
 const sequelize = new Sequelize(db_name, db_user, db_password, {
   host: 'localhost',
   dialect: 'mysql',
+  logging: false,
   operatorsAliases: false,
   logging: false
 });
@@ -81,17 +83,21 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
-//const sampleCourse = Course.build({id: 1, name: 'test', description: 'test', rating: 5, userId: 1, creatorId: 1}).save();
+///// USE THIS TO SEED DB ///////
 
-sequelize.sync();
+// sequelize.sync({ force: true }).then(() => {
+//   const sampleUsers = User.bulkCreate(seed.sampleUsers);
+//   const sampleCourses = Course.bulkCreate(seed.sampleCourses);
+//   const sampleSteps = Step.bulkCreate(seed.sampleSteps);
+// })
 
-// sequelize.sync();
+///////////////////////////////
 
-// sequelize.sync({ force: true });
+
 
 const updateCourseRating = async(courseId) => {
-  const ratingsSum = await UserCourse.sum('rating');
-  const ratingsCount = await UserCourse.count();
+  const ratingsSum = await UserCourse.sum('rating', { where: { courseId } });
+  const ratingsCount = await UserCourse.count({ where: { courseId } });
   const rating = Math.ceil(ratingsSum / ratingsCount);
   await Course.update({ rating }, { where: { id: courseId } });
 };
