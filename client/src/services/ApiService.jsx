@@ -69,8 +69,9 @@ const ApiService = {
   changeRating: () => {
 
   },
+
   getCommentsForCourse: (courseId) => {
-    return AuthService.fetch(`${AuthService.domain}/comments?courseId=` + courseId, {
+    return AuthService.fetch(`${AuthService.domain}/comments?courseId=${courseId}`, {
       method: 'GET'
     })
     .then((response) => {
@@ -80,16 +81,16 @@ const ApiService = {
       return Promise.reject(error);
     })
   },
+
   addComment: (courseId, comment) => {
     return AuthService.fetch(`${AuthService.domain}/comments`, {
       method: 'POST',
       body: JSON.stringify({
         courseId: courseId,
-        commentText: comment
+        text: comment
       })
     })
     .then((response) => {
-      console.log("response in ApiService.addComment():", response)
       return Promise.resolve(response);
     })
     .catch((error) => {
@@ -99,23 +100,3 @@ const ApiService = {
 }
 
 export default ApiService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
