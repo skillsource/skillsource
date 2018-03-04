@@ -18,10 +18,9 @@ class Comment extends Component {
   getComments() {
     ApiService.getCommentsForCourse(this.props.courseId)
       .then((response) => {
-        console.log("response in Comment.getComments:", response)
-        // this.setState({
-        //   comments: response
-        // })
+        this.setState({
+          comments: response
+        });
       })
       .catch((error) => {
         console.log("error getting comments for course:", error)
@@ -31,12 +30,13 @@ class Comment extends Component {
   addComment(e) {
     e.preventDefault();
     let comment = this.state.comment;
-    let comments = this.state.comments.push(response);
+    let comments = this.state.comments;
     ApiService.addComment(this.props.courseId, comment)
       .then((response) => {
+        comments[this.state.comments.length] = response
         this.setState({
-          comments: newComments
-        })
+          comments: comments
+        });
       })
       .catch((error) => {
         console.log("error adding comment:", error)
@@ -47,7 +47,6 @@ class Comment extends Component {
     this.setState({
       comment: e.target.value
     })
-    console.log("this.state:", this.state)
   }
 
   render() {
@@ -58,14 +57,19 @@ class Comment extends Component {
           <h3>Add Comment:</h3>
           <div>
             <input type="text" placeholder="Comment..." onChange={(e) => this.commentInput(e)} />
-            <button onClick={(e) => this.addComment(e)}>Submit Comment</button>
+            <button onClick={this.addComment.bind(this)}>Submit Comment</button>
           </div>
           <div>Comments:</div>
-          {this.state.comments.map((comment, index) =>
-            <div key={comment.id}>
-              {comment.text}
-            </div>
-          )}
+          {
+            (this.state.comments.length >= 1) ?
+            this.state.comments.map((comment, index) =>
+              <div key={comment.id}>
+                {comment.text} {comment.id}
+              </div>
+            )
+            :
+            <div></div>
+          }
         </div>
         : <div>Only logged in users can see comments. Please go to Login Page in order to see login.</div>
     );
