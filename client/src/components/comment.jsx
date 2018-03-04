@@ -64,7 +64,7 @@ class Comment extends Component {
             (this.state.comments.length >= 1) ?
             this.state.comments.map((comment, index) =>
               <div key={comment.id}>
-                {comment.text}
+                {`${comment.user.username}: ${comment.text}`}
               </div>
             )
             :
