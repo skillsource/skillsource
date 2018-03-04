@@ -126,7 +126,7 @@ app.post('/users', wrap(async (req, res) => {
 app.get('/comments', wrap(async (req, res) => {
   const { courseId } = req.query;
   const course = await db.Course.findById(courseId);
-  const comments = await course.getComments();
+  const comments = await course.getComments({ include: db.User });
   res.send(JSON.stringify(comments));
 }));
 
