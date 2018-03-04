@@ -1,4 +1,4 @@
-import AuthService from '../components/AuthService.jsx';
+import AuthService from './AuthService.jsx';
 import Browse from '../components/browse.jsx';
 
 const ApiService = {
@@ -72,6 +72,7 @@ const ApiService = {
       body: JSON.stringify({ courseId, rating }),
     }).then(res => {
       return Promise.resolve(res)
+    })
   },
 
   getCommentsForCourse: (courseId) => {
