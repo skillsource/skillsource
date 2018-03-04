@@ -14,7 +14,6 @@ class Dashboard extends React.Component {
   componentDidMount(){
     ApiService.getEnrollments().then(res => {
       this.setState({courses: res});
-      console.log(res);
     })
   }
 

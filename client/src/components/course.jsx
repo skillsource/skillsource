@@ -44,16 +44,22 @@ class Course extends React.Component {
           <p>Description: {this.state.courseData.description}</p>
           {
             (this.state.courseData.steps === undefined) ?
-              <div>appleee</div>
+              <div>Loading..</div>
             :
             this.state.courseData.steps.map((step)=>{
               return <Step key={step.id} data={step} />
             })
           }
-          <Comment courseId={courseId} />
+          {
+            (this.state.courseData.id === undefined) ?
+            <div>Loading Comments..</div>
+            :
+            <Comment courseId={this.state.courseData.id} />
+          }
       </div>
     );
   }
+}
 
 export default Course;
 
