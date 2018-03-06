@@ -19,6 +19,13 @@ class Snippet extends Component {
             editing={false}
           />
         </div>
+        {
+            Number.isInteger(this.props.progress)
+            ? this.props.progress === 100 
+              ? <p className='progress'>Completed!</p>
+              : <p className='progress'>In progress: {this.props.progress}% complete. </p>
+            : <p></p>
+        }
         <div className="snippet-description">
         <p>{description}</p>
         </div>
