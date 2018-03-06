@@ -189,8 +189,15 @@ a {
   border-color: #FDFFFC;
   padding-left: 4px;
   margin-bottom: 10px;
+}
 
+.discussionboard {
+  margin-top: 40px;
+}
 
+.click {
+  font-size: 12px;
+  margin-top: 40px;
 }
 
 input[type="text"] {
