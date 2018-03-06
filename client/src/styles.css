@@ -156,7 +156,12 @@ a {
   height: 30px;
 }
 
-.checkbox{
+.checkbox {
   float:left;
+  margin-right: 10px;
+}
+
+.progress {
+  float:right;
   margin-right: 10px;
 }
