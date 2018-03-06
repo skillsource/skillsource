@@ -85,11 +85,12 @@ Course.hasMany(Comment);
 
 ///// USE THIS TO SEED DB ///////
 
-// sequelize.sync({ force: true }).then(() => {
-//   const sampleUsers = User.bulkCreate(seed.sampleUsers);
-//   const sampleCourses = Course.bulkCreate(seed.sampleCourses);
-//   const sampleSteps = Step.bulkCreate(seed.sampleSteps);
-// })
+sequelize.sync({ force: true }).then(() => {
+  const sampleUsers = User.bulkCreate(seed.sampleUsers);
+  const sampleCourses = Course.bulkCreate(seed.sampleCourses);
+  const sampleSteps = Step.bulkCreate(seed.sampleSteps);
+  const sampleComments = Comment.bulkCreate(seed.sampleComments);
+})
 
 ///////////////////////////////
 

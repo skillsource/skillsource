@@ -106,10 +106,52 @@ const steps = [
     url: 'https://www.youtube.com/watch?v=C7cPKXfI4CM',
     courseId: 3
   }
+]
 
-
+const comments = [
+  {
+    userId: 1,
+    courseId: 1,
+    text: 'What a great class. Continue your studies at Hack Reactor!'
+  },
+  {
+    userId: 2,
+    courseId: 1,
+    text: 'But I want to learn Python. :-('
+  },
+  {
+    userId: 3,
+    courseId: 1,
+    text: 'You should create a Python course then?'
+  },
+  {
+    userId: 2,
+    courseId: 2,
+    text: 'Swim code swim code swim code swim code. '
+  },
+  {
+    userId: 1,
+    courseId: 2,
+    text: 'Phelps. What a great Olympian. The best?'
+  },
+  {
+    userId: 4,
+    courseId: 2,
+    text: 'I took this course and I\'m faster than Phelps now. Great course. Highly recommended.'
+  },
+  {
+    userId: 3,
+    courseId: 3,
+    text: 'Ukes are awesome. This course is awesome.',
+  },
+  {
+    userId: 2,
+    courseId: 3,
+    text: 'Will this course teach me how to play Free Bird?',
+  }
 ]
 
 module.exports.sampleCourses = courses;
 module.exports.sampleUsers = users;
 module.exports.sampleSteps = steps;
+module.exports.sampleComments = comments;

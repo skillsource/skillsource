@@ -187,7 +187,7 @@ a {
   border-radius: 10px;
   border-style: dotted;
   border-color: #FDFFFC;
-  padding-left: 4px;
+  padding-left: 10px;
   margin-bottom: 10px;
 }
 
@@ -210,4 +210,20 @@ input[type="password"] {
   border-radius: 5px;
   margin: 5px;
   padding-top:0;
+}
+
+#course-name {
+  display: block;
+}
+
+#course-rating {
+  display: inline-block;
+
+}
+
+#course-enroll {
+  display: inline-block;
+  margin-left: 25px;
+  vertical-align: 30%;
+
 }
