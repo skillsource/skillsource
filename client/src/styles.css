@@ -242,11 +242,3 @@ input[type="password"] {
   vertical-align: 30%;
 }
 
-.card {
-  margin: auto;
-  background-color: #2EC4B6;
-  width: 300px;
-  border-radius: 5px;
-  padding: 10px;
-  margin-top: 20px;
-}

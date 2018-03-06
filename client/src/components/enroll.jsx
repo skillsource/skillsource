@@ -1,6 +1,7 @@
 import React from "react";
 import AuthService from "../services/AuthService.js";
 import ApiService from "../services/ApiService.js"
+import { withRouter } from "react-router-dom";
 
 class Enroll extends React.Component {
 
@@ -16,11 +17,10 @@ class Enroll extends React.Component {
   }
 
   render(){
-    const enrolled = (<button onClick={this.props.handleEnrollment}>Drop Course.</button>);
+    const enrolled = (<button onClick={this.props.handleEnrollment}>Drop Course</button>);
     const notEnrolled = (<button onClick={this.props.handleEnrollment}>Enroll in Course</button>);
     const loggedOut = (<div>
-          <button>Enroll</button>
-          <p>Sign up or login to enroll in this course.</p>
+          <button onClick={this.handleReroute}>Login to enroll</button>
           </div>);
 
     if (!this.props.loggedIn) {
@@ -33,4 +33,4 @@ class Enroll extends React.Component {
   }
 }
 
-export default Enroll;
+export default withRouter(Enroll);
