@@ -155,3 +155,8 @@ a {
   width: 80%;
   height: 30px;
 }
+
+.checkbox{
+  float:left;
+  margin-right: 10px;
+}

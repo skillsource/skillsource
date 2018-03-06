@@ -36,8 +36,8 @@ class Step extends Component {
         <div className="step-name">
           {
             this.props.enrolled
-            ? (<input type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
-            : (<p>not enrolled</p>)
+            ? (<input class="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
+            : <div></div>
           }
           <h4>Step {this.props.data.ordinalNumber + 1}: {this.props.data.name}</h4>
         </div>

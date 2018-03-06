@@ -62,7 +62,6 @@ const ApiService = {
     })
   },
 
-<<<<<<< HEAD
   toggleCheckbox: (stepId, completed) => {
     return AuthService.fetch(`${AuthService.domain}/user-steps/?stepId=${stepId}&completed=${completed}`, {
       method: 'PATCH',
@@ -79,8 +78,6 @@ const ApiService = {
     })
   },
 
-=======
->>>>>>> develop
   deleteEnrollment: () => {
 
   },
