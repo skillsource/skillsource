@@ -1,6 +1,6 @@
 import React from "react";
 import Snippet from './snippet.jsx';
-import ApiService from '../services/ApiService.jsx';
+import ApiService from '../services/ApiService.js';
 
 class Dashboard extends React.Component {
 
