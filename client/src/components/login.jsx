@@ -17,7 +17,7 @@ class Login extends Component {
     return (
       <div className="center">
         <div className="card">
-          <h1>Login</h1>
+          <h3>Login</h3>
           <form>
             <input
               className="form-item"
