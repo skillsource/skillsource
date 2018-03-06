@@ -129,6 +129,7 @@ app.get('/comments', wrap(async (req, res) => {
 }));
 
 app.post('/comments', wrap(async (req, res) => {
+  console.log('POST to comments', req.body, req.user.id)
   const userId = req.user.id;
   const { courseId, text } = req.body;
   const comment = await db.Comment.create({ userId, courseId, text });

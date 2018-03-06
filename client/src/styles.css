@@ -10,6 +10,10 @@ h1 {
   color: #FDFFFC;
 }
 
+h3 {
+  color: #FDFFFC;
+}
+
 a {
   color: inherit;
   text-decoration: inherit; /* no underline */
@@ -28,11 +32,11 @@ a {
 
 .navLeft {
   display: inline-block;
-  background-color: #FDFFFC;
+/*  background-color: #FDFFFC;*/
   padding: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  border-radius: 5px;
+  /*border-radius: 5px;*/
 }
 
 .navLeft:hover {
@@ -42,16 +46,15 @@ a {
 .navRight {
   display: inline-block;
   float: right;
+  vertical-align: bottom;
 }
 
 .childRight {
   display: inline-block;
   float: right;
-  background-color: #FDFFFC;
   padding: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  border-radius: 5px;
 }
 
 .childRight:hover {
@@ -71,6 +74,7 @@ a {
   background-color: #2EC4B6;
   margin-bottom: 20px;
   padding-left: 10px;
+  border-radius: 10px;
 }
 
 .snippet:hover {
@@ -106,10 +110,12 @@ a {
 
 .create-step {
   border-width: 2px;
-  border-style: dotted;
-  border-color: #E71D36;
+/*  border-style: dotted;
+  border-color: #E71D36;*/
+  border-radius: 10px;
   margin: 20px;
   padding: 10px;
+  background-color: #2EC4B6;
 }
 
 .courseSnippet {
@@ -164,6 +170,7 @@ a {
 #title {
   text-shadow: .5px .5px #2EC4B6;
   color: #FDFFFC;
+  display: inline-block;
 }
 
 .stepText {
@@ -181,13 +188,18 @@ a {
   margin-bottom: 20px;
 }
 
+.commentHeader {
+  text-decoration: underline;
+}
+
 .comment {
-  border-width: 1px;
+  border-width: 2px;
   border-radius: 10px;
-  border-style: dotted;
+  border-style: solid;
   border-color: #FDFFFC;
   padding-left: 10px;
   margin-bottom: 10px;
+  background-color: #FDFFFC;
 }
 
 .discussionboard {
@@ -200,15 +212,19 @@ a {
 }
 
 input[type="text"] {
+  display: block;
   border-radius: 5px;
   margin: 5px;
   padding-top:0;
+  min-height: 30px;
 }
 
 input[type="password"] {
   border-radius: 5px;
   margin: 5px;
   padding-top:0;
+  display: block;
+  min-height: 30px;
 }
 
 #course-name {
@@ -224,5 +240,13 @@ input[type="password"] {
   display: inline-block;
   margin-left: 25px;
   vertical-align: 30%;
+}
 
+.card {
+  margin: auto;
+  background-color: #2EC4B6;
+  width: 300px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 20px;
 }

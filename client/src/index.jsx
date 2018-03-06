@@ -38,8 +38,6 @@ class App extends React.Component {
     return (
       <HashRouter>
         <div className="viewport">
-
-          <h1 id="title">Skillsource</h1>
           <Nav />
           <div className="content">
             <Route path="/about" component={About} />
