@@ -9,7 +9,6 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const jwtMW = exjwt({ secret: 'secret' });
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.use(bodyParser.json());
@@ -31,13 +30,13 @@ app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 // courses
 app.get('/courses', wrap(async (req, res) => {
   const courses = await db.Course.findAll();
-  res.send(JSON.stringify(courses));
+  res.json(courses);
 }));
 
 app.get('/courses/:courseId', wrap(async (req, res) => {
   const { courseId } = req.params;
   const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
-  res.send(JSON.stringify(course));
+  res.json(course);
 }));
 
 app.post('/courses', wrap(async (req, res) => {
@@ -46,7 +45,7 @@ app.post('/courses', wrap(async (req, res) => {
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
-  res.send(JSON.stringify(newCourse));
+  res.json(newCourse);
 }));
 
 // enrollments
@@ -54,14 +53,13 @@ app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
   const enrollments = await user.getCourses();
-  res.send(JSON.stringify(enrollments));
+  res.json(enrollments);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
   const { courseId } = req.body;
   const user = await db.User.findById(req.user.id);
   const course = await db.Course.findById(courseId, { include: db.Step });
-  console.log('the body', req.body)
   try {
     await user.addCourse(courseId);
     // doing the work of POST /user-steps
@@ -69,7 +67,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   } catch(err) {
     throw boom.badRequest('User already enrolled in this course');
   }
-  res.send(JSON.stringify(course));
+  res.json(course);
 }));
 
 app.patch('/enrollments/rating', wrap(async (req, res) => {
@@ -78,7 +76,7 @@ app.patch('/enrollments/rating', wrap(async (req, res) => {
   await db.UserCourse.update({ rating }, { where: { userId, courseId } });
   const updatedUserCourse = await db.UserCourse.findOne({ where: { userId, courseId } });
   await db.updateCourseRating(courseId);
-  res.send(JSON.stringify(updatedUserCourse));
+  res.json(updatedUserCourse);
 }));
 
 // steps
@@ -86,7 +84,7 @@ app.get('/steps', wrap(async (req, res) => {
   const { courseId } = req.query;
   const course = await db.Course.findById(courseId);
   const steps = await course.getSteps();
-  res.send(JSON.stringify(steps));
+  res.json(steps);
 }));
 
 // userSteps
@@ -94,7 +92,7 @@ app.get('/user-steps', wrap(async (req, res) => {
   const { courseId } = req.query;
   const user = await db.User.findById(req.user.id);
   const userSteps = await user.getSteps({ where: { courseId } });
-  res.send(JSON.stringify(userSteps));
+  res.json(userSteps);
 }));
 
 app.patch('/user-steps', wrap(async (req, res) => {
@@ -102,14 +100,14 @@ app.patch('/user-steps', wrap(async (req, res) => {
   const { stepId, completed } = req.query;
   await db.UserStep.update({ completed }, { where: { userId, stepId } });
   const updatedUserStep = await db.UserStep.findOne({ where: { userId, stepId } });
-  res.send(JSON.stringify(updatedUserStep));
+  res.json(updatedUserStep);
 }));
 
 // users
-app.get('/users/:userId', wrap(async (req, res) => {
+app.get('/users', wrap(async (req, res) => {
   const user = await db.User.findById(req.user.id);
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
-  res.send(JSON.stringify(user));
+  res.json(user);
 }));
 
 app.post('/users', wrap(async (req, res) => {
@@ -119,7 +117,7 @@ app.post('/users', wrap(async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
-  res.send(JSON.stringify(newUser));
+  res.json(newUser);
 }));
 
 // comments
@@ -127,16 +125,15 @@ app.get('/comments', wrap(async (req, res) => {
   const { courseId } = req.query;
   const course = await db.Course.findById(courseId);
   const comments = await course.getComments({ include: db.User });
-  res.send(JSON.stringify(comments));
+  res.json(comments);
 }));
 
 app.post('/comments', wrap(async (req, res) => {
   const userId = req.user.id;
   const { courseId, text } = req.body;
-  const user = await db.User.findById(userId);
-  const course = await db.Course.findById(courseId);
   const comment = await db.Comment.create({ userId, courseId, text });
-  res.send(JSON.stringify(comment));
+  const newComment = await db.Comment.findById(comment.id, { include: db.User });
+  res.send(newComment);
 }));
 
 // auth
@@ -150,18 +147,18 @@ app.post('/login', wrap(async (req, res) => {
   if (!authorized) throw boomUnauthorized;
 
   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 129600 });
-  res.send(JSON.stringify(token));
+  res.json(token);
 }));
 
 app.use((err, req, res, next) => {
   console.log(err);
   if (err.isBoom) {
     const { payload } = err.output;
-    res.status(payload.statusCode).send(payload);
+    res.status(payload.statusCode).json(payload);
   } else if (err.name === 'UnauthorizedError') {
-    if (!req.user) res.status(401).send('Invalid jwt');
+    if (!req.user) res.status(401).json('Invalid jwt');
   } else {
-    res.status(500).send('Whoops! Something went wrong. Check the server logs.');
+    res.status(500).json('Whoops! Something went wrong. Check the server logs.');
   }
 });
 

@@ -1,6 +1,6 @@
 import React from "react";
-import AuthService from "../services/AuthService.jsx";
-import ApiService from "../services/ApiService.jsx"
+import AuthService from "../services/AuthService.js";
+import ApiService from "../services/ApiService.js"
 
 class Enroll extends React.Component {
 
