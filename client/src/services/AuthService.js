@@ -4,15 +4,9 @@ const AuthService = {
   domain: 'http://localhost:3000',
   login: (email, password) => {
     // Get a token from api server using the fetch api
-    console.log('from auth', email, password)
-    return AuthService.fetch(`${AuthService.domain}/login`, {
+    return AuthService.fetch('/login', {
       method: 'POST',
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    }).then(res => {
-      return Promise.resolve(res);
+      body: { email, password }
     }).then(token => {
       AuthService.setToken(token)
       return token;
@@ -20,15 +14,9 @@ const AuthService = {
   },
   signup: (username, password, email) => {
     // Get a token from api server using the fetch api
-    return AuthService.fetch(`${AuthService.domain}/users`, {
+    return AuthService.fetch('/users', {
       method: 'POST',
-      body: JSON.stringify({
-        username,
-        password,
-        email
-      })
-    }).then(res => {
-      return Promise.resolve(res);
+      body: { username, password, email }
     })
   },
   loggedIn: () => {
@@ -67,11 +55,13 @@ const AuthService = {
     return decode(AuthService.getToken());
   },
   fetch: (url, options) => {
+    options.body = JSON.stringify(options.body);
+
     // performs api calls sending the required authentication headers
     const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
+    };
 
     // Setting Authorization header
     // Authorization: Bearer xxxxxxx.xxxxxxxx.xxxxxx
@@ -79,7 +69,7 @@ const AuthService = {
       headers['Authorization'] = 'Bearer ' + AuthService.getToken()
     }
 
-    return fetch(url, {headers, ...options})
+    return fetch(AuthService.domain + url, { headers, ...options })
       .then(AuthService._checkStatus)
       .then(response => response.json())
   },

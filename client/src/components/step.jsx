@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ApiService from "../services/ApiService.jsx";
+import ApiService from "../services/ApiService.js";
 
 class Step extends Component {
   constructor(props){
