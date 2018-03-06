@@ -3,6 +3,7 @@ import axios from 'axios';
 import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.jsx'
 import AuthService from '../services/AuthService.jsx';
+import Moment from 'react-moment';
 
 class Comment extends Component {
 
@@ -50,28 +51,36 @@ class Comment extends Component {
   }
 
   render() {
+    console.log(this.state.comments)
     const loggedIn = AuthService.loggedIn();
     return (
       loggedIn ?
-        <div>
-          <h3>Add Comment:</h3>
-          <div>
-            <input type="text" placeholder="Comment..." onChange={(e) => this.commentInput(e)} />
-            <button onClick={this.addComment.bind(this)}>Submit Comment</button>
+        <div className="discussionboard">
+          <h3>Discussion Board</h3>
+          <div className="commentWrite">
+            <textarea rows="10" className="commentInput" placeholder="Add a comment here." onChange={(e) => this.commentInput(e)} />
+            <button onClick={this.addComment.bind(this)}>Post comment</button>
           </div>
-          <div>Comments:</div>
           {
             (this.state.comments.length >= 1) ?
             this.state.comments.map((comment, index) =>
-              <div key={comment.id}>
-                {`${comment.user.username}: ${comment.text}`}
+              <div className="comment" key={comment.id}>
+                <div className="commentHeader">
+                <p>Posted <Moment format="M/D/YYYY">{comment.createdAt}</Moment> at <Moment format="h:mm A">{comment.createdAt}</Moment> by <b>{comment.user.username}:</b></p>
+                </div>
+                <div className="commentText">
+                <p>{comment.text}</p>
+                </div>
               </div>
             )
             :
             <div></div>
           }
         </div>
-        : <div>Only logged in users can see comments. Please go to Login Page in order to see login.</div>
+        : <div className="discussionboard">
+          <h3>Discussion Board</h3>
+          <p>Only logged in users can see comments. Please login or create an account.</p>
+          </div>
     );
   }
 }

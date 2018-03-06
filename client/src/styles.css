@@ -172,12 +172,35 @@ a {
   height: 30px;
 }
 
+.commentInput {
+  width: 75%;
+  height: 50px;
+  display: block;
+}
+
+.commentWrite {
+  margin-bottom: 20px;
+}
+
+.comment {
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: dotted;
+  border-color: #FDFFFC;
+  padding-left: 4px;
+  margin-bottom: 10px;
+
+
+}
+
 input[type="text"] {
   border-radius: 5px;
   margin: 5px;
+  padding-top:0;
 }
 
 input[type="password"] {
   border-radius: 5px;
   margin: 5px;
+  padding-top:0;
 }
