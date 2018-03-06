@@ -4,7 +4,7 @@ import {
   NavLink,
   HashRouter
 } from "react-router-dom";
-import AuthService from '../services/AuthService.jsx';
+import AuthService from '../services/AuthService.js';
 
 class Nav extends Component {
   constructor() {

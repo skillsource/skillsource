@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ApiService from '../services/ApiService.jsx';
+import ApiService from '../services/ApiService.js';
 import CreateStep from './createStep.jsx';
 
 class Create extends Component {
@@ -72,7 +72,6 @@ class Create extends Component {
     const steps = this.state.steps.map(({ id, ...step }) => step)
     ApiService.createCourse(this.state.name, this.state.description, steps)
       .then(res => {
-        console.log("CourseId:", res.id)
         let courseId = res.id;
         this.props.history.replace("/courses/" + courseId);
       })

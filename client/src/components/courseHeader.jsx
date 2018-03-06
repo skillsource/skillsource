@@ -1,7 +1,7 @@
 import React from 'react';
 import Enroll from './enroll.jsx'
 import StarRatingComponent from 'react-star-rating-component';
-import ApiService from '../services/ApiService.jsx'
+import ApiService from '../services/ApiService.js'
 
 class CourseHeader extends React.Component {
   constructor(props) {

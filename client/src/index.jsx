@@ -16,7 +16,7 @@ import Signup from './components/signup.jsx';
 import Dashboard from './components/dashboard.jsx';
 import Course from './components/course.jsx';
 import Create from './components/create.jsx';
-import AuthService from './services/AuthService.jsx';
+import AuthService from './services/AuthService.js';
 
 class App extends React.Component {
   constructor(props) {

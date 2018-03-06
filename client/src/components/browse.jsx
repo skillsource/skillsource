@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import axios from 'axios';
 import Snippet from './snippet.jsx';
-import ApiService from '../services/ApiService.jsx'
+import ApiService from '../services/ApiService.js'
 
 class Browse extends Component {
 
@@ -14,17 +14,13 @@ class Browse extends Component {
     };
   }
 
-  updateInputValue(evt) {
+  updateInputValue = (e) => {
     this.setState({
-      query: evt.target.value
+      query: e.target.value
     });
   }
 
-  search(){
-    // axios.get(this.getCourses())
-    // .then(()=>{
-
-    // })
+  search = () => {
     var query = this.state.query.toLowerCase();
     var filteredData = this.state.data.filter((course)=>{
       var title = course.name.toLowerCase();
@@ -35,16 +31,14 @@ class Browse extends Component {
     this.setState({toDisplay: filteredData})
   }
 
-  componentWillMount(){
+  componentWillMount() {
     ApiService.browse()
-    .then((data) => {
-      this.setState({
-        data: data,
-        toDisplay: data
+      .then((data) => {
+        this.setState({
+          data: data,
+          toDisplay: data
+        })
       })
-    }).then(()=>{
-      console.log('the data >>>', this.state.data)
-    }) 
   }
 
   render() {
@@ -59,8 +53,8 @@ class Browse extends Component {
     return (
       <div className="browse">
         <h3>Browse courses:</h3>
-        <input value={this.state.query} onChange={this.updateInputValue.bind(this)} className="search" type="search" placeholder="Search"></input>
-        <button onClick={this.search.bind(this)} className="searchButton" type="submit">Search</button>
+        <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
+        <button onClick={this.search} className="searchButton" type="submit">Search</button>
         {snippets}
       </div>
     );

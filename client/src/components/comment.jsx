@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from 'axios';
 import Snippet from './snippet.jsx';
-import ApiService from '../services/ApiService.jsx'
-import AuthService from '../services/AuthService.jsx';
+import ApiService from '../services/ApiService.js'
+import AuthService from '../services/AuthService.js';
 import Moment from 'react-moment';
 
 class Comment extends Component {
