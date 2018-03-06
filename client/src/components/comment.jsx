@@ -33,14 +33,9 @@ class Comment extends Component {
     let comment = this.state.comment;
     let comments = this.state.comments;
     ApiService.addComment(this.props.courseId, comment)
-      .then((response) => {
-        comments[this.state.comments.length] = response
-        this.setState({
-          comments: comments
-        });
-      })
-      .catch((error) => {
-        console.log("error adding comment:", error)
+      .then(() => {
+        this.getComments();
+        this.inputComment.value = "";
       })
   }
 
@@ -58,7 +53,7 @@ class Comment extends Component {
         <div className="discussionboard">
           <h3>Discussion Board</h3>
           <div className="commentWrite">
-            <textarea rows="10" className="commentInput" placeholder="Add a comment here." onChange={(e) => this.commentInput(e)} />
+            <textarea ref={el => this.inputComment = el} rows="10" className="commentInput" placeholder="Add a comment here." onChange={(e) => this.commentInput(e)} />
             <button onClick={this.addComment.bind(this)}>Post comment</button>
           </div>
           {
