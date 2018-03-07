@@ -13,7 +13,8 @@ class CourseHeader extends React.Component {
 
   onStarClick = (rating) => {
     ApiService.rate(this.props.course.id, rating)
-      .then(({ rating }) => this.setState({ rating }));
+      .then(({ rating }) => this.setState({ rating }))
+      .then(() => {this.props.updateRatings()});
   }
 
   render(){

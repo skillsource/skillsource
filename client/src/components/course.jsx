@@ -37,16 +37,16 @@ class Course extends React.Component {
   }
 
   updateRatings = () => {
+    const courseId = this.props.match.params.id;
     ApiService.getCourse(courseId).then(courseData => {
-      console.log('coursedata', courseData)
-      this.setState({ courseData, loggedIn });
-
+      this.setState({ courseData });
+    })
   }
 
   render() {
     return (
       <div className="course-view">
-          <CourseHeader handleEnrollment={this.handleEnrollment} course={this.state.courseData} enrolled={this.state.enrolled} loggedIn={this.state.loggedIn} />
+          <CourseHeader handleEnrollment={this.handleEnrollment} course={this.state.courseData} enrolled={this.state.enrolled} updateRatings={this.updateRatings} loggedIn={this.state.loggedIn} />
           <p>Description: {this.state.courseData.description}</p>
           {
             (this.state.courseData.steps === undefined) ?
