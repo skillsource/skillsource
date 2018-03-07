@@ -19,7 +19,7 @@ class Course extends React.Component {
     this.setState({
       enrolled: !this.state.enrolled
     }, () => {
-      ApiService.enroll(this.props.match.params.id);
+      ApiService.toggleEnrollment(this.props.match.params.id);
     });
   }
 

@@ -21,7 +21,7 @@ const ApiService = {
     return ApiService.getEnrollments()
       .then(enrollments => {
         for (var i = 0; i < enrollments.length; i++) {
-          if (Number(courseId) === enrollments[i].id) {
+          if (Number(courseId) === enrollments[i].id && enrollments[i].enrolled === true) {
             return true;
           }
         }
@@ -29,7 +29,7 @@ const ApiService = {
       });
   },
 
-  enroll: (courseId) => {
+  toggleEnrollment: (courseId) => {
     return AuthService.fetch('/enrollments', {
       method: 'POST',
       body: { courseId }
