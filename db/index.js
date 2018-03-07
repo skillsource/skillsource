@@ -89,6 +89,7 @@ Course.hasMany(Comment);
 //   const sampleUsers = User.bulkCreate(seed.sampleUsers);
 //   const sampleCourses = Course.bulkCreate(seed.sampleCourses);
 //   const sampleSteps = Step.bulkCreate(seed.sampleSteps);
+//   const sampleComments = Comment.bulkCreate(seed.sampleComments);
 // })
 
 ///////////////////////////////

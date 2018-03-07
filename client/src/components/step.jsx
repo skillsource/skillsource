@@ -8,7 +8,7 @@ class Step extends Component {
       complete: false
     }
   }
-  
+
   toggleCheckbox = () => {
     const complete = !this.state.complete;
     this.setState({complete: complete }, ()=>{
@@ -30,6 +30,7 @@ class Step extends Component {
   }
 
   render() {
+    console.log(this.props.data)
     return (
       <a href={this.props.data.url} target="_blank">
       <div className="step">
@@ -45,7 +46,7 @@ class Step extends Component {
         <p>{this.props.data.text}</p>
         </div>
         <div className="step-resource">
-        <p>Click to begin.</p>
+        <p className="click">CLICK TO BEGIN.</p>
         </div>
       </div>
       </a>
