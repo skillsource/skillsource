@@ -21,7 +21,7 @@ const ApiService = {
     return ApiService.getEnrollments()
       .then(enrollments => {
         for (var i = 0; i < enrollments.length; i++) {
-          if (Number(courseId) === enrollments[i].id && enrollments[i].enrolled === true) {
+          if (Number(courseId) === enrollments[i].id) {
             return true;
           }
         }

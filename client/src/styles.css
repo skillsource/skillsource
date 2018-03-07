@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #FF9F1C;
+  background-color: #FFFAFF;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -11,7 +11,7 @@ h1 {
 }
 
 h3 {
-  color: #FDFFFC;
+  color: #1E1B18);
 }
 
 a {
@@ -23,11 +23,22 @@ a {
   padding: 10px;
 }
 
+/**
+ * Nav Component
+ */
+
 .nav {
   display: block;
-  background-color: #2EC4B6;
+  background-color: #FFEA51;
   margin-left: 0;
   margin-right: 0;
+  color: rgb(22, 31, 26);
+}
+
+#title {
+  text-shadow: .5px .5px #FFFAFF;
+  color: #1E1B18;
+  display: inline-block;
 }
 
 .navLeft {
@@ -69,16 +80,24 @@ a {
   font-weight: bold;
 }
 
+/**
+ * SNIPPET COMPONENT
+ */
+
+
+
+
 .snippet {
   display: block;
-  background-color: #2EC4B6;
+  background-color: #3E92CC;
   margin-bottom: 20px;
   padding-left: 10px;
   border-radius: 10px;
+  margin-right: 100px;
 }
 
 .snippet:hover {
-  box-shadow: 2px 2px #000000;
+  box-shadow: 2px 2px #1E1B18;
 }
 
 .snippet-name {
@@ -97,23 +116,24 @@ a {
 
 .step {
   display: block;
-  background-color: #2EC4B6;
+  background-color: #00B1D8;
   padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 10px;
+  margin-right: 100px;
 }
 
 .step:hover {
-  box-shadow: 2px 2px red;
+  box-shadow: 2px 2px #1E1B18;
 }
 
 .create-step {
   border-width: 2px;
-/*  border-style: dotted;
-  border-color: #E71D36;*/
   border-radius: 10px;
-  margin: 20px;
+  margin: 5px;
+  margin-top: 20px;
+  margin-right: 100px;
   padding: 10px;
   background-color: #2EC4B6;
 }
@@ -167,11 +187,7 @@ a {
   display: block;
 }
 
-#title {
-  text-shadow: .5px .5px #2EC4B6;
-  color: #FDFFFC;
-  display: inline-block;
-}
+
 
 .stepText {
   width: 80%;
@@ -199,7 +215,8 @@ a {
   border-color: #FDFFFC;
   padding-left: 10px;
   margin-bottom: 10px;
-  background-color: #FDFFFC;
+  margin-right: 100px;
+  background-color: #FFEA51;
 }
 
 .discussionboard {
@@ -216,7 +233,10 @@ input[type="text"] {
   border-radius: 5px;
   margin: 5px;
   padding-top:0;
-  min-height: 30px;
+  min-height: 20px;
+  border-width: 1px;
+  border-color: #333333;
+  border-style: solid;
 }
 
 input[type="password"] {
@@ -224,7 +244,15 @@ input[type="password"] {
   margin: 5px;
   padding-top:0;
   display: block;
-  min-height: 30px;
+  min-height: 20px;
+}
+
+textarea {
+  border-radius: 5px;
+  margin: 5px;
+  padding-top:0;
+  display: block;
+  min-height: 40px;
 }
 
 #course-name {
@@ -240,5 +268,10 @@ input[type="password"] {
   display: inline-block;
   margin-left: 25px;
   vertical-align: 30%;
+}
+
+button {
+  min-width: 60px;
+  min-height: 20px;
 }
 

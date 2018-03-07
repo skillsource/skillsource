@@ -50,7 +50,7 @@ class Create extends Component {
           </div>
           <div className="input">
             <label>Description: </label>
-            <input name="description" id="createDescription" type="text" onChange={this.handleChange}/>
+            <textarea name="description" id="createDescription" type="text" onChange={this.handleChange}/>
           </div>
           {Steps}
           <button onClick={this.addStep} className="addStep">Add a step</button>

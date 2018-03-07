@@ -36,7 +36,7 @@ app.get('/courses', wrap(async (req, res) => {
 app.get('/courses/:courseId', wrap(async (req, res) => {
   const { courseId } = req.params;
   const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
-  course.ratingsCount = await db.ratingsCountByCourseId(courseId);
+  course.dataValues.ratingsCount = await db.ratingsCountByCourseId(courseId);
   res.json(course);
 }));
 
@@ -54,7 +54,10 @@ app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
   const enrollments = await user.getCourses();
-  res.json(enrollments);
+  const filtered = enrollments.filter((course) => {
+    return course.userCourse.enrolled === true;
+  })
+  res.json(filtered);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {

@@ -19,6 +19,7 @@ class CourseHeader extends React.Component {
   render(){
     const { course, enrolled, handleEnrollment, loggedIn } = this.props;
     const rating = this.state.rating || course.rating;
+    const ratingsCountView = course.ratingsCount > 1 ? (<p>( {course.ratingsCount} reviews )</p>) : <p>( {course.ratingsCount} review )</p>
 
     return (
       <div className="course-header">
@@ -33,7 +34,8 @@ class CourseHeader extends React.Component {
             onStarClick={this.onStarClick}
             editing={enrolled}
           />
-          <p>({course.ratingsCount} reviews)</p>
+          {ratingsCountView}
+
         </div>
         <div id="course-enroll">
           <Enroll

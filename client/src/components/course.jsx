@@ -36,6 +36,13 @@ class Course extends React.Component {
     });
   }
 
+  updateRatings = () => {
+    ApiService.getCourse(courseId).then(courseData => {
+      console.log('coursedata', courseData)
+      this.setState({ courseData, loggedIn });
+
+  }
+
   render() {
     return (
       <div className="course-view">
