@@ -40,7 +40,7 @@ class App extends React.Component {
         <div className="viewport">
           <Nav />
           <div className="content">
-            <Route path="/about" component={About} />
+            <Route exact path="/" component={About} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <PrivateRoute path="/create" component={Create}/>

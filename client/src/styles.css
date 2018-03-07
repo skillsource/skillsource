@@ -7,7 +7,6 @@ html, body {
 
 h1 {
   margin-left: 10px;
-  color: #FDFFFC;
 }
 
 h3 {
@@ -36,9 +35,10 @@ a {
 }
 
 #title {
-  text-shadow: .5px .5px #FFFAFF;
-  color: #1E1B18;
+  text-shadow: .75px .75px 2px #1E1B18;
+  /*color: #1E1B18;*/
   display: inline-block;
+  color: #FDFFFC;
 }
 
 .navLeft {
@@ -54,10 +54,18 @@ a {
   text-decoration: underline;
 }
 
+.navLeft .active {
+  font-weight: bold;
+}
+
 .navRight {
   display: inline-block;
   float: right;
   vertical-align: bottom;
+}
+
+.navRight .active {
+  font-weight: bold;
 }
 
 .childRight {
@@ -72,13 +80,7 @@ a {
   text-decoration: underline;
 }
 
-.navLeft .active {
-  font-weight: bold;
-}
 
-.navRight .active {
-  font-weight: bold;
-}
 
 /**
  * SNIPPET COMPONENT

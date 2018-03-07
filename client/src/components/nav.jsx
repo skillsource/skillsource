@@ -40,9 +40,8 @@ class Nav extends Component {
 
     return (
       <div className="nav">
-      <h1 id="title">Skillsource</h1>
         <div className="navLeft">
-          <NavLink to="/about">About</NavLink>
+          <NavLink to="/"><h1 id="title">Skillsource</h1></NavLink>
         </div>
         <div className="navLeft">
           <NavLink to="/courses">Browse</NavLink>
