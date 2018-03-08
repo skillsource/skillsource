@@ -21,9 +21,10 @@ class Signup extends Component {
     this.auth.signup(username, password, email)
       .then(res => {
         this.auth.login(email, password);
+        console.log('signed in')
       })
-      .then(res => {
-        this.props.history.replace('/');
+      .then(() => {
+        this.props.history.replace('/dashboard')
       })
       .catch(err =>
         console.error(err)
