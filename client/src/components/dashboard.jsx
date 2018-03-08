@@ -11,9 +11,37 @@ class Dashboard extends React.Component {
     }
   }
 
+  getPercent(courseId){
+    var stepsComplete = 0;
+    var totalSteps = 0;
+    var percent = 0;
+    return ApiService.getUserSteps(courseId).then(res=>{
+      console.log('the getUserSteps result >>>>>', res)
+      totalSteps = res.length;
+      for(var i = 0; i < res.length; i++){
+        if(res[i].userStep.completed){
+          stepsComplete++;
+        }
+      }
+      console.log('the totalSteps', totalSteps)
+      percent = Math.round((stepsComplete/totalSteps) * 100);
+      return percent;
+    })
+  }
+
   componentDidMount(){
+    var tmpCourses = [];
     ApiService.getEnrollments().then(res => {
       this.setState({courses: res});
+      return res;
+    }).then(async (res) => {
+      tmpCourses = this.state.courses
+      console.log('the tmpCourses >>>>', tmpCourses)
+      for(var i = 0; i < tmpCourses.length; i++){
+        tmpCourses[i].progress = await this.getPercent(tmpCourses[i].id);
+      }
+    }).then(()=>{
+      this.setState({courses: tmpCourses})
     })
   }
 
@@ -22,7 +50,8 @@ class Dashboard extends React.Component {
       return (
         <Snippet
           key={course.id}
-          data={course}/>
+          data={course}
+          progress={course.progress} />
       )
     });
     return (

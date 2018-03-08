@@ -178,6 +178,16 @@ a {
   height: 30px;
 }
 
+.checkbox {
+  float:left;
+  margin-right: 10px;
+}
+
+.progress {
+  float:right;
+  margin-right: 10px;
+}
+
 .commentInput {
   width: 75%;
   height: 50px;
@@ -233,7 +243,6 @@ input[type="password"] {
 
 #course-rating {
   display: inline-block;
-
 }
 
 #course-enroll {
@@ -241,4 +250,3 @@ input[type="password"] {
   margin-left: 25px;
   vertical-align: 30%;
 }
-
