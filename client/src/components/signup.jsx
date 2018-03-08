@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AuthService from '../services/AuthService.jsx';
+import AuthService from '../services/AuthService.js';
 
 class Signup extends Component {
   constructor() {
@@ -41,11 +41,11 @@ class Signup extends Component {
           </div>
           <div className="input">
             <label>Email: </label>
-            <input name="email" id="email" type="text" onChange={this.handleChange} />
+            <input name="email" id="email" type="text" autoComplete="email" onChange={this.handleChange} />
           </div>
           <div className="input">
             <label>Password: </label>
-            <input name="password" id="password" type="password" onChange={this.handleChange} />
+            <input name="password" id="password" type="password" autoComplete="current-password" onChange={this.handleChange} />
           </div>
           <button onClick={this.handleFormSubmit}>SUBMIT</button>
         </form>

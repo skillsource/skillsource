@@ -16,7 +16,7 @@ import Signup from './components/signup.jsx';
 import Dashboard from './components/dashboard.jsx';
 import Course from './components/course.jsx';
 import Create from './components/create.jsx';
-import AuthService from './services/AuthService.jsx';
+import AuthService from './services/AuthService.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -38,8 +38,6 @@ class App extends React.Component {
     return (
       <HashRouter>
         <div className="viewport">
-
-          <h1>Skillsource</h1>
           <Nav />
           <div className="content">
             <Route path="/about" component={About} />
