@@ -35,7 +35,7 @@ const courses = [
   {
     creatorId: 1,
     name: 'Play the ukelele',
-    description: 'Learn how to play the uke through youtube vordinalNumbereos, perfectly ordered by level of difficulty.'
+    description: 'Learn how to play the uke through youtube videos, perfectly ordered by level of difficulty.'
   }
 ]
 
