@@ -189,11 +189,13 @@ STEPS COMPONENT
 .step {
   display: block;
   background-color: #00B1D8;
-  padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 10px;
   margin-right: 100px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: #1E1B18;
+  border-width: 1px;
 }
 
 .step:hover {
@@ -204,9 +206,25 @@ STEPS COMPONENT
   text-decoration: underline;
 }
 
-.stepText {
+.step-description {
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 80%;
   height: 30px;
+  background-color: #FFFAFF;
+  border-radius: 3px;
+  padding: 10px;
+  line-height: 1px;
+
+}
+
+.step-name {
+  margin-top: 10px;
+  background-color: #FFEA51;
+  border-width: 0;
+  max-width: 30%;
+  padding-left: 10px;
 }
 
 .ytplayer {
@@ -283,6 +301,15 @@ CREATE COMPONENT
 
 .create button {
   margin-top: 10px;
+}
+
+.create textarea {
+  width: 75%;
+}
+
+.create input[type="text"] {
+  min-width: 200px;
+
 }
 
 #delete {
