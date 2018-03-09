@@ -38,6 +38,12 @@ const ApiService = {
 
   getEnrollments: () => AuthService.fetch('/enrollments', { method: 'GET' }),
 
+  getCreatedCourses: () => {
+    return AuthService.fetch('/users/createdCourses', {
+      method: 'GET'
+    });
+  },
+
   toggleCheckbox: (stepId, completed) => {
     return AuthService.fetch(`/user-steps?stepId=${stepId}&completed=${completed}`, {
       method: 'PATCH'
