@@ -29,10 +29,8 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="center">
-        <div className="card">
+      <div className="login">
           <h3>Login</h3>
-          <form>
             <input
               className="form-item"
               placeholder="Email"
@@ -50,8 +48,6 @@ class Login extends Component {
               onChange={this.handleChange}
             />
             <button onClick={this.handleFormSubmit}>SUBMIT</button>
-          </form>
-        </div>
       </div>
     );
   }
