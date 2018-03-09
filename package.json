@@ -29,6 +29,7 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.21.0",
     "mysql2": "^1.5.2",
+    "node-fetch": "^2.1.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-moment": "^0.7.0",

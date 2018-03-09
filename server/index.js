@@ -7,6 +7,7 @@ const cors = require('cors');
 const exjwt = require('express-jwt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const fetch = require('node-fetch');
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -25,6 +26,8 @@ const unrestricted = [
   { url: '/comments', methods: ['GET'] },
   { url: '/login', methods: ['POST'] },
   { url: '/tags', methods: ['GET'] },
+  { url: '/screenshots', methods: ['GET'] },
+
 ]
 app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
@@ -49,6 +52,17 @@ app.post('/courses', wrap(async (req, res) => {
   const newCourse = await db.Course.create(course, { include: [db.Step, db.Tag] });
   res.json(newCourse);
 }));
+
+app.get('/screenshots', wrap(async (req, res) => {
+  const api = "https://www.googleapis.com/pagespeedonline/v1/runPagespeed?screenshot=true&strategy=mobile&url="
+  const url = 'http://www.google.com';
+
+  fetch(api + url, { method: 'GET' })
+  .then((data) => {
+    console.log('Screenshot?', data);
+    res.json(data)
+  })
+}))
 
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
