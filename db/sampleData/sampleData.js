@@ -64,8 +64,8 @@ const steps = [
   {
     ordinalNumber: 0,
     name: 'Work on your kick',
-    text: 'Kicking is important when you swim',
-    url: 'bla',
+    text: 'Leg kick technique is often misunderstood by swimmers and triathletes. This article from SwimSmooth.com does a great job breaking it down and is a good place to start.',
+    url: 'http://www.swimsmooth.com/kick.html',
     courseId: 2
   },
   {

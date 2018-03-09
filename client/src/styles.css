@@ -211,19 +211,17 @@ STEPS COMPONENT
   margin-top: 10px;
   margin-bottom: 10px;
   width: 80%;
-  height: 30px;
   background-color: #FFFAFF;
-  border-radius: 3px;
-  padding: 10px;
-  line-height: 1px;
-
+  padding-left: 10px;
+  padding-bottom: 10px;
+  border-radius: 2px;
 }
 
 .step-name {
   margin-top: 10px;
   background-color: #FFEA51;
   border-width: 0;
-  max-width: 30%;
+  max-width: 40%;
   padding-left: 10px;
 }
 
