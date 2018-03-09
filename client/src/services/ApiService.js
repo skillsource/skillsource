@@ -29,7 +29,7 @@ const ApiService = {
       });
   },
 
-  enroll: (courseId) => {
+  toggleEnrollment: (courseId) => {
     return AuthService.fetch('/enrollments', {
       method: 'POST',
       body: { courseId }
