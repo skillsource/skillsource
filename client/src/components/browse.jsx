@@ -4,13 +4,13 @@ import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.js'
 
 class Browse extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      courses: [],
+      filteredCourses: [],
       query: '',
-      toDisplay: []
+      tags: [],
     };
   }
 
@@ -21,38 +21,45 @@ class Browse extends Component {
   }
 
   search = () => {
-    var query = this.state.query.toLowerCase();
-    var filteredData = this.state.data.filter((course)=>{
-      var title = course.name.toLowerCase();
-      var description;
-      course.description === null ? description = '' : description = course.description.toLowerCase();
+    const query = this.state.query.toLowerCase();
+    const filteredCourses = this.state.courses.filter(course => {
+      const title = course.name.toLowerCase();
+      const description = course.description ? course.description.toLowerCase() : '';
       return title.includes(query) || description.includes(query)
-    })
-    this.setState({toDisplay: filteredData})
+    });
+    this.setState({ filteredCourses });
   }
 
-  componentWillMount() {
-    ApiService.browse()
-      .then((data) => {
-        this.setState({
-          data: data,
-          toDisplay: data
-        })
-      })
+  componentDidMount() {
+    ApiService.browse().then(courses => this.setState({ courses, filteredCourses: courses }))
+    ApiService.getTags().then(tags => this.setState({ tags }));
+  }
+
+  onTagClick = (e) => {
+    const filteredCourses = this.state.courses.filter(course => {
+      return course.tags.map(tag => tag.name).includes(e.target.innerHTML);
+    });
+    this.setState({ filteredCourses });
   }
 
   render() {
-    const snippets = this.state.toDisplay.map((course) => {
+    const snippets = this.state.filteredCourses.map(course => <Snippet key={course.id} data={course}/>);
+    const tags = this.state.tags.map(tag => {
       return (
-        <Snippet
-          key={course.id}
-          data={course}/>
+        <div
+          className="tag"
+          key={tag.id}
+          onClick={this.onTagClick}
+        >
+          {tag.name}
+        </div>
       )
     });
-    //not logged in
+
     return (
       <div className="browse">
         <h3>Browse courses:</h3>
+        {tags}
         <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
         <button onClick={this.search} className="searchButton" type="submit">Search</button>
         {snippets}
