@@ -68,7 +68,9 @@ const ApiService = {
       method: 'POST',
       body: { courseId, text }
     });
-  }
+  },
+
+  getTags: () => AuthService.fetch('/tags', { method: 'GET' }),
 }
 
 export default ApiService;
