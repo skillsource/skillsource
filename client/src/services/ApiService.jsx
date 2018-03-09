@@ -54,6 +54,22 @@ const ApiService = {
     })
   },
 
+  getCreatedCourses: () => {
+    return AuthService.fetch(`${AuthService.domain}/???`, {
+      method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res);
+    });
+  },
+
+  getCompletedCourses: () => {
+    return AuthService.fetch(`${AuthService.domain}/???`, {
+      method: 'GET',
+    }).then(res => {
+      return Promise.resolve(res);
+    });
+  },
+
   getEnrollments: () => {
     return AuthService.fetch(`${AuthService.domain}/enrollments`, {
       method: 'GET',

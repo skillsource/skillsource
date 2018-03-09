@@ -6,7 +6,7 @@ class Dashboard extends React.Component {
 
   constructor(props){
     super(props);
-    this.state={
+    this.state = {
       courses: []
     }
   }
@@ -18,7 +18,30 @@ class Dashboard extends React.Component {
   }
 
   enrolled() {
-    console.log(this.refs.completedButton)
+    ApiService.getEnrollments()
+      .then(res => {
+        this.setState({
+          courses: res
+        })
+      })
+  }
+
+  created() {
+    ApiService.getCreatedCourses()
+      .then((res) => {
+        this.setState({
+          courses: res
+        });
+      })
+  }
+
+  completed() {
+    ApiService.getCompletedCourses()
+      .then((res) => {
+        this.setState({
+          courses: res
+        });
+      })
   }
 
   render(){
@@ -33,7 +56,9 @@ class Dashboard extends React.Component {
     return (
       <div>
         <div className="tab">
-
+          <button id="enrolled" onclick={this.enrolled.bind(this)}>Enrolled</button>
+          <button id="created" onclick={this.created.bind(this)}>Created</button>
+          <button id="completed" onclick={this.completed.bind(this)}>Completed</button>
         </div>
         <div className="dashboard">
           <h3>You are enrolled in:</h3>

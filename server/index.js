@@ -106,6 +106,14 @@ app.patch('/user-steps', wrap(async (req, res) => {
 }));
 
 // users
+app.get('/users', wrap(async (req, res) => {
+  const userId = req.user.id;
+  const user = await db.User.findById(userId);
+  const courses = await db.Course.findAll({ where: { creatorId: userId } });
+  if (!user) throw boom.notFound('Cannot locate user by supplied userId');
+  res.send(JSON.stringify({ user, courses }));
+}));
+
 app.get('/users/:userId', wrap(async (req, res) => {
   const user = await db.User.findById(req.user.id);
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
