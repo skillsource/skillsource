@@ -74,7 +74,7 @@ const steps = [
   {
     ordinalNumber: 1,
     name: 'Learn how to breath efficiently',
-    text: 'Breathing is important when you swim. Watch this great youtube vordinalNumbereo.',
+    text: 'Breathing is important when you swim. Watch this great youtube video.',
     url: 'http://youtube.com/tuningukesforbeginners/',
     courseId: 2
   },
@@ -88,14 +88,14 @@ const steps = [
   {
     ordinalNumber: 0,
     name: 'Pick your instrument',
-    text: 'Choosing the right ukelele can be tough. Here are a few things to consordinalNumberer',
+    text: 'Choosing the right ukelele can be tough. Here are a few things to consider',
     url: 'https://www.ukuleletricks.com/5-best-ukuleles-to-buy-for-beginners/',
     courseId: 3
   },
   {
     ordinalNumber: 1,
     name: 'Get your uke tuned',
-    text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube vordinalNumber for step by step instructions',
+    text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube video for step by step instructions',
     url: 'https://takelessons.com/blog/how-to-tune-a-ukulele-beginners-z10',
     courseId: 3
   },
