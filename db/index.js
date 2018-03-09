@@ -7,7 +7,8 @@ const sequelize = new Sequelize(db_name, db_user, db_password, {
   dialect: 'mysql',
   logging: false,
   operatorsAliases: false,
-  logging: false
+  logging: false,
+  define: { timestamps: false },
 });
 
 const User = sequelize.define('user', {
@@ -70,6 +71,13 @@ const Comment = sequelize.define('comment', {
   }
 });
 
+const Tag = sequelize.define('tag', {
+  name: {
+    type: Sequelize.STRING,
+    required: true,
+  }
+});
+
 Course.belongsTo(User, { as: 'creator' });
 
 User.belongsToMany(Course, { through: UserCourse });
@@ -86,6 +94,9 @@ User.hasMany(Comment);
 
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
+
+Course.belongsToMany(Tag, { through: 'courseTags' });
+Tag.belongsToMany(Course, { through: 'courseTags' });
 
 ///// USE THIS TO SEED DB ///////
 
@@ -107,11 +118,14 @@ const updateCourseRating = async(courseId) => {
   await Course.update({ rating }, { where: { id: courseId } });
 };
 
-module.exports.User = User;
-module.exports.Course = Course;
-module.exports.UserCourse = UserCourse;
-module.exports.Step = Step;
-module.exports.UserStep = UserStep;
-module.exports.Comment = Comment;
-module.exports.updateCourseRating = updateCourseRating;
-module.exports.ratingsCountByCourseId = ratingsCountByCourseId;
+module.exports = {
+  User,
+  Course,
+  UserCourse,
+  Step,
+  UserStep,
+  Comment,
+  Tag,
+  updateCourseRating,
+  ratingsCountByCourseId,
+}

@@ -24,6 +24,7 @@ const unrestricted = [
   { url: '/users', methods: ['POST'] },
   { url: '/comments', methods: ['GET'] },
   { url: '/login', methods: ['POST'] },
+  { url: '/tags', methods: ['GET'] },
 ]
 app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
@@ -41,11 +42,11 @@ app.get('/courses/:courseId', wrap(async (req, res) => {
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting course: { name, description, steps }
+  // expecting course: { name, description, steps, tags }
   // where array steps: [{ ordinalNumber, name, text, url }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
-  const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
+  const newCourse = await db.Course.create(course, { include: [db.Step, db.Tag] });
   res.json(newCourse);
 }));
 
@@ -140,12 +141,17 @@ app.get('/comments', wrap(async (req, res) => {
 }));
 
 app.post('/comments', wrap(async (req, res) => {
-  console.log('POST to comments', req.body, req.user.id)
   const userId = req.user.id;
   const { courseId, text } = req.body;
   const comment = await db.Comment.create({ userId, courseId, text });
   const newComment = await db.Comment.findById(comment.id, { include: db.User });
   res.send(newComment);
+}));
+
+// tags
+app.get('/tags', wrap(async (req, res) => {
+  const tags = await db.Tag.findAll();
+  res.json(tags);
 }));
 
 // auth
