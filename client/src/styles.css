@@ -98,6 +98,7 @@ textarea {
 
 .navLeft:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .navLeft .active {
@@ -124,6 +125,7 @@ textarea {
 
 .childRight:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 /**
@@ -141,6 +143,7 @@ textarea {
 
 .snippet:hover {
   box-shadow: 2px 2px #1E1B18;
+  cursor: pointer;
 }
 
 .snippet-name {
@@ -342,6 +345,10 @@ COURSE VIEW COMPONENT
   margin-top: 40px;
 }
 
+/*
+COURSE COMPONENT
+ */
+
 #course-name {
   display: block;
 }
@@ -352,8 +359,23 @@ COURSE VIEW COMPONENT
 
 #course-enroll {
   display: inline-block;
-  margin-left: 25px;
-  vertical-align: 30%;
+  margin-left: 300px;
+  vertical-align: 20%;
+}
+
+#count {
+  display: inline-block;
+  margin-left: 10px;
+
+}
+
+#stars {
+  display: inline-block;
+}
+
+#enroll-button {
+  float: right;
+  background-color:
 }
 
 /*
@@ -404,6 +426,30 @@ DASHBOARD COMPONENT
   margin-bottom: 15px;
   margin-top: 10px;
 }
+
+.no-course {
+  margin:auto;
+  margin-top: 40px;
+  background-color: #FFEA51;
+  height: 150px;
+  width: 400px;
+  padding-top: 30px;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: rgb(22, 31, 26);
+  text-align: center;
+}
+
+.no-course:hover {
+  box-shadow: 2px 2px #1E1B18;
+  cursor: pointer;
+}
+
+.no-course p {
+  line-height: 30px;
+}
+
 
 /*
 ABOUT COMPONENT

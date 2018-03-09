@@ -68,6 +68,12 @@ const ApiService = {
       method: 'POST',
       body: { courseId, text }
     });
+  },
+
+  getUser: () => {
+    return AuthService.fetch('/users', {
+      method: 'GET'
+    });
   }
 }
 
