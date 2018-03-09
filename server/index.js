@@ -49,6 +49,18 @@ app.post('/courses', wrap(async (req, res) => {
   res.json(newCourse);
 }));
 
+app.get('/users/createdCourses', wrap(async (req, res) => {
+  const userId = req.user.id;
+  const user = await db.User.findById(userId);
+  const userCourses = await db.UserCourse.findAll({ where: { userId }});
+  const courses = [];
+  for (let i = 0; i < userCourses.length; i++) {
+    let c = await db.Course.findById(userCourses[i].courseId);
+    courses.push(c);
+  }
+  res.json(courses);
+}));
+
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
