@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ApiService from "../services/ApiService.jsx";
+import ApiService from "../services/ApiService.js";
 
 class Step extends Component {
   constructor(props){
@@ -8,7 +8,7 @@ class Step extends Component {
       complete: false
     }
   }
-  
+
   toggleCheckbox = () => {
     const complete = !this.state.complete;
     this.setState({complete: complete }, ()=>{
@@ -30,14 +30,15 @@ class Step extends Component {
   }
 
   render() {
+    console.log(this.props.data)
     return (
       <a href={this.props.data.url} target="_blank">
       <div className="step">
         <div className="step-name">
           {
             this.props.enrolled
-            ? (<input type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
-            : (<p>not enrolled</p>)
+            ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
+            : <div></div>
           }
           <h4>Step {this.props.data.ordinalNumber + 1}: {this.props.data.name}</h4>
         </div>
@@ -45,7 +46,7 @@ class Step extends Component {
         <p>{this.props.data.text}</p>
         </div>
         <div className="step-resource">
-        <p>Click to begin.</p>
+        <p className="click">CLICK TO BEGIN.</p>
         </div>
       </div>
       </a>

@@ -38,6 +38,10 @@ const UserCourse = sequelize.define('userCourse', {
     type: Sequelize.INTEGER,
     defaultValue: null,
   },
+  enrolled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  }
 });
 
 const Step = sequelize.define('step', {
@@ -89,15 +93,16 @@ Course.hasMany(Comment);
 //   const sampleUsers = User.bulkCreate(seed.sampleUsers);
 //   const sampleCourses = Course.bulkCreate(seed.sampleCourses);
 //   const sampleSteps = Step.bulkCreate(seed.sampleSteps);
+//   const sampleComments = Comment.bulkCreate(seed.sampleComments);
 // })
 
 ///////////////////////////////
 
-
+const ratingsCountByCourseId = (courseId) => UserCourse.count({ where: { courseId } });
 
 const updateCourseRating = async(courseId) => {
   const ratingsSum = await UserCourse.sum('rating', { where: { courseId } });
-  const ratingsCount = await UserCourse.count({ where: { courseId } });
+  ratingsCount = await ratingsCountByCourseId(courseId);
   const rating = Math.ceil(ratingsSum / ratingsCount);
   await Course.update({ rating }, { where: { id: courseId } });
 };
@@ -109,3 +114,4 @@ module.exports.Step = Step;
 module.exports.UserStep = UserStep;
 module.exports.Comment = Comment;
 module.exports.updateCourseRating = updateCourseRating;
+module.exports.ratingsCountByCourseId = ratingsCountByCourseId;

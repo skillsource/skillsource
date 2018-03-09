@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ApiService from '../services/ApiService.jsx';
+import ApiService from '../services/ApiService.js';
 import CreateStep from './createStep.jsx';
 
 class Create extends Component {
@@ -34,33 +34,6 @@ class Create extends Component {
     };
   }
 
-  render() {
-
-    const Steps = this.state.steps.map((step) => {
-      return (
-        <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
-    )});
-
-    return (
-      <div className="create">
-        <h3>Create a course:</h3>
-          <div className="input">
-            <label>Course Name: </label>
-            <input name="name" id="createName" type="text" onChange={this.handleChange} />
-          </div>
-          <div className="input">
-            <label>Description: </label>
-            <input name="description" id="createDescription" type="text" onChange={this.handleChange}/>
-          </div>
-          {Steps}
-          <button onClick={this.addStep} className="addStep">Add a step</button>
-          <button onClick={this.handleSubmit}>Submit</button>
-      </div>
-    );
-  }
-
-
-
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -72,7 +45,6 @@ class Create extends Component {
     const steps = this.state.steps.map(({ id, ...step }) => step)
     ApiService.createCourse(this.state.name, this.state.description, steps)
       .then(res => {
-        console.log("CourseId:", res.id)
         let courseId = res.id;
         this.props.history.replace("/courses/" + courseId);
       })
@@ -122,6 +94,37 @@ class Create extends Component {
       steps: stepsArray
     });
   }
+
+  render() {
+
+    const Steps = this.state.steps.map((step) => {
+      return (
+        <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
+    )});
+
+    return (
+      <div className="create-page">
+        <h3>Create a new course:</h3>
+        <div className="create">
+          <div className="input">
+            <label>Course Name: </label>
+            <input name="name" id="createName" type="text" onChange={this.handleChange} />
+          </div>
+          <div className="input">
+            <label>Description: </label>
+            <textarea name="description" id="createDescription" type="text" onChange={this.handleChange}/>
+          </div>
+          {Steps}
+          <button onClick={this.addStep}>Add a step</button>
+          <button onClick={this.handleSubmit}>Submit</button>
+        </div>
+      </div>
+    );
+  }
+
+
+
+
 
 }
 
