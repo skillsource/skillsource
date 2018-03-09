@@ -1,9 +1,9 @@
 import React from "react";
 import Step from './step.jsx';
 import Comment from './comment.jsx';
-import ApiService from '../services/ApiService.js'
-import CourseHeader from './courseHeader.jsx'
-import AuthService from '../services/AuthService.js'
+import ApiService from '../services/ApiService.js';
+import CourseHeader from './courseHeader.jsx';
+import AuthService from '../services/AuthService.js';
 
 class Course extends React.Component {
   constructor(props) {
@@ -13,14 +13,6 @@ class Course extends React.Component {
       enrolled: false,
       loggedIn: false
     };
-  }
-
-  handleEnrollment = () => {
-    this.setState({
-      enrolled: !this.state.enrolled
-    }, () => {
-      ApiService.toggleEnrollment(this.props.match.params.id);
-    });
   }
 
   componentDidMount() {
@@ -36,6 +28,14 @@ class Course extends React.Component {
     });
   }
 
+  handleEnrollment = () => {
+    this.setState({
+      enrolled: !this.state.enrolled
+    }, () => {
+      ApiService.toggleEnrollment(this.props.match.params.id);
+    });
+  }
+
   updateRatings = () => {
     const courseId = this.props.match.params.id;
     ApiService.getCourse(courseId).then(courseData => {
@@ -44,6 +44,7 @@ class Course extends React.Component {
   }
 
   render() {
+
     return (
       <div className="course-view">
           <CourseHeader handleEnrollment={this.handleEnrollment} course={this.state.courseData} enrolled={this.state.enrolled} updateRatings={this.updateRatings} loggedIn={this.state.loggedIn} />

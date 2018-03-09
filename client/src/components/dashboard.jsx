@@ -69,8 +69,7 @@ class Dashboard extends React.Component {
         <div className="dashboard">
           <h3>Welcome to Skillsource, {this.state.user.username}!</h3>
           <div className='no-course' onClick={this.handleClick}>
-          <p>You are not yet enrolled in any courses.</p>
-          <p>Click here to browse our course list!</p>
+          <p>You are not enrolled in any courses.</p>
           </div>
         </div>
       )

@@ -35,10 +35,7 @@ const courses = [
   {
     creatorId: 1,
     name: 'Play the ukelele',
-    description: 'Learn how to play the uke through youtube vordinalNumbereos, perfectly ordered by level of difficulty.',
-    steps: [
-
-    ]
+    description: 'Learn how to play the uke through youtube vordinalNumbereos, perfectly ordered by level of difficulty.'
   }
 ]
 
@@ -75,14 +72,14 @@ const steps = [
     ordinalNumber: 1,
     name: 'Learn how to breath efficiently',
     text: 'Breathing is important when you swim. Watch this great youtube video.',
-    url: 'http://youtube.com/tuningukesforbeginners/',
+    url: 'https://www.youtube.com/watch?v=TbFqsEFrCB4',
     courseId: 2
   },
   {
     ordinalNumber: 2,
     name: 'Master the flip turn',
     text: 'The faster you turn, the faster you go.',
-    url: 'http://youtube.com/YourFirstUkeSong/',
+    url: 'https://www.youtube.com/watch?v=FDM-WuklAqc',
     courseId: 2
   },
   {
@@ -96,7 +93,7 @@ const steps = [
     ordinalNumber: 1,
     name: 'Get your uke tuned',
     text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube video for step by step instructions',
-    url: 'https://takelessons.com/blog/how-to-tune-a-ukulele-beginners-z10',
+    url: 'https://www.ukuleletricks.com/ukulele-tuning-how-to-tune-your-ukulele/',
     courseId: 3
   },
   {
