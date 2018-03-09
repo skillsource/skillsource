@@ -30,7 +30,7 @@ app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await db.Course.findAll();
+  const courses = await db.Course.findAll({ include: db.Tag });
   res.json(courses);
 }));
 
