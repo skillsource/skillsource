@@ -4,7 +4,7 @@ import {
   NavLink,
   HashRouter
 } from "react-router-dom";
-import AuthService from '../services/AuthService.jsx';
+import AuthService from '../services/AuthService.js';
 
 class Nav extends Component {
   constructor() {
@@ -41,7 +41,7 @@ class Nav extends Component {
     return (
       <div className="nav">
         <div className="navLeft">
-          <NavLink to="/about">About</NavLink>
+          <NavLink to="/"><h1 id="title">Skillsource</h1></NavLink>
         </div>
         <div className="navLeft">
           <NavLink to="/courses">Browse</NavLink>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Enroll from './enroll.jsx'
 import StarRatingComponent from 'react-star-rating-component';
-import ApiService from '../services/ApiService.jsx'
+import ApiService from '../services/ApiService.js'
 
 class CourseHeader extends React.Component {
   constructor(props) {
@@ -13,12 +13,14 @@ class CourseHeader extends React.Component {
 
   onStarClick = (rating) => {
     ApiService.rate(this.props.course.id, rating)
-      .then(({ rating }) => this.setState({ rating }));
+      .then(({ rating }) => this.setState({ rating }))
+      .then(() => {this.props.updateRatings()});
   }
 
   render(){
     const { course, enrolled, handleEnrollment, loggedIn } = this.props;
     const rating = this.state.rating || course.rating;
+    const ratingsCountView = course.ratingsCount > 1 ? (<p>( {course.ratingsCount} reviews )</p>) : <p>( {course.ratingsCount} review )</p>
 
     return (
       <div className="course-header">
@@ -33,6 +35,8 @@ class CourseHeader extends React.Component {
             onStarClick={this.onStarClick}
             editing={enrolled}
           />
+          {ratingsCountView}
+
         </div>
         <div id="course-enroll">
           <Enroll

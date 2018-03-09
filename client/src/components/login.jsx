@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AuthService from '../services/AuthService.jsx';
+import AuthService from '../services/AuthService.js';
 
 class Login extends Component {
   constructor(){
@@ -13,33 +13,6 @@ class Login extends Component {
     }
   }
 
-  render() {
-    return (
-      <div className="center">
-        <div className="card">
-          <h1>Login</h1>
-          <form>
-            <input
-              className="form-item"
-              placeholder="Email goes here..."
-              name="email"
-              type="text"
-              onChange={this.handleChange}
-            />
-            <input
-              className="form-item"
-              placeholder="Password goes here..."
-              name="password"
-              type="password"
-              onChange={this.handleChange}
-            />
-            <button onClick={this.handleFormSubmit}>SUBMIT</button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -50,13 +23,33 @@ class Login extends Component {
     e.preventDefault();
 
     this.Auth.login(this.state.email, this.state.password)
-      .then(res => {
-        console.log("res.token:", res.token)
-        this.props.history.replace('/dashboard');
-      })
-      .catch(err =>
-        console.error('err in handleFormSubmit', err)
-      );
+      .then(() => this.props.history.replace('/dashboard'))
+      .catch(err => console.error('err in handleFormSubmit', err));
+  }
+
+  render() {
+    return (
+      <div className="login">
+          <h3>Login</h3>
+            <input
+              className="form-item"
+              placeholder="Email"
+              name="email"
+              type="text"
+              autoComplete="email"
+              onChange={this.handleChange}
+            />
+            <input
+              className="form-item"
+              placeholder="Password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              onChange={this.handleChange}
+            />
+            <button onClick={this.handleFormSubmit}>SUBMIT</button>
+      </div>
+    );
   }
 }
 
