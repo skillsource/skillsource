@@ -7,7 +7,9 @@ class Dashboard extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      courses: []
+      enrolled: [],
+      completed: [],
+      created: []
     }
   }
 
@@ -30,15 +32,15 @@ class Dashboard extends React.Component {
   componentDidMount(){
     var tmpCourses = [];
     ApiService.getEnrollments().then(res => {
-      this.setState({courses: res});
+      this.setState({enrolled: res});
       return res;
     }).then(async (res) => {
-      tmpCourses = this.state.courses
+      tmpCourses = this.state.enrolled;
       for(var i = 0; i < tmpCourses.length; i++){
         tmpCourses[i].progress = await this.getPercent(tmpCourses[i].id);
       }
     }).then(()=>{
-      this.setState({courses: tmpCourses})
+      this.setState({enrolled: tmpCourses})
     })
   }
 
@@ -46,7 +48,7 @@ class Dashboard extends React.Component {
     ApiService.getEnrollments()
       .then(res => {
         this.setState({
-          courses: res
+          enrolled: res
         })
       })
   }
@@ -54,23 +56,32 @@ class Dashboard extends React.Component {
   created() {
     ApiService.getCreatedCourses()
       .then((res) => {
+        res.id = res.courseId;
         this.setState({
-          courses: res
+          created: res
         });
       })
   }
 
   completed() {
-    ApiService.getCompletedCourses()
-      .then((res) => {
-        this.setState({
-          courses: res
-        });
-      })
+    let completed = [];
+    this.state.enrolled.forEach((course) => {
+      console.log("course:", course)
+      ApiService.getUserSteps(course.id)
+        .then((responseCourse) => {
+          if (responseCourse.completed) {
+            completed.push(responseCourse);
+          }
+          this.setState({
+            completed: completed
+          });
+        })
+    })
   }
 
   render(){
-    const snippets = this.state.courses.map((course) => {
+    console.log("this.state:", this.state)
+    const snippets = this.state.enrolled.map((course) => {
       return (
         <Snippet
           key={course.id}
@@ -81,16 +92,21 @@ class Dashboard extends React.Component {
     return (
       <div>
         <div className="tab">
-          <button id="enrolled" onclick={this.enrolled.bind(this)}>Enrolled</button>
-          <button id="created" onclick={this.created.bind(this)}>Created</button>
-          <button id="completed" onclick={this.completed.bind(this)}>Completed</button>
+          <button id="enrolled" onClick={this.enrolled.bind(this)}>Enrolled</button>
+          <button id="created" onClick={this.created.bind(this)}>Created</button>
+          <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
         </div>
         <div className="dashboard">
           <h3>You are enrolled in:</h3>
           {snippets}
         </div>
+        <div className="created">
+          <h3>You have Created:</h3>
+
+        </div>
         <div className="completed">
           <h3>You have completed:</h3>
+
         </div>
       </div>
     );
