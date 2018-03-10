@@ -98,6 +98,7 @@ textarea {
 
 .navLeft:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .navLeft .active {
@@ -124,6 +125,7 @@ textarea {
 
 .childRight:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 /**
@@ -137,10 +139,15 @@ textarea {
   padding-left: 10px;
   border-radius: 10px;
   margin-right: 100px;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: rgb(22, 31, 26);
 }
 
 .snippet:hover {
-  box-shadow: 2px 2px #1E1B18;
+  box-shadow: 1px 1px #1E1B18;
+  cursor: pointer;
 }
 
 .snippet-name {
@@ -182,21 +189,73 @@ STEPS COMPONENT
 .step {
   display: block;
   background-color: #00B1D8;
-  padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 10px;
   margin-right: 100px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: #1E1B18;
+  border-width: 1px;
 }
 
 .step:hover {
   box-shadow: 2px 2px #1E1B18;
 }
 
-.stepText {
-  width: 80%;
-  height: 30px;
+.step:hover .click {
+  text-decoration: underline;
 }
+
+.step-description {
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 80%;
+  background-color: #FFFAFF;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  border-radius: 2px;
+}
+
+.step-name {
+  margin-top: 10px;
+  background-color: #FFEA51;
+  border-width: 0;
+  max-width: 40%;
+  padding-left: 10px;
+}
+
+.step-screenshot {
+  display: block;
+  margin: auto;
+  margin-bottom: 2px;
+  border-color: #1E1B18;
+  border-width: 5px;
+  border-radius: 5px;
+  border-style: solid;
+  width: 320px;
+  height: 179px;
+}
+
+.screenshot-desc {
+  margin-top: 0px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.ytplayer {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-width: 0;
+}
+
+.click {
+  font-size: 12px;
+  margin-top: 40px;
+  text-align: center;
+}
+
 
 
 /*
@@ -260,20 +319,18 @@ CREATE COMPONENT
   margin-top: 10px;
 }
 
+.create textarea {
+  width: 75%;
+}
+
+.create input[type="text"] {
+  min-width: 200px;
+
+}
+
 #delete {
   float:right;
 }
-
-/*CAN WE DELETE THIS?
-.courseSnippet {
-  border-radius: 25px;
-  border: 2px solid #E71D36;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 800px;
-  height: 120px;
-  position: relative;
-}*/
 
 /*
 COURSE VIEW COMPONENT
@@ -308,6 +365,10 @@ COURSE VIEW COMPONENT
   margin-right: 10px;
 }
 
+/*
+COMMENT COMPONENTS
+ */
+
 .commentInput {
   width: 75%;
   height: 50px;
@@ -337,10 +398,9 @@ COURSE VIEW COMPONENT
   margin-top: 40px;
 }
 
-.click {
-  font-size: 12px;
-  margin-top: 40px;
-}
+/*
+COURSE COMPONENT
+ */
 
 #course-name {
   display: block;
@@ -352,8 +412,23 @@ COURSE VIEW COMPONENT
 
 #course-enroll {
   display: inline-block;
-  margin-left: 25px;
-  vertical-align: 30%;
+  margin-left: 100px;
+  vertical-align: 20%;
+}
+
+#count {
+  display: inline-block;
+  margin-left: 10px;
+
+}
+
+#stars {
+  display: inline-block;
+}
+
+#enroll-button {
+  float: right;
+  background-color:
 }
 
 /*
@@ -405,6 +480,30 @@ DASHBOARD COMPONENT
   margin-top: 10px;
 }
 
+.no-course {
+  margin:auto;
+  margin-top: 100px;
+  background-color: #FD7377;
+  height: 100px;
+  width: 400px;
+  padding-top: 30px;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: rgb(22, 31, 26);
+  text-align: center;
+}
+
+.no-course:hover {
+  box-shadow: 2px 2px #1E1B18;
+  cursor: pointer;
+}
+
+.no-course p {
+  line-height: 30px;
+}
+
+
 /*
 ABOUT COMPONENT
  */
@@ -448,4 +547,13 @@ ABOUT COMPONENT
   background-color: #E1ECF4;
   border-color: transparent;
   cursor: pointer;
+}
+
+.addTag {
+  display: block;
+  margin-top: 10px;
+}
+
+.tagSelect {
+  margin-left: 10px;
 }
