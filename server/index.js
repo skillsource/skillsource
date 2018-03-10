@@ -57,9 +57,13 @@ app.get('/users/createdCourses', wrap(async (req, res) => {
   const courses = [];
   for (let i = 0; i < userCourses.length; i++) {
     let c = await db.Course.findById(userCourses[i].courseId);
-    courses.push(c);
+    if (c.creatorId === userId) {
+      courses.push(c);
+    }
   }
-  res.json(courses);
+  res.json({
+    courses: courses
+  });
 }));
 
 // enrollments
