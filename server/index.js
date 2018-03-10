@@ -67,6 +67,16 @@ app.post('/courses', wrap(async (req, res) => {
   })
 }));
 
+app.get('/users/createdCourses', wrap(async (req, res) => {
+  const userId = req.user.id;
+  const creatorId = userId;
+  const user = await db.User.findById(userId);
+  const userCourses = await db.Course.findAll({ where: { creatorId } });
+  res.json({
+    courses: userCourses
+  });
+}));
+
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
