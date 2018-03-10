@@ -19,6 +19,11 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
 app.use('/screenshots', express.static(__dirname + '/../public/images/'));
 
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
 
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
@@ -51,7 +56,15 @@ app.post('/courses', wrap(async (req, res) => {
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: db.Step });
-  const tagIds = course.tags.map(tag => tag.id);
+  let tagIds = [];
+  await asyncForEach(course.tags, async (tag) => {
+    if (tag.id) {
+      tagIds.push(tag.id);
+    } else {
+      const newTag = await db.Tag.create(tag);
+      tagIds.push(newTag.id);
+    }
+  })
   const tags = await db.Tag.findAll({ where: { id: tagIds } });
   await newCourse.addTags(tags);
   res.json(newCourse);
