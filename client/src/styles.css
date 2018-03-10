@@ -225,6 +225,24 @@ STEPS COMPONENT
   padding-left: 10px;
 }
 
+.step-screenshot {
+  display: block;
+  margin: auto;
+  margin-bottom: 2px;
+  border-color: #1E1B18;
+  border-width: 5px;
+  border-radius: 5px;
+  border-style: solid;
+  width: 320px;
+  height: 179px;
+}
+
+.screenshot-desc {
+  margin-top: 0px;
+  font-size: 12px;
+  text-align: center;
+}
+
 .ytplayer {
   display: block;
   margin-left: auto;
@@ -314,17 +332,6 @@ CREATE COMPONENT
   float:right;
 }
 
-/*CAN WE DELETE THIS?
-.courseSnippet {
-  border-radius: 25px;
-  border: 2px solid #E71D36;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 800px;
-  height: 120px;
-  position: relative;
-}*/
-
 /*
 COURSE VIEW COMPONENT
  */
@@ -357,6 +364,10 @@ COURSE VIEW COMPONENT
   float:left;
   margin-right: 10px;
 }
+
+/*
+COMMENT COMPONENTS
+ */
 
 .commentInput {
   width: 75%;
@@ -401,7 +412,7 @@ COURSE COMPONENT
 
 #course-enroll {
   display: inline-block;
-  margin-left: 300px;
+  margin-left: 100px;
   vertical-align: 20%;
 }
 

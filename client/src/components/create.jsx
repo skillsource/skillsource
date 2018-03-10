@@ -42,7 +42,7 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const steps = this.state.steps.map(({ id, ...step }) => step)
+    const steps = this.state.steps.map(({ id, ...step }) => step);
     ApiService.createCourse(this.state.name, this.state.description, steps)
       .then(res => {
         let courseId = res.id;
