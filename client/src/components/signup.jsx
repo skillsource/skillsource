@@ -21,9 +21,11 @@ class Signup extends Component {
     this.auth.signup(username, password, email)
       .then(res => {
         this.auth.login(email, password);
+        console.log('signed in')
       })
-      .then(res => {
-        this.props.history.replace('/');
+      .then((res) => {
+        console.log('reroute to dashboard')
+        this.props.history.replace('/courses')
       })
       .catch(err =>
         console.error(err)
@@ -34,21 +36,16 @@ class Signup extends Component {
     return (
       <div className="signup">
         <h3>Get your Skillsource account.</h3>
-        <form>
           <div className="input">
-            <label>Username: </label>
-            <input name="username" id="username" type="text" onChange={this.handleChange} />
+            <input name="username" placeholder="Username" type="text" onChange={this.handleChange} />
           </div>
           <div className="input">
-            <label>Email: </label>
-            <input name="email" id="email" type="text" autoComplete="email" onChange={this.handleChange} />
+            <input name="email" placeholder="E-mail" type="text" autoComplete="email" onChange={this.handleChange} />
           </div>
           <div className="input">
-            <label>Password: </label>
-            <input name="password" id="password" type="password" autoComplete="current-password" onChange={this.handleChange} />
+            <input name="password" placeholder="Password" type="password" autoComplete="current-password" onChange={this.handleChange} />
           </div>
           <button onClick={this.handleFormSubmit}>SUBMIT</button>
-        </form>
       </div>
     );
   }

@@ -7,6 +7,7 @@ const cors = require('cors');
 const exjwt = require('express-jwt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const pssg = require('pssg'); // Google Pagespeed Screenshot API
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -16,6 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
+app.use('/screenshots', express.static(__dirname + '/../public/images/'));
+
 
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
@@ -24,28 +27,44 @@ const unrestricted = [
   { url: '/users', methods: ['POST'] },
   { url: '/comments', methods: ['GET'] },
   { url: '/login', methods: ['POST'] },
+  { url: '/tags', methods: ['GET'] },
+  { url: /\/screenshots\/*/, methods: ['GET'] },
 ]
 app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await db.Course.findAll();
+  const courses = await db.Course.findAll({ include: db.Tag });
   res.json(courses);
 }));
 
 app.get('/courses/:courseId', wrap(async (req, res) => {
   const { courseId } = req.params;
   const course = await db.Course.findById(courseId, { include: [db.Step, db.Comment] });
+  course.dataValues.ratingsCount = await db.ratingsCountByCourseId(courseId);
   res.json(course);
 }));
 
 app.post('/courses', wrap(async (req, res) => {
-  // expecting course: { name, description, steps }
+  // expecting course: { name, description, steps, tags }
   // where array steps: [{ ordinalNumber, name, text, url }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
-  const newCourse = await db.Course.create(course, { include: [{ model: db.Step }] });
+  const newCourse = await db.Course.create(course, { include: db.Step });
+  const tagIds = course.tags.map(tag => tag.id);
+  const tags = await db.Tag.findAll({ where: { id: tagIds } });
+  await newCourse.addTags(tags);
   res.json(newCourse);
+
+  /// Retrieve and save screenshots
+  newCourse.steps.forEach((step) => {
+    pssg.download(step.url, {
+      dest: __dirname + '/../public/images/',
+      filename: step.id
+    }).then((file) => {
+      console.log('Screenshot saved to' + file + '.')
+    });
+  })
 }));
 
 // enrollments
@@ -53,19 +72,29 @@ app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
   const enrollments = await user.getCourses();
-  res.json(enrollments);
+  const filtered = enrollments.filter((course) => {
+    return course.userCourse.enrolled === true;
+  })
+  res.json(filtered);
 }));
 
 app.post('/enrollments', wrap(async (req, res) => {
   const { courseId } = req.body;
-  const user = await db.User.findById(req.user.id);
+  const userId = req.user.id;
+  const user = await db.User.findById(userId);
   const course = await db.Course.findById(courseId, { include: db.Step });
-  try {
-    await user.addCourse(courseId);
-    // doing the work of POST /user-steps
-    await user.addSteps(course.steps);
-  } catch(err) {
-    throw boom.badRequest('User already enrolled in this course');
+  const userCourse = await db.UserCourse.findOne({ where: { userId, courseId } });
+
+  if (userCourse) {
+    userCourse.update({ enrolled: !userCourse.enrolled });
+  } else {
+    try {
+      await user.addCourse(courseId);
+      // doing the work of POST /user-steps
+      await user.addSteps(course.steps);
+    } catch(err) {
+      throw boom.badRequest('User already enrolled in this course');
+    }
   }
   res.json(course);
 }));
@@ -129,12 +158,17 @@ app.get('/comments', wrap(async (req, res) => {
 }));
 
 app.post('/comments', wrap(async (req, res) => {
-  console.log('POST to comments', req.body, req.user.id)
   const userId = req.user.id;
   const { courseId, text } = req.body;
   const comment = await db.Comment.create({ userId, courseId, text });
   const newComment = await db.Comment.findById(comment.id, { include: db.User });
   res.send(newComment);
+}));
+
+// tags
+app.get('/tags', wrap(async (req, res) => {
+  const tags = await db.Tag.findAll();
+  res.json(tags);
 }));
 
 // auth

@@ -17,10 +17,10 @@ class Enroll extends React.Component {
   }
 
   render(){
-    const enrolled = (<button onClick={this.props.handleEnrollment}>Drop Course</button>);
-    const notEnrolled = (<button onClick={this.props.handleEnrollment}>Enroll in Course</button>);
+    const enrolled = (<button id="enroll-button" onClick={this.props.handleEnrollment}>Drop Course</button>);
+    const notEnrolled = (<button id="enroll-button" onClick={this.props.handleEnrollment}>Enroll in Course</button>);
     const loggedOut = (<div>
-          <button onClick={this.handleReroute}>Login to enroll</button>
+          <button id="enroll-button" onClick={this.handleReroute}>Login to enroll</button>
           </div>);
 
     if (!this.props.loggedIn) {

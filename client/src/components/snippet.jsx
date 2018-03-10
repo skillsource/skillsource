@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import StarRatingComponent from 'react-star-rating-component';
 
+
 class Snippet extends Component {
+
+  // youtubeCheck = () => {
+
+  //   if ()
+  // }
+
+
   render() {
     const { id, name, rating, description } = this.props.data;
-    const url = "#/courses/" + id
+    const url = "#/courses/" + id;
     return (
       <a href={url}>
       <div className="snippet">
@@ -21,9 +29,11 @@ class Snippet extends Component {
         </div>
         {
             Number.isInteger(this.props.progress)
-            ? this.props.progress === 100 
+            ? this.props.progress === 100
               ? <p className='progress'>Completed!</p>
-              : <p className='progress'>In progress: {this.props.progress}% complete. </p>
+              : <div className='progress'><p>In progress: </p>
+              <p>{this.props.progress}% complete. </p>
+              </div>
             : <p></p>
         }
         <div className="snippet-description">

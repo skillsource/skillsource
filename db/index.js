@@ -7,7 +7,8 @@ const sequelize = new Sequelize(db_name, db_user, db_password, {
   dialect: 'mysql',
   logging: false,
   operatorsAliases: false,
-  logging: false
+  logging: false,
+  define: { timestamps: false },
 });
 
 const User = sequelize.define('user', {
@@ -38,6 +39,10 @@ const UserCourse = sequelize.define('userCourse', {
     type: Sequelize.INTEGER,
     defaultValue: null,
   },
+  enrolled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  }
 });
 
 const Step = sequelize.define('step', {
@@ -66,6 +71,13 @@ const Comment = sequelize.define('comment', {
   }
 });
 
+const Tag = sequelize.define('tag', {
+  name: {
+    type: Sequelize.STRING,
+    required: true,
+  }
+});
+
 Course.belongsTo(User, { as: 'creator' });
 
 User.belongsToMany(Course, { through: UserCourse });
@@ -83,30 +95,40 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
+Course.belongsToMany(Tag, { through: 'courseTags' });
+Tag.belongsToMany(Course, { through: 'courseTags' });
+
 ///// USE THIS TO SEED DB ///////
 
-// sequelize.sync({ force: true }).then(() => {
-//   const sampleUsers = User.bulkCreate(seed.sampleUsers);
-//   const sampleCourses = Course.bulkCreate(seed.sampleCourses);
-//   const sampleSteps = Step.bulkCreate(seed.sampleSteps);
-//   const sampleComments = Comment.bulkCreate(seed.sampleComments);
-// })
+// sequelize.sync({ force: true }).then(async () => {
+//   await User.bulkCreate(seed.sampleUsers);
+//   const tags = await Tag.bulkCreate(seed.sampleTags);
+//   const courses = await Course.bulkCreate(seed.sampleCourses);
+//   await courses[0].addTags([tags[0], tags[1]]);
+//   await courses[1].addTags([tags[2], tags[3]]);
+//   await Step.bulkCreate(seed.sampleSteps);
+//   await Comment.bulkCreate(seed.sampleComments);
+// });
 
 ///////////////////////////////
 
-
+const ratingsCountByCourseId = (courseId) => UserCourse.count({ where: { courseId } });
 
 const updateCourseRating = async(courseId) => {
   const ratingsSum = await UserCourse.sum('rating', { where: { courseId } });
-  const ratingsCount = await UserCourse.count({ where: { courseId } });
+  ratingsCount = await ratingsCountByCourseId(courseId);
   const rating = Math.ceil(ratingsSum / ratingsCount);
   await Course.update({ rating }, { where: { id: courseId } });
 };
 
-module.exports.User = User;
-module.exports.Course = Course;
-module.exports.UserCourse = UserCourse;
-module.exports.Step = Step;
-module.exports.UserStep = UserStep;
-module.exports.Comment = Comment;
-module.exports.updateCourseRating = updateCourseRating;
+module.exports = {
+  User,
+  Course,
+  UserCourse,
+  Step,
+  UserStep,
+  Comment,
+  Tag,
+  updateCourseRating,
+  ratingsCountByCourseId,
+}
