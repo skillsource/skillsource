@@ -7,6 +7,7 @@ const cors = require('cors');
 const exjwt = require('express-jwt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const pssg = require('pssg'); // Google Pagespeed Screenshot API
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -16,6 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
+app.use('/screenshots', express.static(__dirname + '/../public/images/'));
+
 
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
@@ -25,6 +28,7 @@ const unrestricted = [
   { url: '/comments', methods: ['GET'] },
   { url: '/login', methods: ['POST'] },
   { url: '/tags', methods: ['GET'] },
+  { url: /\/screenshots\/*/, methods: ['GET'] },
 ]
 app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
@@ -46,8 +50,21 @@ app.post('/courses', wrap(async (req, res) => {
   // where array steps: [{ ordinalNumber, name, text, url }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
-  const newCourse = await db.Course.create(course, { include: [db.Step, db.Tag] });
+  const newCourse = await db.Course.create(course, { include: db.Step });
+  const tagIds = course.tags.map(tag => tag.id);
+  const tags = await db.Tag.findAll({ where: { id: tagIds } });
+  await newCourse.addTags(tags);
   res.json(newCourse);
+
+  /// Retrieve and save screenshots
+  newCourse.steps.forEach((step) => {
+    pssg.download(step.url, {
+      dest: __dirname + '/../public/images/',
+      filename: step.id
+    }).then((file) => {
+      console.log('Screenshot saved to' + file + '.')
+    });
+  })
 }));
 
 // enrollments
