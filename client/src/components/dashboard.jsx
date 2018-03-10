@@ -71,6 +71,7 @@ class Dashboard extends React.Component {
   }
 
   created() {
+    console.log("created clicked")
     ApiService.getCreatedCourses()
       .then((res) => {
         res.id = res.courseId;
@@ -114,19 +115,19 @@ class Dashboard extends React.Component {
       )
     });
 
-    if (this.state.courses.length === 0) {
+    if (this.state.enrolled.length === 0 && this.state.courses.length === 0) {
       return (
         <div>
           <div className="dashboard">
             <h3>Welcome to Skillsource, {this.state.user.username}!</h3>
+            <div className="tab">
+              <button id="enrolled" onClick={this.enrolled.bind(this)}>Enrolled</button>
+              <button id="created" onClick={this.created.bind(this)}>Created</button>
+              <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
+            </div>
             <div className='no-course' onClick={this.handleClick}>
             <p>You are not enrolled in any courses.</p>
             </div>
-          </div>
-          <div className="tab">
-            <button id="enrolled" onClick={this.enrolled.bind(this)}>Enrolled</button>
-            <button id="created" onClick={this.created.bind(this)}>Created</button>
-            <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
           </div>
         </div>
       )
@@ -150,7 +151,7 @@ class Dashboard extends React.Component {
       } else {
         courses = (
             <div className="completed">
-              <h3>You have completed:</h3>
+              <h3>You have Completed:</h3>
               {snippets}
             </div>
           )
