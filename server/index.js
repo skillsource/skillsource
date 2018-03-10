@@ -46,7 +46,10 @@ app.post('/courses', wrap(async (req, res) => {
   // where array steps: [{ ordinalNumber, name, text, url }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
-  const newCourse = await db.Course.create(course, { include: [db.Step, db.Tag] });
+  const newCourse = await db.Course.create(course, { include: db.Step });
+  const tagIds = course.tags.map(tag => tag.id);
+  const tags = await db.Tag.findAll({ where: { id: tagIds } });
+  await newCourse.addTags(tags);
   res.json(newCourse);
 }));
 
