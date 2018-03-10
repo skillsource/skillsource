@@ -60,7 +60,7 @@ class Browse extends Component {
       <div className="browse">
         <h3>Browse courses:</h3>
         {tags}
-        <input className="search" value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
+        <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
         <button onClick={this.search} className="searchButton" type="submit">Search</button>
         {snippets}
       </div>
