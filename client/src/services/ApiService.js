@@ -71,11 +71,7 @@ const ApiService = {
     });
   },
 
-  getUser: () => {
-    return AuthService.fetch('/users', {
-      method: 'GET'
-    });
-  },
+  getUser: () => AuthService.fetch('/users', { method: 'GET' }),
 
   getTags: () => AuthService.fetch('/tags', { method: 'GET' }),
 
