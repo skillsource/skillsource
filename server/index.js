@@ -69,17 +69,11 @@ app.post('/courses', wrap(async (req, res) => {
 
 app.get('/users/createdCourses', wrap(async (req, res) => {
   const userId = req.user.id;
+  const creatorId = userId;
   const user = await db.User.findById(userId);
-  const userCourses = await db.UserCourse.findAll({ where: { userId }});
-  const courses = [];
-  for (let i = 0; i < userCourses.length; i++) {
-    let c = await db.Course.findById(userCourses[i].courseId);
-    if (c.creatorId === userId) {
-      courses.push(c);
-    }
-  }
+  const userCourses = await db.Course.findAll({ where: { creatorId } });
   res.json({
-    courses: courses
+    courses: userCourses
   });
 }));
 
