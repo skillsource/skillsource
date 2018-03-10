@@ -75,6 +75,7 @@ class Step extends Component {
 
     } else {
       const screenshot = `/screenshots/${this.props.stepId}.jpg`
+      host = host.toUpperCase();
 
       return (
         <a href={url} target="_blank">
@@ -89,12 +90,13 @@ class Step extends Component {
           </div>
           <div>
           <img className="step-screenshot" src={screenshot}></img>
+          <p className="screenshot-desc">{host}</p>
           </div>
           <div className="step-description">
           <p>{text}</p>
           </div>
-          <div className="step-resource">
-          <p className="click">CLICK TO BEGIN.</p>
+          <div className="click">
+          <p>CLICK TO BEGIN.</p>
           </div>
         </div>
         </a>
