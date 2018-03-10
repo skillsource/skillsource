@@ -8,30 +8,37 @@ class Create extends Component {
     // this.steps = props.stepDetails;
     this.state = {
       steps: [
-          {
-            name: '',
-            ordinalNumber: 0,
-            text: '',
-            url: '',
-            id: 0
-          },
-          {
-            name: '',
-            ordinalNumber: 1,
-            text: '',
-            url: '',
-            id: 1
-          },
-          {
-            name: '',
-            ordinalNumber: 2,
-            text: '',
-            url: '',
-            id: 2
-          }
-        ],
-      idCounter: 3
+        {
+          name: '',
+          ordinalNumber: 0,
+          text: '',
+          url: '',
+          id: 0
+        },
+        {
+          name: '',
+          ordinalNumber: 1,
+          text: '',
+          url: '',
+          id: 1
+        },
+        {
+          name: '',
+          ordinalNumber: 2,
+          text: '',
+          url: '',
+          id: 2
+        }
+      ],
+      idCounter: 3,
+      tags: [],
+      tagName: '',
     };
+  }
+
+  componentDidMount() {
+    ApiService.getTags()
+      .then(tags => this.setState({ tags, tagName: tags[0].name }));
   }
 
   handleChange = (e) => {
@@ -42,15 +49,12 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const { tags, tagName, name, description } = this.state;
     const steps = this.state.steps.map(({ id, ...step }) => step);
-    ApiService.createCourse(this.state.name, this.state.description, steps)
-      .then(res => {
-        let courseId = res.id;
-        this.props.history.replace("/courses/" + courseId);
-      })
-      .catch(err =>
-        console.error('err in handleSubmit', err)
-      );
+    const courseTags = tags.filter(tag => tag.name === tagName);
+    ApiService.createCourse(this.state.name, this.state.description, steps, courseTags)
+      .then(course => this.props.history.replace("/courses/" + course.id))
+      .catch(err => console.error('err in handleSubmit', err));
   }
 
   addStep = () => {
@@ -95,12 +99,18 @@ class Create extends Component {
     });
   }
 
-  render() {
+  onTagChange = (e) => {
+    const tagName = e.target.value;
+    this.setState({ tagName });
+  }
 
+  render() {
     const Steps = this.state.steps.map((step) => {
       return (
         <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
     )});
+
+    const tags = this.state.tags.map(tag => <option key={tag.id} value={tag.name}>{tag.name}</option>)
 
     return (
       <div className="create-page">
@@ -116,16 +126,17 @@ class Create extends Component {
           </div>
           {Steps}
           <button onClick={this.addStep}>Add a step</button>
+          <div className="addTag">
+            Add a tag!
+            <select className="tagSelect" value={this.state.tagName} onChange={this.onTagChange}>
+              {tags}
+            </select>
+          </div>
           <button onClick={this.handleSubmit}>Submit</button>
         </div>
       </div>
     );
   }
-
-
-
-
-
 }
 
 export default Create;

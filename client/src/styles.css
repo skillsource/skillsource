@@ -548,3 +548,12 @@ ABOUT COMPONENT
   border-color: transparent;
   cursor: pointer;
 }
+
+.addTag {
+  display: block;
+  margin-top: 10px;
+}
+
+.tagSelect {
+  margin-left: 10px;
+}
