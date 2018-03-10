@@ -233,6 +233,8 @@ STEPS COMPONENT
   border-width: 5px;
   border-radius: 5px;
   border-style: solid;
+  width: 320px;
+  height: 179px;
 }
 
 .screenshot-desc {
