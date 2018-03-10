@@ -121,17 +121,17 @@ class Create extends Component {
             <input name="name" id="createName" type="text" onChange={this.handleChange} />
           </div>
           <div className="input">
+             <label>Course Tag:</label>
+            <select className="tagSelect" value={this.state.tagName} onChange={this.onTagChange}>
+              {tags}
+            </select>
+          </div>
+          <div className="input">
             <label>Description: </label>
             <textarea name="description" id="createDescription" type="text" onChange={this.handleChange}/>
           </div>
           {Steps}
           <button onClick={this.addStep}>Add a step</button>
-          <div className="addTag">
-            Add a tag!
-            <select className="tagSelect" value={this.state.tagName} onChange={this.onTagChange}>
-              {tags}
-            </select>
-          </div>
           <button onClick={this.handleSubmit}>Submit</button>
         </div>
       </div>

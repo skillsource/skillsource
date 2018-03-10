@@ -325,7 +325,11 @@ CREATE COMPONENT
 
 .create input[type="text"] {
   min-width: 200px;
+}
 
+.create select{
+  min-width: 200px;
+  min-height: 30px;
 }
 
 #delete {
@@ -466,17 +470,24 @@ SIGNUP COMPONENT
   border-color: #1E1B18;
   border-style: solid;
 }
+/*
+BROWSE COMPONENT
+ */
+
+.browse h3 {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.search {
+  margin-left: 10px;
+}
 
 /*
 DASHBOARD COMPONENT
  */
 .dashboard h3 {
   margin-bottom: 20px;
-  margin-top: 10px;
-}
-
-.browse h3 {
-  margin-bottom: 15px;
   margin-top: 10px;
 }
 
