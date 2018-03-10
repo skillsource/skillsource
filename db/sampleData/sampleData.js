@@ -151,7 +151,23 @@ const comments = [
   }
 ]
 
+const tags = [
+  {
+    name: 'sports'
+  },
+  {
+    name: 'music'
+  },
+  {
+    name: 'cooking'
+  },
+  {
+    name: 'coding'
+  }
+]
+
 module.exports.sampleCourses = courses;
 module.exports.sampleUsers = users;
 module.exports.sampleSteps = steps;
 module.exports.sampleComments = comments;
+module.exports.sampleTags = tags;
