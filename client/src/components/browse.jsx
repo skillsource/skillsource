@@ -42,6 +42,12 @@ class Browse extends Component {
     this.setState({ filteredCourses });
   }
 
+  tagReset = () => {
+    this.setState({
+      filteredCourses: this.state.courses
+    });
+  }
+
   render() {
     const snippets = this.state.filteredCourses.map(course => <Snippet key={course.id} data={course}/>);
     const tags = this.state.tags.map(tag => {
@@ -59,8 +65,15 @@ class Browse extends Component {
     return (
       <div className="browse">
         <h3>Browse courses:</h3>
+        <div
+          className="tag"
+          key="All"
+          onClick={this.tagReset}
+        >
+          all courses
+        </div>
         {tags}
-        <input className="search" value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
+        <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
         <button onClick={this.search} className="searchButton" type="submit">Search</button>
         {snippets}
       </div>
