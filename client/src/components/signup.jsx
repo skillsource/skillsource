@@ -21,10 +21,8 @@ class Signup extends Component {
     this.auth.signup(username, password, email)
       .then(res => {
         this.auth.login(email, password);
-        console.log('signed in')
       })
       .then((res) => {
-        console.log('reroute to dashboard')
         this.props.history.replace('/courses')
       })
       .catch(err =>
