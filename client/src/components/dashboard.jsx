@@ -8,8 +8,8 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       enrolled: [],
-      completed: [],
-      created: []
+      courses: [],
+      currentTab: 'enrolled'
     }
   }
 
@@ -32,15 +32,20 @@ class Dashboard extends React.Component {
   componentDidMount(){
     var tmpCourses = [];
     ApiService.getEnrollments().then(res => {
-      this.setState({enrolled: res});
+      this.setState({
+        enrolled: res,
+        courses: res
+      });
       return res;
     }).then(async (res) => {
-      tmpCourses = this.state.enrolled;
+      tmpCourses = this.state.courses;
       for(var i = 0; i < tmpCourses.length; i++){
         tmpCourses[i].progress = await this.getPercent(tmpCourses[i].id);
       }
     }).then(()=>{
-      this.setState({enrolled: tmpCourses})
+      this.setState({
+        courses: tmpCourses
+      });
     })
   }
 
@@ -48,7 +53,8 @@ class Dashboard extends React.Component {
     ApiService.getEnrollments()
       .then(res => {
         this.setState({
-          enrolled: res
+          enrolled: res,
+          courses: res
         })
       })
   }
@@ -58,7 +64,8 @@ class Dashboard extends React.Component {
       .then((res) => {
         res.id = res.courseId;
         this.setState({
-          created: res
+          courses: res.courses,
+          currentTab: 'created'
         });
       })
   }
@@ -66,14 +73,21 @@ class Dashboard extends React.Component {
   completed() {
     let completed = [];
     this.state.enrolled.forEach((course) => {
-      console.log("course:", course)
       ApiService.getUserSteps(course.id)
-        .then((responseCourse) => {
-          if (responseCourse.completed) {
-            completed.push(responseCourse);
-          }
+        .then((userSteps) => {
+          let numOfSteps = userSteps.length;
+          let stepsCompleted = 0;
+          userSteps.forEach((step) => {
+            if (step.userStep.completed) {
+              stepsCompleted++;
+            }
+            if (numOfSteps === stepsCompleted) {
+              completed.push(course);
+            }
+          });
           this.setState({
-            completed: completed
+            courses: completed,
+            currentTab: 'completed'
           });
         })
     })
@@ -81,7 +95,7 @@ class Dashboard extends React.Component {
 
   render(){
     console.log("this.state:", this.state)
-    const snippets = this.state.enrolled.map((course) => {
+    const snippets = this.state.courses.map((course) => {
       return (
         <Snippet
           key={course.id}
@@ -89,6 +103,32 @@ class Dashboard extends React.Component {
           progress={course.progress} />
       )
     });
+
+    let courses;
+
+    if (this.state.currentTab === 'enrolled') {
+      courses = (
+          <div className="dashboard">
+            <h3>You are enrolled in:</h3>
+            {snippets}
+          </div>
+        )
+    } else if (this.state.currentTab === 'created') {
+      courses = (
+          <div className="created">
+            <h3>You have Created:</h3>
+            {snippets}
+          </div>
+        )
+    } else {
+      courses = (
+          <div className="completed">
+            <h3>You have completed:</h3>
+            {snippets}
+          </div>
+        )
+    }
+
     return (
       <div>
         <div className="tab">
@@ -96,17 +136,8 @@ class Dashboard extends React.Component {
           <button id="created" onClick={this.created.bind(this)}>Created</button>
           <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
         </div>
-        <div className="dashboard">
-          <h3>You are enrolled in:</h3>
-          {snippets}
-        </div>
-        <div className="created">
-          <h3>You have Created:</h3>
-
-        </div>
-        <div className="completed">
-          <h3>You have completed:</h3>
-
+        <div>
+          { courses }
         </div>
       </div>
     );
