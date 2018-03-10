@@ -74,6 +74,8 @@ class Step extends Component {
         )
 
     } else {
+      const screenshot = `/screenshots/${this.props.stepId}.jpg`
+
       return (
         <a href={url} target="_blank">
         <div className="step">
@@ -84,6 +86,9 @@ class Step extends Component {
               : <div></div>
             }
             <h4>Step {ordinalNumber + 1}: {name}</h4>
+          </div>
+          <div>
+          <img className="step-screenshot" src={screenshot}></img>
           </div>
           <div className="step-description">
           <p>{text}</p>

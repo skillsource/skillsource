@@ -17,7 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
-app.use('/screenshots', express.static(__dirname + '/../public/images'));
+app.use('/screenshots', express.static(__dirname + '/../public/images/'));
+
 
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
@@ -27,8 +28,7 @@ const unrestricted = [
   { url: '/comments', methods: ['GET'] },
   { url: '/login', methods: ['POST'] },
   { url: '/tags', methods: ['GET'] },
-  { url: '/screenshots', methods: ['GET'] },
-
+  { url: /\/screenshots\/*/, methods: ['GET'] },
 ]
 app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
