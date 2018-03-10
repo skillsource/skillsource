@@ -20,7 +20,7 @@ class CourseHeader extends React.Component {
   render(){
     const { course, enrolled, handleEnrollment, loggedIn } = this.props;
     const rating = this.state.rating || course.rating;
-    const ratingsCountView = course.ratingsCount > 1 ? (<p>( {course.ratingsCount} reviews )</p>) : <p>( {course.ratingsCount} review )</p>
+    const ratingsCountView = course.ratingsCount === 1 ? <p id="count">( {course.ratingsCount} review )</p> : (<p id="count">( {course.ratingsCount} reviews )</p>)
 
     return (
       <div className="course-header">
@@ -28,7 +28,7 @@ class CourseHeader extends React.Component {
           <h3>{course.name}</h3>
         </div>
         <div id="course-rating">
-          <StarRatingComponent
+          <StarRatingComponent id="stars"
             name="rating"
             starCount={5}
             value={rating}
