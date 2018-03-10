@@ -29,12 +29,15 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.21.0",
     "mysql2": "^1.5.2",
+    "pssg": "^0.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-moment": "^0.7.0",
     "react-router-dom": "^4.2.2",
     "react-star-rating-component": "^1.4.0",
-    "sequelize": "^4.33.4"
+    "react-url": "^1.0.1",
+    "sequelize": "^4.33.4",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

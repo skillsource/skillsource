@@ -4,13 +4,14 @@ import Browse from '../components/browse.jsx';
 const ApiService = {
   browse: () => AuthService.fetch('/courses', { method: 'GET' }),
 
-  createCourse: (name, description, steps) => {
+  createCourse: (name, description, steps, tags) => {
     return AuthService.fetch('/courses', {
       method: 'POST',
       body: {
         name,
         description,
-        steps
+        steps,
+        tags,
       }
     });
   },
@@ -76,7 +77,10 @@ const ApiService = {
     });
   },
 
+  getUser: () => AuthService.fetch('/users', { method: 'GET' }),
+
   getTags: () => AuthService.fetch('/tags', { method: 'GET' }),
+
 }
 
 export default ApiService;

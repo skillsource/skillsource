@@ -1,6 +1,7 @@
 import React from "react";
 import Snippet from './snippet.jsx';
 import ApiService from '../services/ApiService.js';
+import AuthService from '../services/AuthService.js';
 
 class Dashboard extends React.Component {
 
@@ -9,7 +10,10 @@ class Dashboard extends React.Component {
     this.state = {
       enrolled: [],
       courses: [],
-      currentTab: 'enrolled'
+      currentTab: 'enrolled',
+      user: {
+        username: ''
+      }
     }
   }
 
@@ -47,6 +51,13 @@ class Dashboard extends React.Component {
         courses: tmpCourses
       });
     })
+    ApiService.getUser().then((user) => {
+      this.setState({ user });
+    })
+  }
+
+  handleClick = () => {
+    this.props.history.replace('/courses')
   }
 
   enrolled() {
@@ -94,7 +105,6 @@ class Dashboard extends React.Component {
   }
 
   render(){
-    console.log("this.state:", this.state)
     const snippets = this.state.courses.map((course) => {
       return (
         <Snippet
@@ -104,43 +114,61 @@ class Dashboard extends React.Component {
       )
     });
 
-    let courses;
-
-    if (this.state.currentTab === 'enrolled') {
-      courses = (
+    if (this.state.courses.length === 0) {
+      return (
+        <div>
           <div className="dashboard">
-            <h3>You are enrolled in:</h3>
-            {snippets}
+            <h3>Welcome to Skillsource, {this.state.user.username}!</h3>
+            <div className='no-course' onClick={this.handleClick}>
+            <p>You are not enrolled in any courses.</p>
+            </div>
           </div>
-        )
-    } else if (this.state.currentTab === 'created') {
-      courses = (
-          <div className="created">
-            <h3>You have Created:</h3>
-            {snippets}
+          <div className="tab">
+            <button id="enrolled" onClick={this.enrolled.bind(this)}>Enrolled</button>
+            <button id="created" onClick={this.created.bind(this)}>Created</button>
+            <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
           </div>
-        )
+        </div>
+      )
     } else {
-      courses = (
-          <div className="completed">
-            <h3>You have completed:</h3>
-            {snippets}
+      let courses;
+
+      if (this.state.currentTab === 'enrolled') {
+        courses = (
+            <div className="dashboard">
+              <h3>You are enrolled in:</h3>
+              {snippets}
+            </div>
+          )
+      } else if (this.state.currentTab === 'created') {
+        courses = (
+            <div className="created">
+              <h3>You have Created:</h3>
+              {snippets}
+            </div>
+          )
+      } else {
+        courses = (
+            <div className="completed">
+              <h3>You have completed:</h3>
+              {snippets}
+            </div>
+          )
+      }
+      return (
+        <div>
+          <div className="tab">
+            <button id="enrolled" onClick={this.enrolled.bind(this)}>Enrolled</button>
+            <button id="created" onClick={this.created.bind(this)}>Created</button>
+            <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
           </div>
-        )
+          <div>
+            { courses }
+          </div>
+        </div>
+      );
     }
 
-    return (
-      <div>
-        <div className="tab">
-          <button id="enrolled" onClick={this.enrolled.bind(this)}>Enrolled</button>
-          <button id="created" onClick={this.created.bind(this)}>Created</button>
-          <button id="completed" onClick={this.completed.bind(this)}>Completed</button>
-        </div>
-        <div>
-          { courses }
-        </div>
-      </div>
-    );
   }
 }
 

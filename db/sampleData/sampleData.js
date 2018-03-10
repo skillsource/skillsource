@@ -35,10 +35,7 @@ const courses = [
   {
     creatorId: 1,
     name: 'Play the ukelele',
-    description: 'Learn how to play the uke through youtube vordinalNumbereos, perfectly ordered by level of difficulty.',
-    steps: [
-
-    ]
+    description: 'Learn how to play the uke through youtube videos, perfectly ordered by level of difficulty.'
   }
 ]
 
@@ -67,36 +64,36 @@ const steps = [
   {
     ordinalNumber: 0,
     name: 'Work on your kick',
-    text: 'Kicking is important when you swim',
-    url: 'bla',
+    text: 'Leg kick technique is often misunderstood by swimmers and triathletes. This article from SwimSmooth.com does a great job breaking it down and is a good place to start.',
+    url: 'http://www.swimsmooth.com/kick.html',
     courseId: 2
   },
   {
     ordinalNumber: 1,
     name: 'Learn how to breath efficiently',
-    text: 'Breathing is important when you swim. Watch this great youtube vordinalNumbereo.',
-    url: 'http://youtube.com/tuningukesforbeginners/',
+    text: 'Breathing is important when you swim. Watch this great youtube video.',
+    url: 'https://www.youtube.com/watch?v=TbFqsEFrCB4',
     courseId: 2
   },
   {
     ordinalNumber: 2,
     name: 'Master the flip turn',
     text: 'The faster you turn, the faster you go.',
-    url: 'http://youtube.com/YourFirstUkeSong/',
+    url: 'https://www.youtube.com/watch?v=FDM-WuklAqc',
     courseId: 2
   },
   {
     ordinalNumber: 0,
     name: 'Pick your instrument',
-    text: 'Choosing the right ukelele can be tough. Here are a few things to consordinalNumberer',
+    text: 'Choosing the right ukelele can be tough. Here are a few things to consider',
     url: 'https://www.ukuleletricks.com/5-best-ukuleles-to-buy-for-beginners/',
     courseId: 3
   },
   {
     ordinalNumber: 1,
     name: 'Get your uke tuned',
-    text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube vordinalNumber for step by step instructions',
-    url: 'https://takelessons.com/blog/how-to-tune-a-ukulele-beginners-z10',
+    text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube video for step by step instructions',
+    url: 'https://www.ukuleletricks.com/ukulele-tuning-how-to-tune-your-ukulele/',
     courseId: 3
   },
   {
