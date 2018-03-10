@@ -5,6 +5,9 @@ class Login extends Component {
   constructor(){
     super();
     this.Auth = AuthService;
+    this.state = {
+      error: false
+    }
   }
 
   componentWillMount() {
@@ -23,8 +26,14 @@ class Login extends Component {
     e.preventDefault();
 
     this.Auth.login(this.state.email, this.state.password)
-      .then(() => this.props.history.replace('/dashboard'))
-      .catch(err => console.error('err in handleFormSubmit', err));
+      .then(() => {
+        this.props.history.replace('/dashboard')
+        this.setState({error: false})
+        })
+      .catch(err => {
+        this.setState({error: true})
+        console.error('err in handleFormSubmit', err)
+      });
   }
 
   render() {
@@ -48,6 +57,11 @@ class Login extends Component {
               onChange={this.handleChange}
             />
             <button onClick={this.handleFormSubmit}>SUBMIT</button>
+            {
+              this.state.error
+              ? <div>Email/password invalid</div>
+              : <div></div>
+            }
       </div>
     );
   }
