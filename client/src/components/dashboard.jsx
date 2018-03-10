@@ -9,7 +9,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       enrolled: [],
-      courses: [],
+      courses: [{}],
       currentTab: 'enrolled',
       user: {
         username: ''
@@ -72,7 +72,6 @@ class Dashboard extends React.Component {
   }
 
   created() {
-    console.log("created clicked")
     ApiService.getCreatedCourses()
       .then((res) => {
         res.id = res.courseId;

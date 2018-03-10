@@ -46,7 +46,6 @@ class Comment extends Component {
   }
 
   render() {
-    console.log(this.state.comments)
     const loggedIn = AuthService.loggedIn();
     return (
       loggedIn ?

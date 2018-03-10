@@ -4,12 +4,6 @@ import StarRatingComponent from 'react-star-rating-component';
 
 class Snippet extends Component {
 
-  // youtubeCheck = () => {
-
-  //   if ()
-  // }
-
-
   render() {
     const { id, name, rating, description } = this.props.data;
     const url = "#/courses/" + id;
