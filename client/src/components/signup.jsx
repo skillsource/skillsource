@@ -5,6 +5,9 @@ class Signup extends Component {
   constructor() {
     super();
     this.auth = AuthService;
+    this.state = {
+      error: false
+    }
   }
 
   handleChange = (e) => {
@@ -24,12 +27,14 @@ class Signup extends Component {
         console.log('signed in')
       })
       .then((res) => {
+        this.setState({error: false})
         console.log('reroute to dashboard')
         this.props.history.replace('/courses')
       })
-      .catch(err =>
+      .catch(err => {
+        this.setState({error: true})
         console.error(err)
-      );
+      });
   }
 
   render() {
@@ -46,6 +51,11 @@ class Signup extends Component {
             <input name="password" placeholder="Password" type="password" autoComplete="current-password" onChange={this.handleChange} />
           </div>
           <button onClick={this.handleFormSubmit}>SUBMIT</button>
+          {
+            this.state.error
+            ? <div>Email already exists</div>
+            : <div></div>
+          }
       </div>
     );
   }
