@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(__dirname + '/../client/dist'));
 app.use('/favicon.ico', express.static(__dirname + '/../favicon.ico'));
+app.use('/screenshots', express.static(__dirname + '/../public/images'));
 
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
@@ -50,19 +51,19 @@ app.post('/courses', wrap(async (req, res) => {
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: [db.Step, db.Tag] });
+  console.log(newCourse)
   res.json(newCourse);
+
+  /// Retrieve and save screenshots
+  newCourse.steps.forEach((step) => {
+    pssg.download(step.url, {
+      dest: __dirname + '/../public/images/',
+      filename: step.id
+    }).then((file) => {
+      console.log('Screenshot saved to' + file + '.')
+    });
+  })
 }));
-
-app.get('/screenshots', wrap(async (req, res) => {
-  pssg.download('https://watchandcode.com/p/practical-javascript', {
-    dest: __dirname + '/../db/images/',
-    filename: 'watch2'
-  }).then((file) => {
-    console.log('Screenshot saved to' + file + '.')
-  });
-  res.send(file)
-
-}))
 
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
