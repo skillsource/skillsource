@@ -70,7 +70,14 @@ const ApiService = {
     });
   },
 
+  getUser: () => {
+    return AuthService.fetch('/users', {
+      method: 'GET'
+    });
+  },
+
   getTags: () => AuthService.fetch('/tags', { method: 'GET' }),
+
 }
 
 export default ApiService;
