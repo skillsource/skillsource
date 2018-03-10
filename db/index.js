@@ -71,12 +71,6 @@ const Comment = sequelize.define('comment', {
   }
 });
 
-const Reply = sequelize.define('reply', {
-  text: {
-    type: Sequelize.STRING
-  }
-})
-
 const Tag = sequelize.define('tag', {
   name: {
     type: Sequelize.STRING,
@@ -100,12 +94,6 @@ User.hasMany(Comment);
 
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
-
-Reply.belongsTo(User);
-User.hasMany(Reply);
-
-Reply.belongsTo(Comment);
-Comment.hasMany(Reply);
 
 Course.belongsToMany(Tag, { through: 'courseTags' });
 Tag.belongsToMany(Course, { through: 'courseTags' });
