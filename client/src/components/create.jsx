@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import ApiService from '../services/ApiService.js';
 import CreateStep from './createStep.jsx';
+import ReactTags from 'react-tag-autocomplete';
 
 class Create extends Component {
   constructor() {
     super();
-    // this.steps = props.stepDetails;
     this.state = {
       steps: [
         {
@@ -15,30 +15,16 @@ class Create extends Component {
           url: '',
           id: 0
         },
-        {
-          name: '',
-          ordinalNumber: 1,
-          text: '',
-          url: '',
-          id: 1
-        },
-        {
-          name: '',
-          ordinalNumber: 2,
-          text: '',
-          url: '',
-          id: 2
-        }
       ],
-      idCounter: 3,
+      idCounter: 1,
       tags: [],
-      tagName: '',
+      suggestions: [],
     };
   }
 
   componentDidMount() {
     ApiService.getTags()
-      .then(tags => this.setState({ tags, tagName: tags[0].name }));
+      .then(tags => this.setState({ suggestions: tags }));
   }
 
   handleChange = (e) => {
@@ -49,10 +35,9 @@ class Create extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { tags, tagName, name, description } = this.state;
+    const { tags, suggestions, name, description } = this.state;
     const steps = this.state.steps.map(({ id, ...step }) => step);
-    const courseTags = tags.filter(tag => tag.name === tagName);
-    ApiService.createCourse(this.state.name, this.state.description, steps, courseTags)
+    ApiService.createCourse(this.state.name, this.state.description, steps, tags)
       .then(course => this.props.history.replace("/courses/" + course.id))
       .catch(err => console.error('err in handleSubmit', err));
   }
@@ -99,9 +84,15 @@ class Create extends Component {
     });
   }
 
-  onTagChange = (e) => {
-    const tagName = e.target.value;
-    this.setState({ tagName });
+  handleDelete = (i) => {
+    const tags = this.state.tags.slice(0);
+    tags.splice(i, 1);
+    this.setState({ tags });
+  }
+
+  handleAddition = (tag) => {
+    const tags = [].concat(this.state.tags, tag);
+    this.setState({ tags });
   }
 
   render() {
@@ -109,8 +100,6 @@ class Create extends Component {
       return (
         <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
     )});
-
-    const tags = this.state.tags.map(tag => <option key={tag.id} value={tag.name}>{tag.name}</option>)
 
     return (
       <div className="create-page">
@@ -120,18 +109,19 @@ class Create extends Component {
             <label>Course Name: </label>
             <input name="name" id="createName" type="text" onChange={this.handleChange} />
           </div>
+          <ReactTags
+            tags={this.state.tags}
+            suggestions={this.state.suggestions}
+            handleDelete={this.handleDelete}
+            handleAddition={this.handleAddition}
+            allowNew={true}
+          />
           <div className="input">
             <label>Description: </label>
             <textarea name="description" id="createDescription" type="text" onChange={this.handleChange}/>
           </div>
           {Steps}
           <button onClick={this.addStep}>Add a step</button>
-          <div className="addTag">
-            Add a tag!
-            <select className="tagSelect" value={this.state.tagName} onChange={this.onTagChange}>
-              {tags}
-            </select>
-          </div>
           <button onClick={this.handleSubmit}>Submit</button>
         </div>
       </div>

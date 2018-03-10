@@ -35,6 +35,7 @@
     "react-moment": "^0.7.0",
     "react-router-dom": "^4.2.2",
     "react-star-rating-component": "^1.4.0",
+    "react-tag-autocomplete": "^5.5.0",
     "react-url": "^1.0.1",
     "sequelize": "^4.33.4",
     "url": "^0.11.0"
