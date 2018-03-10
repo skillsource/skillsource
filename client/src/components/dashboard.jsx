@@ -64,6 +64,7 @@ class Dashboard extends React.Component {
     ApiService.getEnrollments()
       .then(res => {
         this.setState({
+          currentTab: 'enrolled',
           enrolled: res,
           courses: res
         })
