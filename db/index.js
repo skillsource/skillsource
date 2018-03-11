@@ -8,7 +8,6 @@ const sequelize = new Sequelize(db_name, db_user, db_password, {
   logging: false,
   operatorsAliases: false,
   logging: false,
-  define: { timestamps: false },
 });
 
 const User = sequelize.define('user', {
