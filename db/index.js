@@ -8,7 +8,6 @@ const sequelize = new Sequelize(db_name, db_user, db_password, {
   logging: false,
   operatorsAliases: false,
   logging: false,
-  define: { timestamps: false },
 });
 
 const User = sequelize.define('user', {
@@ -104,8 +103,9 @@ Tag.belongsToMany(Course, { through: 'courseTags' });
 //   await User.bulkCreate(seed.sampleUsers);
 //   const tags = await Tag.bulkCreate(seed.sampleTags);
 //   const courses = await Course.bulkCreate(seed.sampleCourses);
-//   await courses[0].addTags([tags[0], tags[1]]);
-//   await courses[1].addTags([tags[2], tags[3]]);
+//   await courses[0].addTags([tags[3]]);
+//   await courses[1].addTags([tags[0]]);
+//   await courses[2].addTags([tags[1]]);
 //   await Step.bulkCreate(seed.sampleSteps);
 //   await Comment.bulkCreate(seed.sampleComments);
 // });
