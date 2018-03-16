@@ -17,6 +17,8 @@ class Browse extends Component {
   updateInputValue = (e) => {
     this.setState({
       query: e.target.value
+    }, () => {
+      this.search();
     });
   }
 
@@ -73,8 +75,7 @@ class Browse extends Component {
           all courses
         </div>
         {tags}
-        <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search"></input>
-        <button onClick={this.search} className="searchButton" type="submit">Search</button>
+        <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search for courses..."></input>
         {snippets}
       </div>
     );
