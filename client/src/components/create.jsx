@@ -16,7 +16,8 @@ class Create extends Component {
           url: '',
           id: 0,
           duration: 0,
-          minutes: 0
+          minutes: 0,
+          units: 'minutes'
         },
       ],
       idCounter: 1,
@@ -79,18 +80,14 @@ class Create extends Component {
 
   handleStepsChange = (e, index) => {
     let stepsArray = this.state.steps.slice();
-
     stepsArray[index][e.target.name] = e.target.value;
     var units = stepsArray[index]['units']
     var duration = Number(stepsArray[index]['duration'])
     var obj = {}; 
     obj[`${units}`] = duration
-    console.log('the obj~~~ ', obj)
     var minutes = moment.duration(obj).asMinutes()
-    console.log('conversion>>>', minutes)
+    
     stepsArray[index]['minutes'] = minutes;
-
-    console.log('steps>>>>>', stepsArray)
 
     this.setState({
       steps: stepsArray
