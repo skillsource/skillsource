@@ -175,8 +175,14 @@ app.post('/users', wrap(async (req, res) => {
 // comments
 app.get('/comments', wrap(async (req, res) => {
   const { courseId } = req.query;
+  console.log(req.query);
   const course = await db.Course.findById(courseId);
-  const comments = await course.getComments({ include: db.User });
+  const comments = await course.getComments({ 
+    where: {commentId: null}, 
+    include: [{model: db.User}, { model: db.Comment, as: 'thread', 
+      include: {model: db.User}
+    }]
+  });
   res.json(comments);
 }));
 

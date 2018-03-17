@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ApiService from '../services/ApiService.js';
 import CreateStep from './createStep.jsx';
 import ReactTags from 'react-tag-autocomplete';
+import moment from 'moment';
 
 class Create extends Component {
   constructor() {
@@ -13,7 +14,9 @@ class Create extends Component {
           ordinalNumber: 0,
           text: '',
           url: '',
-          id: 0
+          id: 0,
+          duration: 0,
+          minutes: 0
         },
       ],
       idCounter: 1,
@@ -78,6 +81,16 @@ class Create extends Component {
     let stepsArray = this.state.steps.slice();
 
     stepsArray[index][e.target.name] = e.target.value;
+    var units = stepsArray[index]['units']
+    var duration = Number(stepsArray[index]['duration'])
+    var obj = {}; 
+    obj[`${units}`] = duration
+    console.log('the obj~~~ ', obj)
+    var minutes = moment.duration(obj).asMinutes()
+    console.log('conversion>>>', minutes)
+    stepsArray[index]['minutes'] = minutes;
+
+    console.log('steps>>>>>', stepsArray)
 
     this.setState({
       steps: stepsArray

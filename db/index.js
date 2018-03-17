@@ -55,13 +55,15 @@ const Step = sequelize.define('step', {
   },
   text: Sequelize.STRING,
   url: Sequelize.STRING,
+  minutes: Sequelize.INTEGER
 });
 
 const UserStep = sequelize.define('userStep', {
   completed: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
-  }
+  },
+  minutes: Sequelize.INTEGER
 });
 
 const Comment = sequelize.define('comment', {
@@ -94,21 +96,23 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
+Comment.hasMany(Comment, { as: 'thread'});
+
 Course.belongsToMany(Tag, { through: 'courseTags' });
 Tag.belongsToMany(Course, { through: 'courseTags' });
 
 ///// USE THIS TO SEED DB ///////
 
-// sequelize.sync({ force: true }).then(async () => {
-//   await User.bulkCreate(seed.sampleUsers);
-//   const tags = await Tag.bulkCreate(seed.sampleTags);
-//   const courses = await Course.bulkCreate(seed.sampleCourses);
-//   await courses[0].addTags([tags[3]]);
-//   await courses[1].addTags([tags[0]]);
-//   await courses[2].addTags([tags[1]]);
-//   await Step.bulkCreate(seed.sampleSteps);
-//   await Comment.bulkCreate(seed.sampleComments);
-// });
+sequelize.sync({ force: true }).then(async () => {
+  await User.bulkCreate(seed.sampleUsers);
+  const tags = await Tag.bulkCreate(seed.sampleTags);
+  const courses = await Course.bulkCreate(seed.sampleCourses);
+  await courses[0].addTags([tags[3]]);
+  await courses[1].addTags([tags[0]]);
+  await courses[2].addTags([tags[1]]);
+  await Step.bulkCreate(seed.sampleSteps);
+  await Comment.bulkCreate(seed.sampleComments);
+});
 
 ///////////////////////////////
 
