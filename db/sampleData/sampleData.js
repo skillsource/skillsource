@@ -119,7 +119,14 @@ const comments = [
   {
     userId: 3,
     courseId: 1,
-    text: 'You should create a Python course then?'
+    text: 'You should create a Python course then?',
+    commentId: 2
+  },
+  {
+    userId: 2,
+    courseId: 1,
+    text: 'I just want it to appear like magic!',
+    commentId: 2
   },
   {
     userId: 2,
