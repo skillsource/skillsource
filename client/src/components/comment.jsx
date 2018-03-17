@@ -31,7 +31,6 @@ class Comment extends Component {
   getComments() {
     ApiService.getCommentsForCourse(this.props.courseId)
       .then((response) => {
-        console.log(response);
         this.setState({
           comments: response
         });
@@ -53,20 +52,31 @@ class Comment extends Component {
   }
 
   addSubComment(e) {
-    console.log('SubComment fired');
+    e.preventDefault();
+    let comment = this.state.comment;
+    let comments = this.state.comments;
+    ApiService.addComment(this.props.courseId, comment, this.state.selectedComment)
+      .then(() => {
+        this.getComments();
+        this.inputComment.value = "";
+      })
   }
 
   renderComment(comment) {
     return (
-      <div className="comment" key={comment.id} onClick={this.handleSelectComment.bind(this, comment.id)}>
+      <div className="comment" key={comment.id}>
         <div className="commentHeader">
           <p>Posted <Moment format="M/D/YYYY">{comment.createdAt}</Moment> at <Moment format="h:mm A">{comment.createdAt}</Moment> by <b>{comment.user.username}:</b></p>
         </div>
         <div className="commentText">
           <p>{comment.text}</p>
           <div className="comment-options">
-            <div className="comment-icon">3<i className="material-icons">comment</i></div>
-            <div className="comment-icon"><i className="material-icons">forum</i>Add Comment</div>
+            {
+              comment.thread ?
+                <div className="comment-icon" onClick={this.handleSelectComment.bind(this, comment.id)}>{comment.thread.length}<i className="material-icons">comment</i></div>
+                :
+                ''
+            }
           </div>
         </div>
       </div>
@@ -75,17 +85,20 @@ class Comment extends Component {
 
   renderCommentThread(comment) {
     return (
-      <div className="comment" key={comment.id} onClick={this.handleSelectComment.bind(this, comment.id)}>
+      <div className="comment" key={comment.id} >
         <div className="commentHeader">
           <p>Posted <Moment format="M/D/YYYY">{comment.createdAt}</Moment> at <Moment format="h:mm A">{comment.createdAt}</Moment> by <b>{comment.user.username}:</b></p>
         </div>
         <div className="commentText">
           <p>{comment.text}</p>
           <div className="comment-options">
-            <div className="comment-icon">3<i className="material-icons">comment</i></div>
-            <div className="comment-icon"><i className="material-icons">forum</i>Add Comment</div>
+            <div className="comment-icon" onClick={this.handleSelectComment.bind(this, comment.id)}>{comment.thread.length}<i className="material-icons">comment</i></div>
           </div>
         </div>
+
+        { comment.thread.length > 0 ? comment.thread.map((subComment, index) => {
+          return this.renderComment(subComment);
+        }) : ''}
 
         <div className="commentWrite">
           <textarea ref={el => this.inputComment = el} rows="10" className="commentInput" placeholder="Add a comment here." onChange={(e) => this.commentInput(e)} />

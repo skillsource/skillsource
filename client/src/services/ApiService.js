@@ -70,10 +70,10 @@ const ApiService = {
     });
   },
 
-  addComment: (courseId, text) => {
+  addComment: (courseId, text, commentId = null) => {
     return AuthService.fetch('/comments', {
       method: 'POST',
-      body: { courseId, text }
+      body: { courseId, text, commentId }
     });
   },
 
