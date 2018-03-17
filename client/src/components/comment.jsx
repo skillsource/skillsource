@@ -11,14 +11,27 @@ class Comment extends Component {
     super(props);
     this.state = {
       comments: [],
-      comment: ''
+      comment: '',
+      selectedComment: null
     }
     this.getComments();
+  }
+
+  handleSelectComment(id) {
+    if (this.state.selectedComment === id) {
+      this.setState({selectedComment: null});
+    } else {
+      this.setState({
+        selectedComment: id
+      });
+    }
+
   }
 
   getComments() {
     ApiService.getCommentsForCourse(this.props.courseId)
       .then((response) => {
+        console.log(response);
         this.setState({
           comments: response
         });
@@ -39,6 +52,50 @@ class Comment extends Component {
       })
   }
 
+  addSubComment(e) {
+    console.log('SubComment fired');
+  }
+
+  renderComment(comment) {
+    return (
+      <div className="comment" key={comment.id} onClick={this.handleSelectComment.bind(this, comment.id)}>
+        <div className="commentHeader">
+          <p>Posted <Moment format="M/D/YYYY">{comment.createdAt}</Moment> at <Moment format="h:mm A">{comment.createdAt}</Moment> by <b>{comment.user.username}:</b></p>
+        </div>
+        <div className="commentText">
+          <p>{comment.text}</p>
+          <div className="comment-options">
+            <div className="comment-icon">3<i className="material-icons">comment</i></div>
+            <div className="comment-icon"><i className="material-icons">forum</i>Add Comment</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderCommentThread(comment) {
+    return (
+      <div className="comment" key={comment.id} onClick={this.handleSelectComment.bind(this, comment.id)}>
+        <div className="commentHeader">
+          <p>Posted <Moment format="M/D/YYYY">{comment.createdAt}</Moment> at <Moment format="h:mm A">{comment.createdAt}</Moment> by <b>{comment.user.username}:</b></p>
+        </div>
+        <div className="commentText">
+          <p>{comment.text}</p>
+          <div className="comment-options">
+            <div className="comment-icon">3<i className="material-icons">comment</i></div>
+            <div className="comment-icon"><i className="material-icons">forum</i>Add Comment</div>
+          </div>
+        </div>
+
+        <div className="commentWrite">
+          <textarea ref={el => this.inputComment = el} rows="10" className="commentInput" placeholder="Add a comment here." onChange={(e) => this.commentInput(e)} />
+          <button onClick={this.addSubComment.bind(this)}>Post comment</button>
+        </div>
+
+      </div>
+    );
+  }
+
   commentInput(e) {
     this.setState({
       comment: e.target.value
@@ -57,18 +114,14 @@ class Comment extends Component {
           </div>
           {
             (this.state.comments.length >= 1) ?
-            this.state.comments.map((comment, index) =>
-              <div className="comment" key={comment.id}>
-                <div className="commentHeader">
-                <p>Posted <Moment format="M/D/YYYY">{comment.createdAt}</Moment> at <Moment format="h:mm A">{comment.createdAt}</Moment> by <b>{comment.user.username}:</b></p>
-                </div>
-                <div className="commentText">
-                <p>{comment.text}</p>
-                </div>
-              </div>
+            this.state.comments.map((comment, index) => {
+              return this.state.selectedComment !== comment.id ? this.renderComment(comment) : this.renderCommentThread(comment);
+            }
             )
             :
-            <div></div>
+            <div>
+
+          </div>
           }
         </div>
         : <div className="discussionboard">
