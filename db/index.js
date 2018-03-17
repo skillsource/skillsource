@@ -94,6 +94,8 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
+Comment.hasMany(Comment, { as: 'thread'});
+
 Course.belongsToMany(Tag, { through: 'courseTags' });
 Tag.belongsToMany(Course, { through: 'courseTags' });
 
