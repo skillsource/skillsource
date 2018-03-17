@@ -544,6 +544,11 @@ ABOUT COMPONENT
   height: 100px;
 }
 
+.step-headers {
+  padding: 4px 8px;
+  align-items: center;
+}
+
 /*.about h2 {
   text-shadow: .2px .2px .5px #1E1B18;
 }*/
@@ -708,10 +713,14 @@ ABOUT COMPONENT
   cursor: auto;
 }
 
-.comment-icon {
+.icon {
   display: flex;
   align-items: center;
   border-radius: 3px;
   padding: 8px;
   background-color: transparent;
+}
+
+.material-icons {
+  padding-right: 8px;
 }

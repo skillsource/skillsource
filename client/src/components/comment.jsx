@@ -73,7 +73,7 @@ class Comment extends Component {
           <div className="comment-options">
             {
               comment.thread ?
-                <div className="comment-icon" onClick={this.handleSelectComment.bind(this, comment.id)}>{comment.thread.length}<i className="material-icons">comment</i></div>
+                <div className="icon" onClick={this.handleSelectComment.bind(this, comment.id)}><i className="material-icons">comment</i>{comment.thread.length}</div>
                 :
                 ''
             }
@@ -92,7 +92,7 @@ class Comment extends Component {
         <div className="commentText">
           <p>{comment.text}</p>
           <div className="comment-options">
-            <div className="comment-icon" onClick={this.handleSelectComment.bind(this, comment.id)}>{comment.thread.length}<i className="material-icons">comment</i></div>
+            <div className="icon" onClick={this.handleSelectComment.bind(this, comment.id)}>{comment.thread.length}<i className="material-icons">comment</i></div>
           </div>
         </div>
 

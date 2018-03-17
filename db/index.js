@@ -103,16 +103,16 @@ Tag.belongsToMany(Course, { through: 'courseTags' });
 
 /// USE THIS TO SEED DB ///////
 
-sequelize.sync({ force: true }).then(async () => {
-  await User.bulkCreate(seed.sampleUsers);
-  const tags = await Tag.bulkCreate(seed.sampleTags);
-  const courses = await Course.bulkCreate(seed.sampleCourses);
-  await courses[0].addTags([tags[3]]);
-  await courses[1].addTags([tags[0]]);
-  await courses[2].addTags([tags[1]]);
-  await Step.bulkCreate(seed.sampleSteps);
-  await Comment.bulkCreate(seed.sampleComments);
-});
+// sequelize.sync({ force: true }).then(async () => {
+//   await User.bulkCreate(seed.sampleUsers);
+//   const tags = await Tag.bulkCreate(seed.sampleTags);
+//   const courses = await Course.bulkCreate(seed.sampleCourses);
+//   await courses[0].addTags([tags[3]]);
+//   await courses[1].addTags([tags[0]]);
+//   await courses[2].addTags([tags[1]]);
+//   await Step.bulkCreate(seed.sampleSteps);
+//   await Comment.bulkCreate(seed.sampleComments);
+// });
 
 /////////////////////////////
 
