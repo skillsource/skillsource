@@ -16,7 +16,8 @@ class Create extends Component {
           url: '',
           id: 0,
           duration: 0,
-          minutes: 0
+          minutes: 0,
+          units: 'minutes'
         },
       ],
       idCounter: 1,
@@ -85,7 +86,7 @@ class Create extends Component {
     var obj = {}; 
     obj[`${units}`] = duration
     var minutes = moment.duration(obj).asMinutes()
-    console.log('conversion>>>', minutes)
+    
     stepsArray[index]['minutes'] = minutes;
 
     this.setState({
