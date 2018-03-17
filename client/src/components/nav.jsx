@@ -35,7 +35,7 @@ class Nav extends Component {
     return (
       <div className="nav">
         <div className="navLeft">
-          <NavLink to="/">Skillsource</NavLink>
+          <NavLink to="/" id="title">Skillsource</NavLink>
           <NavLink to="/courses">Browse</NavLink>
           <NavLink to="/dashboard">Dashboard</NavLink>
           <NavLink to="/create">Create Course</NavLink>

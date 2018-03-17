@@ -67,62 +67,32 @@ textarea {
  */
 
 .nav {
+  background-color: #3E92CC;
   display: grid;
   grid-template-columns: 5fr 2fr;
   grid-template-rows: 80px;
 }
 
-/* .nav > div > a {
-  line-height: 80px;
-} */
-
-.navLeft {
-  grid-area: 1/1/1/1;
-  background-color: dodgerblue;
+.nav > div {
   display: flex;
   align-items: center;
 }
 
-/* #title {
-  text-shadow: .75px .75px 2px #1E1B18;
-  color: #1E1B18;
-  display: inline-block;
-  color: #FDFFFC;
-  position: relative;
-  top: -13px;
-}
-
-.navLeft:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.navLeft .active {
-  font-weight: bold;
-}
-
 .navRight {
-  display: inline-block;
-  float: right;
-  vertical-align: bottom;
+  justify-content: flex-end;
 }
 
-.navRight .active {
-  font-weight: bold;
-}
-
-.childRight {
-  display: inline-block;
-  float: right;
+.nav > div > a {
+  margin: 10px;
   padding: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.childRight:hover {
   text-decoration: underline;
   cursor: pointer;
-} */
+}
+
+#title {
+  text-shadow: .75px .75px 2px #1E1B18;
+  color: #FDFFFC;
+}
 
 /**
  * SNIPPET COMPONENT
