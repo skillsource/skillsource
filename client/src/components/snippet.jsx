@@ -10,6 +10,7 @@ class Snippet extends Component {
     const url = "#/courses/" + id;
     
     let totalMinutes = 0;
+
     steps.forEach(step => totalMinutes += step.minutes);
 
     const time = moment.duration(totalMinutes, 'minutes').humanize();
