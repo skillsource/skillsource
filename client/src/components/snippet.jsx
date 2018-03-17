@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
 import StarRatingComponent from 'react-star-rating-component';
+import moment from 'moment';
 
 
 class Snippet extends Component {
 
   render() {
-    const { id, name, rating, description } = this.props.data;
+    const { id, name, rating, description, steps } = this.props.data;
     const url = "#/courses/" + id;
+    
+    let totalMinutes = 0;
+    steps.forEach(step => totalMinutes += step.minutes);
+
+    const time = moment.duration(totalMinutes, 'minutes').humanize();
+
     return (
       <a href={url}>
       <div className="snippet">
         <div className="snippet-name">
           <h4>{name}</h4>
+        </div>
+        <div className="snippet-time">
+          <h4>Estimated Time: {time}</h4>
         </div>
         <div className="snippet-rating">
           <StarRatingComponent
