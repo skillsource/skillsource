@@ -55,13 +55,15 @@ const Step = sequelize.define('step', {
   },
   text: Sequelize.STRING,
   url: Sequelize.STRING,
+  minutes: Sequelize.INTEGER
 });
 
 const UserStep = sequelize.define('userStep', {
   completed: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
-  }
+  },
+  minutes: Sequelize.INTEGER
 });
 
 const Comment = sequelize.define('comment', {
@@ -94,10 +96,12 @@ User.hasMany(Comment);
 Comment.belongsTo(Course);
 Course.hasMany(Comment);
 
+Comment.hasMany(Comment, { as: 'thread'});
+
 Course.belongsToMany(Tag, { through: 'courseTags' });
 Tag.belongsToMany(Course, { through: 'courseTags' });
 
-///// USE THIS TO SEED DB ///////
+/// USE THIS TO SEED DB ///////
 
 // sequelize.sync({ force: true }).then(async () => {
 //   await User.bulkCreate(seed.sampleUsers);
@@ -110,7 +114,7 @@ Tag.belongsToMany(Course, { through: 'courseTags' });
 //   await Comment.bulkCreate(seed.sampleComments);
 // });
 
-///////////////////////////////
+/////////////////////////////
 
 const ratingsCountByCourseId = (courseId) => UserCourse.count({ where: { courseId } });
 

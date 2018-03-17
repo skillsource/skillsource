@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ApiService from "../services/ApiService.js";
 import urlmodule from 'url';
+import moment from 'moment';
 
 class Step extends Component {
   constructor(props){
@@ -86,7 +87,15 @@ class Step extends Component {
               ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
               : <div></div>
             }
-            <h4>Step {ordinalNumber + 1}: {name}</h4>
+
+            <div class="step-headers">
+            <strong>Step {ordinalNumber + 1}: {name}</strong>
+            <br/>
+            <div className="icon">
+              <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes || 0, "minutes").humanize() }
+            </div>
+            </div>
+
           </div>
           <div>
           <img className="step-screenshot" src={screenshot}></img>

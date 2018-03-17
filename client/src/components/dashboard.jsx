@@ -9,7 +9,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       enrolled: [],
-      courses: [{}],
+      courses: [],
       currentTab: 'enrolled',
       user: {
         username: ''

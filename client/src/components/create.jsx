@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ApiService from '../services/ApiService.js';
 import CreateStep from './createStep.jsx';
 import ReactTags from 'react-tag-autocomplete';
+import moment from 'moment';
 
 class Create extends Component {
   constructor() {
@@ -13,6 +14,9 @@ class Create extends Component {
           ordinalNumber: 0,
           text: '',
           url: '',
+          duration: 0,
+          minutes: 0,
+          unit: 'minutes'
         },
       ],
       tags: [],
@@ -61,6 +65,11 @@ class Create extends Component {
   handleStepsChange = (e, index) => {
     let steps = this.state.steps.slice();
     steps[index][e.target.name] = e.target.value;
+
+    const unit = steps[index].unit
+    const duration = Number(steps[index].duration)
+    steps[index].minutes = moment.duration({ [unit]: duration }).asMinutes();
+
     this.setState({ steps });
   }
 
