@@ -17,7 +17,7 @@ h1 {
 h3 {
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
-  color: #1E1B18);
+  color: #1E1B18;
 }
 
 a {
@@ -67,33 +67,29 @@ textarea {
  */
 
 .nav {
-  display: block;
-  background-color: #FFEA51;
-  margin-left: 0;
-  margin-right: 0;
-  color: rgb(22, 31, 26);
-  max-height: 60px;
-  border-width: 0px;
-  border-bottom: 1px;
-  border-style: solid;
-  border-color: #1E1B18;
+  display: grid;
+  grid-template-columns: 5fr 2fr;
+  grid-template-rows: 80px;
 }
 
-#title {
+/* .nav > div > a {
+  line-height: 80px;
+} */
+
+.navLeft {
+  grid-area: 1/1/1/1;
+  background-color: dodgerblue;
+  display: flex;
+  align-items: center;
+}
+
+/* #title {
   text-shadow: .75px .75px 2px #1E1B18;
-  /*color: #1E1B18;*/
+  color: #1E1B18;
   display: inline-block;
   color: #FDFFFC;
   position: relative;
   top: -13px;
-}
-
-.navLeft {
-  display: inline-block;
-  padding: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-  vertical-align: top;
 }
 
 .navLeft:hover {
@@ -126,7 +122,7 @@ textarea {
 .childRight:hover {
   text-decoration: underline;
   cursor: pointer;
-}
+} */
 
 /**
  * SNIPPET COMPONENT
