@@ -60,7 +60,13 @@ class Step extends Component {
               ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
               : <div></div>
             }
-            <h4>Step {ordinalNumber + 1}: {name}</h4>
+            <div class="step-headers">
+              <strong>Step {ordinalNumber + 1}: {name}</strong>
+              <br/>
+              <div className="icon">
+                <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes, "minutes").humanize() }
+              </div>
+            </div>
           </div>
           <div className="step-video">
             <iframe className="ytplayer" type="text/html" width="640" height="360"
@@ -89,13 +95,12 @@ class Step extends Component {
             }
 
             <div class="step-headers">
-            <strong>Step {ordinalNumber + 1}: {name}</strong>
-            <br/>
-            <div className="icon">
-              <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes || 0, "minutes").humanize() }
+              <strong>Step {ordinalNumber + 1}: {name}</strong>
+              <br/>
+              <div className="icon">
+                <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes, "minutes").humanize() }
+              </div>
             </div>
-            </div>
-
           </div>
           <div>
           <img className="step-screenshot" src={screenshot}></img>
