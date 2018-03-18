@@ -26,6 +26,7 @@ class Nav extends Component {
 
     const loggedIn = (
       <div className="navRight">
+        <NavLink to="/settings">Settings</NavLink>
         <NavLink to="/login" onClick={this.handleClick}>Logout</NavLink>
       </div>
     );

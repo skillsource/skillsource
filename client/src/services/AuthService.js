@@ -19,6 +19,18 @@ const AuthService = {
       body: { username, password, email }
     })
   },
+  updatePassword: (newPassword, userId) => {
+    return AuthService.fetch(`/users/${userId}`, {
+      method: 'PUT',
+      body: { password: newPassword }
+    })
+  },
+  updateEmail: (newEmail, userId) => {
+    return AuthService.fetch(`/users/${userId}`, {
+      method: 'PUT',
+      body: { email: newEmail }
+    })
+  },
   loggedIn: () => {
     // Checks if there is a saved token and it's still valid
     const token = AuthService.getToken() // Getting token from localstorage
