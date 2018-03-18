@@ -84,17 +84,15 @@ app.get('/users/createdCourses', wrap(async (req, res) => {
   const userId = req.user.id;
   const creatorId = userId;
   const user = await db.User.findById(userId);
-  const userCourses = await db.Course.findAll({ where: { creatorId } });
-  res.json({
-    courses: userCourses
-  });
+  const courses = await db.Course.findAll({ where: { creatorId }, include: db.Step });
+  res.json({ courses });
 }));
 
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
-  const enrollments = await user.getCourses();
+  const enrollments = await user.getCourses({ include: [{ model: db.Step }] });
   const filtered = enrollments.filter((course) => {
     return course.userCourse.enrolled === true;
   })
