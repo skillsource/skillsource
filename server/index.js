@@ -156,8 +156,9 @@ app.patch('/user-steps', wrap(async (req, res) => {
 // users
 app.get('/users', wrap(async (req, res) => {
   const user = await db.User.findById(req.user.id);
+  const { id, username, email } = user;
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
-  res.json(user);
+  res.json({ id, username, email });
 }));
 
 app.post('/users', wrap(async (req, res) => {
@@ -167,13 +168,27 @@ app.post('/users', wrap(async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
-  res.json(newUser);
+  const withoutPassword = { id: newUser.id, email: newUser.email, username: newUser.username };
+  res.json(withoutPassword);
+}));
+
+// update email or password
+app.put('/users/:id', wrap(async (req, res) => {
+  const { password, email } = req.body;
+  const userId = req.params.id;
+  if (email) await db.User.update({ email }, { where: { id: userId }});
+  if (password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.User.update({ password: hashedPassword }, { where: { id: userId }});
+  }
+
+  const updatedUser = await db.User.findOne({ attributes: ['id', 'username', 'email'], where: { id: userId }});
+  res.json(updatedUser); 
 }));
 
 // comments
 app.get('/comments', wrap(async (req, res) => {
   const { courseId } = req.query;
-  console.log(req.query);
   const course = await db.Course.findById(courseId);
   const comments = await course.getComments({
     where: {commentId: null},
