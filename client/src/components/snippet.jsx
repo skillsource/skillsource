@@ -53,8 +53,10 @@ class Snippet extends Component {
                 ? <p className='progress'>Completed!</p>
                 : <div className='progress'><p>In progress: </p>
                 <p>{this.props.progress}% complete. </p>
-                </div>)
-              : <p className='progress'>You're not enrolled</p>
+                </div>) 
+              : this.props.progress === "not enrolled"
+                ? <p className='progress'>You're not enrolled</p>
+                :<p></p>
           }
           <div className="snippet-description">
           <p>{description}</p>

@@ -94,6 +94,7 @@ class Dashboard extends React.Component {
         var created = this.state.courses;
         var enrolled = this.state.enrolled;
         return created = created.map((course)=>{
+          course.progress = "not enrolled"
           for(var i = 0; i < enrolled.length; i++){
             if(course.id === enrolled[i].id){
               course.progress = enrolled[i].progress
