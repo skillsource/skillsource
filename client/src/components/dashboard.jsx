@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
       }).then(() => {
         var created = this.state.courses;
         var enrolled = this.state.enrolled;
-        return created = created.map((course)=>{
+        return created = created.map((course) => {
           course.progress = "not enrolled"
           for(var i = 0; i < enrolled.length; i++){
             if(course.id === enrolled[i].id){
@@ -103,8 +103,18 @@ class Dashboard extends React.Component {
           return course;
         })
       }).then((res) => {
-        console.log('the courses~~>>>>', res)
-        this.setState({courses: res})
+        //this.setState({courses: res})
+        return res.map((course) => {
+          return ApiService.getCourseEnrollments(course.id)
+          .then((res)=>{
+            course.numOfEnroll = res.length
+            return course;
+          })
+        })
+      }).then((res) => {
+        Promise.all(res).then((result)=>{
+          this.setState({courses: result})
+        })
       })
   }
 
@@ -137,7 +147,8 @@ class Dashboard extends React.Component {
         <Snippet
           key={course.id}
           data={course}
-          progress={course.progress} />
+          progress={course.progress} 
+          numOfEnroll={course.numOfEnroll} />
       )
     });
 
