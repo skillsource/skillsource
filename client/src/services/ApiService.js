@@ -77,6 +77,12 @@ const ApiService = {
     });
   },
 
+  getCourseEnrollments: (courseId) => {
+    return AuthService.fetch(`/course/${courseId}/enrollments`, {
+      method: 'GET',
+    })
+  },
+
   getUser: () => AuthService.fetch('/users', { method: 'GET' }),
 
   getTags: () => AuthService.fetch('/tags', { method: 'GET' }),

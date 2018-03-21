@@ -80,6 +80,12 @@ app.post('/courses', wrap(async (req, res) => {
   })
 }));
 
+app.get('/course/:courseId/enrollments', wrap(async (req, res) => {
+  const { courseId } = req.params;
+  const enrollments = await db.UserCourse.findAll({ where: { courseId } });
+  res.json(enrollments);
+}));
+
 app.get('/users/createdCourses', wrap(async (req, res) => {
   const userId = req.user.id;
   const creatorId = userId;
