@@ -187,6 +187,7 @@ STEPS COMPONENT
 
 .step-name {
   margin-top: 10px;
+  margin-bottom: 15px;
   background-color: #FFEA51;
   border-width: 0;
   max-width: 40%;
@@ -201,8 +202,8 @@ STEPS COMPONENT
   border-width: 5px;
   border-radius: 5px;
   border-style: solid;
-  width: 320px;
-  height: 179px;
+  /* width: 320px;
+  height: 179px; */
 }
 
 .screenshot-desc {
@@ -302,6 +303,11 @@ CREATE COMPONENT
 
 #delete {
   float:right;
+}
+
+.create .form-element {
+  padding: 5px;
+  margin-bottom: 10px;
 }
 
 /*
