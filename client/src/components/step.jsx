@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import MediaUploaded from "./mediaUploaded.jsx";
 import ApiService from "../services/ApiService.js";
 import urlmodule from 'url';
 import moment from 'moment';
