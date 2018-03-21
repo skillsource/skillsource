@@ -61,14 +61,25 @@ class Dashboard extends React.Component {
   }
 
   enrolled() {
+    var tmpCourses = [];
     ApiService.getEnrollments()
       .then(res => {
         this.setState({
           currentTab: 'enrolled',
           enrolled: res,
           courses: res
-        })
-      })
+        });
+        return res;
+      }).then(async (res) => {
+      tmpCourses = this.state.courses;
+      for(var i = 0; i < tmpCourses.length; i++){
+        tmpCourses[i].progress = await this.getPercent(tmpCourses[i].id);
+      }
+    }).then(()=>{
+      this.setState({
+        courses: tmpCourses
+      });
+    })
   }
 
   created() {
@@ -79,6 +90,31 @@ class Dashboard extends React.Component {
           courses: res.courses,
           currentTab: 'created'
         });
+      }).then(() => {
+        var created = this.state.courses;
+        var enrolled = this.state.enrolled;
+        return created = created.map((course) => {
+          course.progress = "not enrolled"
+          for(var i = 0; i < enrolled.length; i++){
+            if(course.id === enrolled[i].id){
+              course.progress = enrolled[i].progress
+            }
+          }
+          return course;
+        })
+      }).then((res) => {
+        //this.setState({courses: res})
+        return res.map((course) => {
+          return ApiService.getCourseEnrollments(course.id)
+          .then((res)=>{
+            course.numOfEnroll = res.length
+            return course;
+          })
+        })
+      }).then((res) => {
+        Promise.all(res).then((result)=>{
+          this.setState({courses: result})
+        })
       })
   }
 
@@ -111,7 +147,8 @@ class Dashboard extends React.Component {
         <Snippet
           key={course.id}
           data={course}
-          progress={course.progress} />
+          progress={course.progress} 
+          numOfEnroll={course.numOfEnroll} />
       )
     });
 
@@ -143,14 +180,14 @@ class Dashboard extends React.Component {
           )
       } else if (this.state.currentTab === 'created') {
         courses = (
-            <div className="created">
+            <div className="dashboard">
               <h3>You have Created:</h3>
               {snippets}
             </div>
           )
       } else {
         courses = (
-            <div className="completed">
+            <div className="dashboard">
               <h3>You have Completed:</h3>
               {snippets}
             </div>
