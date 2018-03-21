@@ -14,6 +14,9 @@ module.exports = {
       template: "index.html"
     })
   ],
+  node: {
+    fs: 'empty'
+  },
   module: {
     loaders: [
       {
