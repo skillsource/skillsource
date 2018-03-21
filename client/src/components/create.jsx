@@ -72,6 +72,7 @@ class Create extends Component {
 
     this.setState({ steps });
   }
+  
 
   handleDelete = (i) => {
     const tags = this.state.tags.slice(0);

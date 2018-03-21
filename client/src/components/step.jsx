@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import MediaUploaded from "./mediaUploaded.jsx";
 import ApiService from "../services/ApiService.js";
 import urlmodule from 'url';
 import moment from 'moment';
+import CloudService from "../services/cloud";
 
 class Step extends Component {
   constructor(props){
@@ -12,6 +14,7 @@ class Step extends Component {
   }
 
   componentDidMount(){
+    console.log('aa', this.props);
     const courseId = this.props.courseId
     const stepId = this.props.stepId;
     ApiService.getUserSteps(courseId).then(res=>{
@@ -43,79 +46,89 @@ class Step extends Component {
     return id;
   }
 
-  render() {
+  renderStepDetails() {
     const {url, ordinalNumber, name, text} = this.props.data;
+
+    return (
+      <div className="step">
+            <div className="step-name">
+              {
+                this.props.enrolled
+                ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
+                : <div></div>
+              }
+              <div class="step-headers">
+                <strong>Step {ordinalNumber + 1}: {name}</strong>
+                <br/>
+                <div className="icon">
+                  <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes, "minutes").humanize() }
+                </div>
+              </div>
+            </div>
+            <div className="step-media">
+              { this.renderStepMedia() }
+            </div>
+            <div className="step-description">
+            <p>{text}</p>
+            </div>
+          </div>
+    );
+  }
+
+  renderStepMedia() {
+
+    const {url, imgRef} = this.props.data;
     let host = urlmodule.parse(url).hostname;
 
-    if (host === 'youtube.com' || host === 'youtu.be' || host === 'www.youtube.com') {
+    if (this.props.data.imgRef) {
+      return (
+        <div className="step-image">
+          { CloudService.getFromCloudinary(this.props.data.imgRef) }
+        </div>
+      )
+    }
 
+    if (url && (host === 'youtube.com' || host === 'youtu.be' || host === 'www.youtube.com')) {
       let embedId = this.getYoutubeId(url);
       let youtubeUrl = `https://www.youtube.com/embed/${embedId}`;
-
       return (
-        <div className="step">
-          <div className="step-name">
-            {
-              this.props.enrolled
-              ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
-              : <div></div>
-            }
-            <div class="step-headers">
-              <strong>Step {ordinalNumber + 1}: {name}</strong>
-              <br/>
-              <div className="icon">
-                <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes, "minutes").humanize() }
-              </div>
-            </div>
-          </div>
-          <div className="step-video">
-            <iframe className="ytplayer" type="text/html" width="640" height="360"
-            src={youtubeUrl}></iframe>
-          </div>
-          <div className="step-description">
-          <p>{text}</p>
-          </div>
+        <div className="step-video">
+          <iframe className="ytplayer" type="text/html" width="640" height="360" src={youtubeUrl}>
+          </iframe>
         </div>
-
-
-        )
-
-    } else {
-      const screenshot = `/screenshots/${this.props.stepId}.jpg`
-      host = host.toUpperCase();
-
-      return (
-        <a href={url} target="_blank">
-        <div className="step">
-          <div className="step-name">
-            {
-              this.props.enrolled
-              ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
-              : <div></div>
-            }
-
-            <div class="step-headers">
-              <strong>Step {ordinalNumber + 1}: {name}</strong>
-              <br/>
-              <div className="icon">
-                <i className="material-icons">watch_later</i> { moment.duration(this.props.data.minutes, "minutes").humanize() }
-              </div>
-            </div>
-          </div>
-          <div>
-          <img className="step-screenshot" src={screenshot}></img>
-          <p className="screenshot-desc">{host}</p>
-          </div>
-          <div className="step-description">
-          <p>{text}</p>
-          </div>
-          <div className="click">
-          <p>CLICK TO BEGIN.</p>
-          </div>
-        </div>
-        </a>
       );
     }
+
+    if (url) {
+      const screenshot = `/screenshots/${this.props.stepId}.jpg`;
+      host = host.toUpperCase();
+      return (
+      <div>
+        <img className="step-screenshot" src={screenshot}></img>
+        <p className="screenshot-desc">{host}</p>
+      </div>
+      );
+    }
+  }
+
+  render() {
+    const {url, ordinalNumber, name, text} = this.props.data;
+    if (url) {
+      return (
+        <a href={url} target="_blank">
+          { this.renderStepDetails() }
+        </a>
+
+
+        );
+    } else {
+      return (
+        <div>
+          { this.renderStepDetails() }
+        </div>
+        );
+    }
+     
   }
 }
 
