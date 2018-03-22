@@ -24,9 +24,10 @@ const mailer = {
 
   email: (userEmail, courseId, subject, text) => {
 
-    console.log("in email funciton");
+    //only schedule a new email if the user doesn't already have one scheduled for that particular course
+
     if (mailer.emailCourses[userEmail]) {
-      if (mailer.emailCourses[userEmail] && mailer.emailCourses[userEmail].includes(courseId)) {
+      if (mailer.emailCourses[userEmail].includes(courseId)) {
         return;
       } else {
         mailer.emailCourses[userEmail].push(courseId);
@@ -42,8 +43,9 @@ const mailer = {
       text: text
     }
 
-    mailer.unsentEmails.push(mailer.transporter.sendMail(HelperOptions));
-    console.log(mailer.unsentEmails);
+    //store the unsent email as a Promise.  node-schdule will resolve all unsent emails at 12:30pm each day
+
+    mailer.unsentEmails.push(mailer.transporter.sendMail(HelperOptions));  
   }
 }
 

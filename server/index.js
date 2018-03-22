@@ -34,6 +34,7 @@ rule.hour = 24;
 schedule.scheduleJob('30 12 * * *', () => {
   Promise.all(mailer.unsentEmails)
     .then((res) => {
+      //res confirms the sent email
       console.log(res);
       mailer.unsentEmails = [];
       mailer.emailCourses = {};
@@ -150,14 +151,12 @@ app.post('/enrollments', wrap(async (req, res) => {
       // doing the work of POST /user-steps
       await user.addSteps(course.steps);
       //email the course creator if creator has checked email option
-      if (creator.creatorEmail) {
-        console.log('about to schedule an email');
+      //mailer.js will do the job of checking whether it is a duplicate for that day
+      if (creator.creatorEmail) {      
         await mailer.email(creator.email, courseId, 'New enrollment!', `Congratulations, a new user has enrolled in your course "${course.name}"!`);
-      } else {
-        console.log("this user does not want to be emailed");
-      }
-      
+      } 
     } catch(err) {
+      //if the err is in the email, this console.log is really helpful
       console.log(err);
       throw boom.badRequest('User already enrolled in this course');
     }
