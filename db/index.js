@@ -21,7 +21,11 @@ const User = sequelize.define('user', {
     }
   },
   username: Sequelize.STRING,
-  password: Sequelize.STRING
+  password: Sequelize.STRING,
+  creatorEmail: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  }
 });
 
 const Course = sequelize.define('course', {
@@ -30,7 +34,7 @@ const Course = sequelize.define('course', {
   rating: {
     type: Sequelize.INTEGER,
     defaultValue: null,
-  },
+  }
 });
 
 const UserCourse = sequelize.define('userCourse', {

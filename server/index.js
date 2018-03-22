@@ -136,8 +136,11 @@ app.post('/enrollments', wrap(async (req, res) => {
       await user.addCourse(courseId);
       // doing the work of POST /user-steps
       await user.addSteps(course.steps);
-      //email the course creator
-      await mailer.email(creator.email, 'New enrollment!', 'Congratulations, a new user has enrolled in your course!');
+      //email the course creator if creator has checked email option
+      if (course.email) {
+        await mailer.email(creator.email, 'New enrollment!', 'Congratulations, a new user has enrolled in your course!');
+      }
+      
     } catch(err) {
       throw boom.badRequest('User already enrolled in this course');
     }
@@ -199,12 +202,16 @@ app.post('/users', wrap(async (req, res) => {
 
 // update email or password
 app.put('/users/:id', wrap(async (req, res) => {
-  const { password, email } = req.body;
+  console.log(req.body);
+  const { password, email, enrollEmail } = req.body;
   const userId = req.params.id;
   if (email) await db.User.update({ email }, { where: { id: userId }});
   if (password) {
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.User.update({ password: hashedPassword }, { where: { id: userId }});
+  }
+  if (enrollEmail !== undefined) {
+    db.User.update( { creatorEmail: enrollEmail}, { where: { id: userId }});
   }
 
   const updatedUser = await db.User.findOne({ attributes: ['id', 'username', 'email'], where: { id: userId }});
