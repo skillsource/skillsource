@@ -9,6 +9,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const pssg = require('pssg'); // Google Pagespeed Screenshot API
 const cloudinary = require('./helpers/cloudinary');
+const mailer = require('./helpers/mailer.js');
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -125,6 +126,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
   const course = await db.Course.findById(courseId, { include: db.Step });
+  const creator = await db.User.findById(course.creatorId);
   const userCourse = await db.UserCourse.findOne({ where: { userId, courseId } });
 
   if (userCourse) {
@@ -134,6 +136,8 @@ app.post('/enrollments', wrap(async (req, res) => {
       await user.addCourse(courseId);
       // doing the work of POST /user-steps
       await user.addSteps(course.steps);
+      //email the course creator
+      await mailer.email(creator.email, 'New enrollment!', 'Congratulations, a new user has enrolled in your course!');
     } catch(err) {
       throw boom.badRequest('User already enrolled in this course');
     }
