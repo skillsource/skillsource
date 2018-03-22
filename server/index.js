@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const pssg = require('pssg'); // Google Pagespeed Screenshot API
 const cloudinary = require('./helpers/cloudinary');
 const mailer = require('./helpers/mailer.js');
+const schedule = require('node-schedule');
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -26,6 +27,18 @@ async function asyncForEach(array, callback) {
     await callback(array[index], index, array)
   }
 }
+
+// configure cron job for course enrollment update emails
+const rule = new schedule.RecurrenceRule();
+rule.hour = 24;
+schedule.scheduleJob('30 12 * * *', () => {
+  Promise.all(mailer.unsentEmails)
+    .then((res) => {
+      console.log(res);
+      mailer.unsentEmails = [];
+      mailer.emailCourses = {};
+    });  
+});
 
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
@@ -137,11 +150,15 @@ app.post('/enrollments', wrap(async (req, res) => {
       // doing the work of POST /user-steps
       await user.addSteps(course.steps);
       //email the course creator if creator has checked email option
-      if (course.email) {
-        await mailer.email(creator.email, 'New enrollment!', 'Congratulations, a new user has enrolled in your course!');
+      if (creator.creatorEmail) {
+        console.log('about to schedule an email');
+        await mailer.email(creator.email, courseId, 'New enrollment!', `Congratulations, a new user has enrolled in your course "${course.name}"!`);
+      } else {
+        console.log("this user does not want to be emailed");
       }
       
     } catch(err) {
+      console.log(err);
       throw boom.badRequest('User already enrolled in this course');
     }
   }
@@ -211,7 +228,7 @@ app.put('/users/:id', wrap(async (req, res) => {
     await db.User.update({ password: hashedPassword }, { where: { id: userId }});
   }
   if (enrollEmail !== undefined) {
-    db.User.update( { creatorEmail: enrollEmail}, { where: { id: userId }});
+    await db.User.update( { creatorEmail: enrollEmail}, { where: { id: userId }});
   }
 
   const updatedUser = await db.User.findOne({ attributes: ['id', 'username', 'email'], where: { id: userId }});

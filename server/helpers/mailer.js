@@ -18,7 +18,23 @@ const mailer = {
     }
   }),
 
-  email: (userEmail, subject, text) => {
+  unsentEmails: [],
+
+  emailCourses: {},
+
+  email: (userEmail, courseId, subject, text) => {
+
+    console.log("in email funciton");
+    if (mailer.emailCourses[userEmail]) {
+      if (mailer.emailCourses[userEmail] && mailer.emailCourses[userEmail].includes(courseId)) {
+        return;
+      } else {
+        mailer.emailCourses[userEmail].push(courseId);
+      }
+    } else {
+      mailer.emailCourses[userEmail] = [courseId];
+    }
+
     let HelperOptions = {
       from: `"Skillsource" <${settings.user}>`,
       to: userEmail,
@@ -26,13 +42,8 @@ const mailer = {
       text: text
     }
 
-    mailer.transporter.sendMail(HelperOptions, (error, info) => {
-      if (error) {
-        return console.log(error);
-      }
-      console.log("The message was sent!");
-      console.log(info);
-    });
+    mailer.unsentEmails.push(mailer.transporter.sendMail(HelperOptions));
+    console.log(mailer.unsentEmails);
   }
 }
 
