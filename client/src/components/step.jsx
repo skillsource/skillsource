@@ -56,7 +56,7 @@ class Step extends Component {
               ? (<input className="checkbox" type="checkbox" name="completion" checked={this.state.complete} onChange={this.toggleCheckbox}></input>)
               : <div></div>
           }
-          <div class="step-headers">
+          <div className="step-headers">
             <strong>Step {ordinalNumber + 1}: {name}</strong>
             <br />
             <div className="icon">
