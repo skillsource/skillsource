@@ -1,6 +1,6 @@
 import React from "react";
 import cloudinary from 'cloudinary';
-import settings from '../../config/cloudinary.js';
+import settings from '../../../config/cloudinary.js';
 
 
 cloudinary.config(settings);
