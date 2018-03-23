@@ -68,3 +68,5 @@ client/src/.DS_Store
 config/config.js
 config/cloudinary.js
 config/*
+
+public/images/*

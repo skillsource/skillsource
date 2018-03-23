@@ -56,6 +56,7 @@ const Step = sequelize.define('step', {
   text: Sequelize.STRING,
   url: Sequelize.STRING,
   imgRef: Sequelize.STRING,
+  urlImgRef: Sequelize.STRING,
   minutes: Sequelize.INTEGER
 });
 
