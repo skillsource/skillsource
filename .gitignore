@@ -67,3 +67,5 @@ client/src/.DS_Store
 # config variables
 config/*
 
+public/images/*
+

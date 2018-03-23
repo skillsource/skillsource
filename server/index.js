@@ -8,10 +8,13 @@ const exjwt = require('express-jwt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const pssg = require('pssg'); // Google Pagespeed Screenshot API
+<<<<<<< HEAD
 const cloudinary = require('./helpers/cloudinary');
 const mailer = require('./helpers/mailer.js');
 const schedule = require('node-schedule');
 const moment = require('moment');
+=======
+>>>>>>> e052a298afd5175eac8eeec4023cee656c0837b0
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -94,7 +97,7 @@ app.get('/courses/:courseId', wrap(async (req, res) => {
 
 app.post('/courses', wrap(async (req, res) => {
   // expecting course: { name, description, steps, tags }
-  // where array steps: [{ ordinalNumber, name, text, url, imgRef }]
+  // where array steps: [{ ordinalNumber, name, text, url, imgRef, urlImgRef }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: db.Step });
@@ -113,22 +116,12 @@ app.post('/courses', wrap(async (req, res) => {
 
   /// Retrieve and save screenshots
   newCourse.steps.forEach((step) => {
-
     if (step.url) {
       pssg.download(step.url, {
         dest: __dirname + '/../public/images/',
         filename: step.id
       }).then((file) => {
-        console.log('Screenshot saved to' + file + '.')
-  
-        cloudinary.uploader.upload(file, (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(result)
-          }
-        });
-  
+        console.log('Screenshot saved to' + file + '.');
       }).catch((err) => {
         console.log(err);
       })

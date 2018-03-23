@@ -717,3 +717,47 @@ ABOUT COMPONENT
   text-align: center;
   color: white;
 }
+
+
+.loading-spinner {
+  margin-top:4px;
+  border: 6px solid rgb(200, 241, 244); /* Light grey */
+  border-top: 6px solid #00B1D8; /* Blue */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.attachment {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 2px solid lightgrey;
+}
+
+.step-preview {
+  clear: both;
+  background-color: #E1ECF4;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  min-height: 43.5px;
+}
+
+.step-preview-num {
+  font-size: 35px;
+  color: #545454;
+  padding: 0 15px 3px 5px;
+  float: left;
+  font-weight: bold;
+}
+
+.step-preview-text {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+

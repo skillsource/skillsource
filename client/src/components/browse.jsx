@@ -78,7 +78,18 @@ class Browse extends Component {
         </div>
       )
     });
-    const steps = this.state.steps.map(step => <p key={step.id}>{step.ordinalNumber + 1}: {step.text}</p>)
+    const steps = this.state.steps.map(step => {
+      return (
+        <div className="step-preview" key={step.id}>
+          <div className="step-preview-num">{step.ordinalNumber + 1}</div>
+          <div className="step-preview-text">
+            <b>{step.name + '. '}</b>
+            {step.text}
+          </div>
+        </div>
+      )
+    });
+
     return (
       <div className="browse">
         <div className="browse-filters">
