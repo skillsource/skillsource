@@ -2,23 +2,38 @@ const users = [
   {
     email: 'magee@magee.com',
     username: 'Magee',
-    password: '123'
+    password: '123',
+    creatorEmail: false,
+    reminderEmail: false,
   },
   {
     email: 'kate@kate.com',
     username: 'Kate',
-    password: '123'
+    password: '123',
+    creatorEmail: false,
+    reminderEmail: false,
   },
   {
     email: 'nick@nick.com',
     username: 'Nick',
-    password: '123'
+    password: '123',
+    creatorEmail: false,
+    reminderEmail: false,
   },
   {
     email: 'bella@bella.com',
     username: 'Bella',
-    password: '123'
+    password: '123',
+    creatorEmail: false,
+    reminderEmail: false,
   },
+  {
+    email:'shelldog42@gmail.com',
+    username: 'Michelle',
+    password: 'chickenface',
+    creatorEmail: false,
+    reminderEmail: true,
+  }
 ];
 
 const courses = [
@@ -94,7 +109,7 @@ const steps = [
     text: 'Choosing the right ukelele can be tough. Here are a few things to consider',
     url: 'https://www.ukuleletricks.com/5-best-ukuleles-to-buy-for-beginners/',
     courseId: 3,
-    minutes: 240
+    minutes: 0
   },
   {
     ordinalNumber: 1,
@@ -102,7 +117,7 @@ const steps = [
     text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube video for step by step instructions',
     url: 'https://www.ukuleletricks.com/ukulele-tuning-how-to-tune-your-ukulele/',
     courseId: 3,
-    minutes: 10
+    minutes: 0
   },
   {
     ordinalNumber: 2,
@@ -110,7 +125,7 @@ const steps = [
     text: 'I know, you just want to play \'Somewhere Over The Rainbow\' but let\'s start with something a little simpler to build up our skills',
     url: 'https://www.youtube.com/watch?v=C7cPKXfI4CM',
     courseId: 3,
-    minutes: 500
+    minutes: 0
   }
 ]
 
