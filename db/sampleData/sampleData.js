@@ -109,7 +109,7 @@ const steps = [
     text: 'Choosing the right ukelele can be tough. Here are a few things to consider',
     url: 'https://www.ukuleletricks.com/5-best-ukuleles-to-buy-for-beginners/',
     courseId: 3,
-    minutes: 0
+    minutes: 240
   },
   {
     ordinalNumber: 1,
@@ -117,7 +117,7 @@ const steps = [
     text: 'For this course we\'re going to use G, C, E, A tuning. Watch this youtube video for step by step instructions',
     url: 'https://www.ukuleletricks.com/ukulele-tuning-how-to-tune-your-ukulele/',
     courseId: 3,
-    minutes: 0
+    minutes: 10
   },
   {
     ordinalNumber: 2,
@@ -125,7 +125,7 @@ const steps = [
     text: 'I know, you just want to play \'Somewhere Over The Rainbow\' but let\'s start with something a little simpler to build up our skills',
     url: 'https://www.youtube.com/watch?v=C7cPKXfI4CM',
     courseId: 3,
-    minutes: 0
+    minutes: 500
   }
 ]
 
