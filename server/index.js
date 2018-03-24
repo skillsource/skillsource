@@ -8,13 +8,10 @@ const exjwt = require('express-jwt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const pssg = require('pssg'); // Google Pagespeed Screenshot API
-<<<<<<< HEAD
 const cloudinary = require('./helpers/cloudinary');
 const mailer = require('./helpers/mailer.js');
 const schedule = require('node-schedule');
 const moment = require('moment');
-=======
->>>>>>> e052a298afd5175eac8eeec4023cee656c0837b0
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
