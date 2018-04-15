@@ -14,12 +14,11 @@ class Create extends Component {
           ordinalNumber: 0,
           text: '',
           url: '',
-          id: 0,
           duration: 0,
-          minutes: 0
+          minutes: 0,
+          unit: 'minutes'
         },
       ],
-      idCounter: 1,
       tags: [],
       suggestions: [],
     };
@@ -31,71 +30,49 @@ class Create extends Component {
   }
 
   handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { tags, suggestions, name, description } = this.state;
-    const steps = this.state.steps.map(({ id, ...step }) => step);
-    ApiService.createCourse(this.state.name, this.state.description, steps, tags)
+    const { steps, tags, suggestions, name, description } = this.state;
+    ApiService.createCourse(name, description, steps, tags)
       .then(course => this.props.history.replace("/courses/" + course.id))
       .catch(err => console.error('err in handleSubmit', err));
   }
 
   addStep = () => {
-    let stepsArray = this.state.steps.slice();
-    let nextOrdinal = stepsArray.length;
-    stepsArray.push(
-      {
-        name: '',
-        ordinalNumber: nextOrdinal,
-        text: '',
-        url: '',
-        id: this.state.idCounter
-      }
-    )
-
-    this.setState({
-      steps: stepsArray,
-      idCounter: this.state.idCounter + 1
+    let steps = this.state.steps.slice();
+    steps.push({
+      name: '',
+      ordinalNumber: steps.length,
+      text: '',
+      url: '',
     });
+
+    this.setState({ steps });
   }
 
   deleteStep = (index) => {
-    let stepsArray = this.state.steps.slice();
-    stepsArray.splice(index, 1);
-    let counter = 0;
-    stepsArray.forEach((step) => {
-      step.ordinalNumber = counter;
-      counter++;
-    })
-    this.setState({
-      steps: stepsArray
-    })
+    let steps = this.state.steps.slice();
+    steps.splice(index, 1);
+    for (let i = 0; i < steps.length; i++) {
+      steps[i].ordinalNumber = i;
+    }
+    this.setState({ steps });
   }
 
   handleStepsChange = (e, index) => {
-    let stepsArray = this.state.steps.slice();
+    let steps = this.state.steps.slice();
+    steps[index][e.target.name] = e.target.value;
 
-    stepsArray[index][e.target.name] = e.target.value;
-    var units = stepsArray[index]['units']
-    var duration = Number(stepsArray[index]['duration'])
-    var obj = {}; 
-    obj[`${units}`] = duration
-    console.log('the obj~~~ ', obj)
-    var minutes = moment.duration(obj).asMinutes()
-    console.log('conversion>>>', minutes)
-    stepsArray[index]['minutes'] = minutes;
+    const unit = steps[index].unit
+    const duration = Number(steps[index].duration)
+    steps[index].minutes = moment.duration({ [unit]: duration }).asMinutes();
 
-    console.log('steps>>>>>', stepsArray)
-
-    this.setState({
-      steps: stepsArray
-    });
+    this.setState({ steps });
   }
+  
 
   handleDelete = (i) => {
     const tags = this.state.tags.slice(0);
@@ -109,10 +86,16 @@ class Create extends Component {
   }
 
   render() {
-    const Steps = this.state.steps.map((step) => {
+    const steps = this.state.steps.map((step, i) => {
       return (
-        <CreateStep key={step.id} data={step} deleteStep={this.deleteStep} stepChange={this.handleStepsChange}/>
-    )});
+        <CreateStep
+          key={i}
+          data={step}
+          deleteStep={this.deleteStep}
+          stepChange={this.handleStepsChange}
+        />
+      )
+    });
 
     return (
       <div className="create-page">
@@ -133,7 +116,7 @@ class Create extends Component {
             <label>Description: </label>
             <textarea name="description" id="createDescription" type="text" onChange={this.handleChange}/>
           </div>
-          {Steps}
+          {steps}
           <button onClick={this.addStep}>Add a step</button>
           <button onClick={this.handleSubmit}>Submit</button>
         </div>

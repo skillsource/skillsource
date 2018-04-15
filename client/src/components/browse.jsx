@@ -11,6 +11,7 @@ class Browse extends Component {
       filteredCourses: [],
       query: '',
       tags: [],
+      steps: [], 
     };
   }
 
@@ -27,14 +28,16 @@ class Browse extends Component {
     const filteredCourses = this.state.courses.filter(course => {
       const title = course.name.toLowerCase();
       const description = course.description ? course.description.toLowerCase() : '';
-      return title.includes(query) || description.includes(query)
+      return title.includes(query) || description.includes(query);
     });
     this.setState({ filteredCourses });
   }
 
   componentDidMount() {
-    ApiService.browse().then(courses => this.setState({ courses, filteredCourses: courses }))
-    ApiService.getTags().then(tags => this.setState({ tags }));
+    ApiService.browse()
+      .then(courses => this.setState({ courses, filteredCourses: courses }));
+    ApiService.getTags()
+      .then(tags => this.setState({ tags }));
   }
 
   onTagClick = (e) => {
@@ -50,33 +53,60 @@ class Browse extends Component {
     });
   }
 
+  onMouseEnter = (steps) => {
+    this.setState({ steps });
+  }
+
+  onMouseLeave = () => {
+    this.setState({ steps: [] });
+  }
+
   render() {
-    const snippets = this.state.filteredCourses.map(course => <Snippet key={course.id} data={course}/>);
+    const snippets = this.state.filteredCourses.map(course => {
+      return (
+        <Snippet
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          key={course.id} data={course}
+        />
+      )
+    });
     const tags = this.state.tags.map(tag => {
       return (
-        <div
-          className="tag"
-          key={tag.id}
-          onClick={this.onTagClick}
-        >
+        <div className="tag" key={tag.id} onClick={this.onTagClick}>
           {tag.name}
+        </div>
+      )
+    });
+    const steps = this.state.steps.map(step => {
+      return (
+        <div className="step-preview" key={step.id}>
+          <div className="step-preview-num">{step.ordinalNumber + 1}</div>
+          <div className="step-preview-text">
+            <b>{step.name + '. '}</b>
+            {step.text}
+          </div>
         </div>
       )
     });
 
     return (
       <div className="browse">
-        <h3>Browse courses:</h3>
-        <div
-          className="tag"
-          key="All"
-          onClick={this.tagReset}
-        >
-          all courses
+        <div className="browse-filters">
+          <div className="tag" key="All" onClick={this.tagReset}>
+            all courses
+          </div>
+          {tags}
+          <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search for courses..."></input>
         </div>
-        {tags}
-        <input value={this.state.query} onChange={this.updateInputValue} className="search" type="search" placeholder="Search for courses..."></input>
-        {snippets}
+        <div className="browse-courses">
+          <div className="browse-snippets">
+            {snippets}
+          </div>
+          <div className="browse-preview">
+            {steps}
+          </div>
+        </div>
       </div>
     );
   }

@@ -16,6 +16,7 @@ import Signup from './components/signup.jsx';
 import Dashboard from './components/dashboard.jsx';
 import Course from './components/course.jsx';
 import Create from './components/create.jsx';
+import Settings from './components/settings.jsx';
 import AuthService from './services/AuthService.js';
 
 class App extends React.Component {
@@ -46,6 +47,7 @@ class App extends React.Component {
             <PrivateRoute path="/create" component={Create}/>
             <PrivateRoute path="/dashboard" component={Dashboard}/>
             <Route exact path="/courses" component={Browse} />
+            <Route exact path="/settings" component={Settings} />
             <Route path="/courses/:id" render={(props) => <Course {...this.props} {...props} />}/>
           </div>
         </div>

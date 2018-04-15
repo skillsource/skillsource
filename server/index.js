@@ -8,6 +8,10 @@ const exjwt = require('express-jwt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const pssg = require('pssg'); // Google Pagespeed Screenshot API
+const cloudinary = require('./helpers/cloudinary');
+const mailer = require('./helpers/mailer.js');
+const schedule = require('node-schedule');
+const moment = require('moment');
 
 const app = express();
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
@@ -25,6 +29,44 @@ async function asyncForEach(array, callback) {
   }
 }
 
+// configure cron job for daily digest emails
+const rule = new schedule.RecurrenceRule();
+rule.hour = 24;
+
+//schedule daily user course reminder emails
+schedule.scheduleJob('44 20 * * *', async() => {
+  console.log('in scheduler');
+  const users = await db.User.findAll({ where: { reminderEmail: true }, include: [db.Course]});
+  console.log(users);
+  const today = moment();
+  users.forEach(user => {   
+    user.courses.forEach(course => {
+      const enrolled = moment(course.createdAt);
+      const duration = db.getCourseLength(course.id);
+      const half = Math.floor(duration/2);
+      const halfwayCheck = enrolled.add(half, 'minutes');
+
+      console.log(enrolled, duration, half, halfwayCheck);
+
+      if (today.isSame(halfwayCheck, 'day')) {
+        console.log('about to send a reminder email');
+        mailer.remind(user.email, course.id, `halfway checkpoint for course ${course.name}`, 'How is your learning going? Spend a few minutes beefing up your course progress!');
+      }
+    });
+  });
+});
+
+//schedule daily enrollment update emails
+schedule.scheduleJob('45 20 * * *', () => {
+  Promise.all(mailer.unsentEmails)
+    .then((res) => {
+      //res confirms the sent email
+      console.log(res);
+      mailer.unsentEmails = [];
+      mailer.emailCourses = {};
+    });  
+});
+
 const unrestricted = [
   { url: '/courses/', methods: ['GET'] },
   { url: /\/courses\/*/, methods: ['GET'] },
@@ -39,7 +81,7 @@ app.use(exjwt({ secret: 'secret' }).unless({ path: unrestricted }));
 
 // courses
 app.get('/courses', wrap(async (req, res) => {
-  const courses = await db.Course.findAll({ include: db.Tag });
+  const courses = await db.Course.findAll({ include: [db.Tag, db.Step] });
   res.json(courses);
 }));
 
@@ -52,7 +94,7 @@ app.get('/courses/:courseId', wrap(async (req, res) => {
 
 app.post('/courses', wrap(async (req, res) => {
   // expecting course: { name, description, steps, tags }
-  // where array steps: [{ ordinalNumber, name, text, url }]
+  // where array steps: [{ ordinalNumber, name, text, url, imgRef, urlImgRef }]
   // doing the work of POST /steps
   const course = { creatorId: req.user.id, ...req.body };
   const newCourse = await db.Course.create(course, { include: db.Step });
@@ -71,30 +113,38 @@ app.post('/courses', wrap(async (req, res) => {
 
   /// Retrieve and save screenshots
   newCourse.steps.forEach((step) => {
-    pssg.download(step.url, {
-      dest: __dirname + '/../public/images/',
-      filename: step.id
-    }).then((file) => {
-      console.log('Screenshot saved to' + file + '.')
-    });
+    if (step.url) {
+      pssg.download(step.url, {
+        dest: __dirname + '/../public/images/',
+        filename: step.id
+      }).then((file) => {
+        console.log('Screenshot saved to' + file + '.');
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
   })
+}));
+
+app.get('/course/:courseId/enrollments', wrap(async (req, res) => {
+  const { courseId } = req.params;
+  const enrollments = await db.UserCourse.findAll({ where: { courseId } });
+  res.json(enrollments);
 }));
 
 app.get('/users/createdCourses', wrap(async (req, res) => {
   const userId = req.user.id;
   const creatorId = userId;
   const user = await db.User.findById(userId);
-  const userCourses = await db.Course.findAll({ where: { creatorId } });
-  res.json({
-    courses: userCourses
-  });
+  const courses = await db.Course.findAll({ where: { creatorId }, include: db.Step });
+  res.json({ courses });
 }));
 
 // enrollments
 app.get('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
-  const enrollments = await user.getCourses();
+  const enrollments = await user.getCourses({ include: [{ model: db.Step }] });
   const filtered = enrollments.filter((course) => {
     return course.userCourse.enrolled === true;
   })
@@ -106,6 +156,7 @@ app.post('/enrollments', wrap(async (req, res) => {
   const userId = req.user.id;
   const user = await db.User.findById(userId);
   const course = await db.Course.findById(courseId, { include: db.Step });
+  const creator = await db.User.findById(course.creatorId);
   const userCourse = await db.UserCourse.findOne({ where: { userId, courseId } });
 
   if (userCourse) {
@@ -115,7 +166,14 @@ app.post('/enrollments', wrap(async (req, res) => {
       await user.addCourse(courseId);
       // doing the work of POST /user-steps
       await user.addSteps(course.steps);
+      //email the course creator if creator has checked email option
+      //mailer.js will do the job of checking whether it is a duplicate for that day
+      if (creator.creatorEmail) {      
+        await mailer.email(creator.email, courseId, 'New enrollment!', `Congratulations, a new user has enrolled in your course "${course.name}"!`);
+      } 
     } catch(err) {
+      //if the err is in the email, this console.log is really helpful
+      console.log(err);
       throw boom.badRequest('User already enrolled in this course');
     }
   }
@@ -158,8 +216,9 @@ app.patch('/user-steps', wrap(async (req, res) => {
 // users
 app.get('/users', wrap(async (req, res) => {
   const user = await db.User.findById(req.user.id);
+  const { id, username, email } = user;
   if (!user) throw boom.notFound('Cannot locate user by supplied userId');
-  res.json(user);
+  res.json({ id, username, email });
 }));
 
 app.post('/users', wrap(async (req, res) => {
@@ -169,17 +228,38 @@ app.post('/users', wrap(async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await db.User.create({ username, email, password: hashedPassword });
-  res.json(newUser);
+  const withoutPassword = { id: newUser.id, email: newUser.email, username: newUser.username };
+  res.json(withoutPassword);
+}));
+
+// update email or password
+app.put('/users/:id', wrap(async (req, res) => {
+  console.log(req.body);
+  const { password, email, enrollEmail, reminderEmail } = req.body;
+  const userId = req.params.id;
+  if (email) await db.User.update({ email }, { where: { id: userId }});
+  if (password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.User.update({ password: hashedPassword }, { where: { id: userId }});
+  }
+  if (enrollEmail !== undefined) {
+    await db.User.update( { creatorEmail: enrollEmail}, { where: { id: userId }});
+  }
+  if (reminderEmail !== undefined) {
+    await db.User.update( { reminderEmail }, { where: { id: userId }});
+  }
+
+  const updatedUser = await db.User.findOne({ attributes: ['id', 'username', 'email'], where: { id: userId }});
+  res.json(updatedUser);
 }));
 
 // comments
 app.get('/comments', wrap(async (req, res) => {
   const { courseId } = req.query;
-  console.log(req.query);
   const course = await db.Course.findById(courseId);
-  const comments = await course.getComments({ 
-    where: {commentId: null}, 
-    include: [{model: db.User}, { model: db.Comment, as: 'thread', 
+  const comments = await course.getComments({
+    where: {commentId: null},
+    include: [{model: db.User}, { model: db.Comment, as: 'thread',
       include: {model: db.User}
     }]
   });
@@ -188,8 +268,8 @@ app.get('/comments', wrap(async (req, res) => {
 
 app.post('/comments', wrap(async (req, res) => {
   const userId = req.user.id;
-  const { courseId, text } = req.body;
-  const comment = await db.Comment.create({ userId, courseId, text });
+  const { courseId, text, commentId } = req.body;
+  const comment = await db.Comment.create({ userId, courseId, text, commentId });
   const newComment = await db.Comment.findById(comment.id, { include: db.User });
   res.send(newComment);
 }));
